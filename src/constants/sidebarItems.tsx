@@ -50,7 +50,7 @@ export const sidebarItems = (role: string) => {
     },
     {
       label: (
-        <Link href={`/${role}/academic/content-management`}>
+        <Link href={`/${role}/content-management`}>
           Content-Management
         </Link>
       ),

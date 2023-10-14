@@ -27,7 +27,7 @@ const LoginPage = () => {
       const res = await userLogin({ ...data }).unwrap();
       console.log(res);
       if (res?.token) {
-        router.push("/profile");
+        router.push("/super_admin/admin");
         message.success("User logged in successfully!");
       }
       storeUserInfo({ accessToken: res?.token });

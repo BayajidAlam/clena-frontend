@@ -1,30 +1,34 @@
 "use client";
 import ActionBar from "@/components/ui/ActionBar";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import Link from "next/link";
 import {
   DeleteOutlined,
   EditOutlined,
+  FilterOutlined,
   ReloadOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import { useDebounced } from "@/redux/hooks";
 import UMTable from "@/components/ui/UMTable";
+import { useAdminsQuery, useDeleteAdminMutation } from "@/redux/api/adminApi";
 import { IDepartment } from "@/types";
 import dayjs from "dayjs";
-import { useFacultiesQuery } from "@/redux/api/facultyApi";
-import { useStudentsQuery } from "@/redux/api/studentApi";
+import UMModal from "@/components/ui/UMModal";
 
-const StudentPage = () => {
+const AdminPage = () => {
   const query: Record<string, any> = {};
+  const [deleteAdmin] = useDeleteAdminMutation();
 
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(10);
   const [sortBy, setSortBy] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+  const [adminId, setAdminId] = useState<string>("");
 
   query["limit"] = size;
   query["page"] = page;
@@ -39,20 +43,20 @@ const StudentPage = () => {
   if (!!debouncedSearchTerm) {
     query["searchTerm"] = debouncedSearchTerm;
   }
-  const { data, isLoading } = useStudentsQuery({ ...query });
+  const { data, isLoading } = useAdminsQuery({ ...query });
 
-  const students = data?.students;
+  const admins = data?.admins;
   const meta = data?.meta;
-  // console.log(students);
 
   const columns = [
     {
       title: "Id",
-      dataIndex: "studentId",
+      dataIndex: "id",
       sorter: true,
     },
     {
       title: "Name",
+      dataIndex: "name",
       render: function (data: Record<string, string>) {
         const fullName = `${data?.firstName} ${data?.middleName} ${data?.lastName}`;
         return <>{fullName}</>;
@@ -61,6 +65,17 @@ const StudentPage = () => {
     {
       title: "Email",
       dataIndex: "email",
+    },
+    {
+      title: "Department",
+      dataIndex: "managementDepartment",
+      render: function (data: IDepartment) {
+        return <>{data?.title}</>;
+      },
+    },
+    {
+      title: "Designation",
+      dataIndex: "designation",
     },
     {
       title: "Created at",
@@ -75,22 +90,18 @@ const StudentPage = () => {
       dataIndex: "contactNo",
     },
     {
-      title: "Gender",
-      dataIndex: "gender",
-      sorter: true,
-    },
-    {
       title: "Action",
       dataIndex: "id",
       render: function (data: any) {
+        // console.log(data);
         return (
           <>
-            <Link href={`/super_admin/manage-faculty/details/${data.id}`}>
+            <Link href={`/super_admin/admin/details/${data}`}>
               <Button onClick={() => console.log(data)} type="primary">
                 <EyeOutlined />
               </Button>
             </Link>
-            <Link href={`/super_admin/manage-faculty/edit/${data.id}`}>
+            <Link href={`/super_admin/admin/edit/${data}`}>
               <Button
                 style={{
                   margin: "0px 5px",
@@ -101,7 +112,15 @@ const StudentPage = () => {
                 <EditOutlined />
               </Button>
             </Link>
-            <Button onClick={() => console.log(data)} type="primary" danger>
+            <Button
+              type="primary"
+              onClick={() => {
+                setOpen(true);
+                setAdminId(data);
+              }}
+              danger
+              style={{ marginLeft: "3px" }}
+            >
               <DeleteOutlined />
             </Button>
           </>
@@ -126,6 +145,20 @@ const StudentPage = () => {
     setSortOrder("");
     setSearchTerm("");
   };
+
+  const deleteAdminHandler = async (id: string) => {
+    // console.log(id);
+    try {
+      const res = await deleteAdmin(id);
+      if (res) {
+        message.success("Admin Successfully Deleted!");
+        setOpen(false);
+      }
+    } catch (error: any) {
+      message.error(error.message);
+    }
+  };
+
   return (
     <div>
       <UMBreadCrumb
@@ -136,7 +169,7 @@ const StudentPage = () => {
           },
         ]}
       />
-      <ActionBar title="Student List">
+      <ActionBar title="Admin List">
         <Input
           size="large"
           placeholder="Search"
@@ -146,8 +179,8 @@ const StudentPage = () => {
           }}
         />
         <div>
-          <Link href="/super_admin/manage-student/create">
-            <Button type="primary">Create</Button>
+          <Link href="/super_admin/admin/create">
+            <Button type="primary">Create Admin</Button>
           </Link>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
             <Button
@@ -164,7 +197,7 @@ const StudentPage = () => {
       <UMTable
         loading={isLoading}
         columns={columns}
-        dataSource={students}
+        dataSource={admins}
         pageSize={size}
         totalPages={meta?.total}
         showSizeChanger={true}
@@ -172,8 +205,17 @@ const StudentPage = () => {
         onTableChange={onTableChange}
         showPagination={true}
       />
+
+      <UMModal
+        title="Remove admin"
+        isOpen={open}
+        closeModal={() => setOpen(false)}
+        handleOk={() => deleteAdminHandler(adminId)}
+      >
+        <p className="my-5">Do you want to remove this admin?</p>
+      </UMModal>
     </div>
   );
 };
 
-export default StudentPage;
+export default AdminPage;
