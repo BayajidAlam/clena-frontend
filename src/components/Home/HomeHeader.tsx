@@ -10,7 +10,7 @@ const HomeHeader = () => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        width: "80%",
+        width: "75%",
         padding: "10px 0px",
         margin: "0px auto",
       }}
