@@ -33,17 +33,20 @@ const SideBar = () => {
     >
       <div
         style={{
-          color: "white",
+          color: "#ff5100",
           fontSize: "2rem",
           textAlign: "center",
           fontWeight: "bold",
-          marginBottom: ".5rem",
-          padding: "10px 0px",
+          padding: "12px 0px",
+          backgroundColor: "white",
         }}
       >
-        UMS
+        CLENA
       </div>
       <Menu
+        style={{
+          backgroundColor: "#ff5100",
+        }}
         theme="dark"
         defaultSelectedKeys={["1"]}
         mode="inline"
