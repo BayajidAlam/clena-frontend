@@ -41,7 +41,7 @@ const SideBar = () => {
           backgroundColor: "white",
         }}
       >
-        CLENA
+        CLEANA
       </div>
       <Menu
         style={{
