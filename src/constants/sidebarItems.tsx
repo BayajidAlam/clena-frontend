@@ -1,13 +1,10 @@
 import type { MenuProps } from "antd";
-import {
-  ProfileOutlined,
-  TableOutlined,
-} from "@ant-design/icons";
+import { ProfileOutlined, TableOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { USER_ROLE } from "./role";
 
 export const sidebarItems = (role: string) => {
-
+  console.log(role, "role");
 
   const defaultSidebarItems: MenuProps["items"] = [
     {
@@ -24,6 +21,9 @@ export const sidebarItems = (role: string) => {
           key: `/${role}/change-password`,
         },
       ],
+      style: {
+        background: "#ff5100",
+      },
     },
   ];
 
@@ -81,7 +81,6 @@ export const sidebarItems = (role: string) => {
       key: `/${role}/booking`,
     },
   ];
-
 
   if (role === USER_ROLE.SUPER_ADMIN) return superAdminSidebarItems;
   else if (role === USER_ROLE.ADMIN) return adminSidebarItems;
