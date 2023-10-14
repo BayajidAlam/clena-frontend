@@ -12,8 +12,7 @@ const { Sider } = Layout;
 const SideBar = () => {
   const [collapsed, setCollapsed] = useState(false);
 
-  const role = USER_ROLE.SUPER_ADMIN;
-  // const { role } = getUserInfo() as any;
+  const { role } = getUserInfo() as any;
   // console.log(role);
 
   return (
@@ -29,6 +28,7 @@ const SideBar = () => {
         left: 0,
         top: 0,
         bottom: 0,
+        backgroundColor: "#ff5100",
       }}
     >
       <div

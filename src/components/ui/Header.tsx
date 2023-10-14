@@ -25,11 +25,11 @@ const Header = () => {
   ];
 
   const { role } = getUserInfo() as any;
-  
+
   return (
     <AntHeader
       style={{
-        background: "#fff",
+        backgroundColor: "#ff5100",
       }}
     >
       <Row
@@ -39,20 +39,35 @@ const Header = () => {
           height: "100%",
         }}
       >
-        <p
+        <div
           style={{
-            margin: "0px 5px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
           }}
         >
-          {role}
-        </p>
-        <Dropdown menu={{ items }}>
-          <a>
-            <Space wrap size={16}>
-              <Avatar size="large" icon={<UserOutlined />} />
-            </Space>
-          </a>
-        </Dropdown>
+          <div
+            style={{
+              display: "flex",
+
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <span className="text-white text-base font-bold">{"John Doe"}</span>
+            <span className="text-white text-sm">{"Admin"}</span>
+          </div>
+
+          <Dropdown menu={{ items }}>
+            <a href="">
+              {" "}
+              <Space wrap size={24}>
+                <Avatar size="large" icon={<UserOutlined />} />
+              </Space>
+            </a>
+          </Dropdown>
+        </div>
       </Row>
     </AntHeader>
   );
