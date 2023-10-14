@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import CleanSvg from "../../assets/cleaning service-pana.svg";
 import Image from "next/image";
@@ -22,6 +23,7 @@ const TopBanner = () => {
           className="tracking-widest"
         >
           Spring <br />
+         
           Cleaning <br /> Don't Panic
         </h1>
         <p className="w-[90%] my-6">
