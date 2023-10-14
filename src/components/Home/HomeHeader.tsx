@@ -11,7 +11,7 @@ const HomeHeader = () => {
         justifyContent: "space-between",
         alignItems: "center",
         width: "75%",
-        padding: "10px 0px",
+        padding: "20px 0px",
         margin: "0px auto",
       }}
     >
