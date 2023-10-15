@@ -45,12 +45,12 @@ const UserProfilePage = ({ params }: any) => {
       <UMBreadCrumb
         items={[
           {
-            label: "super_admin",
-            link: "/super_admin",
+            label: `profile`,
+            link: `/profile/${id}`,
           },
           {
-            label: "admin",
-            link: "/super_admin/admin",
+            label: `edit`,
+            link: `/profile/edit/${id}`,
           },
         ]}
       />
@@ -168,7 +168,7 @@ const UserProfilePage = ({ params }: any) => {
                 }}
               >
                 <Image
-                  src={myData?.profileImg}
+                  src={`/${myData?.profileImg}`}
                   width={150}
                   height={150}
                   alt="image"

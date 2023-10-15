@@ -31,6 +31,7 @@ const LoginPage = () => {
     try {
       // console.log(data, "data");
       const res = await userLogin({ ...data }).unwrap();
+      console.log(res?.token, "userData");
       // @ts-ignore
       if (res?.token) {
         // @ts-ignore
@@ -43,7 +44,8 @@ const LoginPage = () => {
           storeUserInfo({ accessToken: res?.token });
         } else {
           // @ts-ignore
-          router.push(`/${decode?.role}`);
+          storeUserInfo({ accessToken: res?.token });
+          router.push(`/profile/${decode?.userId}`);
         }
       }
 

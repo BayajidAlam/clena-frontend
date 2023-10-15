@@ -37,6 +37,8 @@ const UMTable = ({
 
   return (
     <Table
+      className="shadow-md"
+      scroll={{ x: 300 }}
       loading={loading}
       columns={columns}
       dataSource={dataSource}

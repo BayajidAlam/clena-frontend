@@ -34,7 +34,9 @@ const UserProfilePage = ({ params }: any) => {
     }
   }, [data, myData]);
 
-  const onSubmit = async (values: any) => {};
+  const onSubmit = async (values: any) => {
+    console.log(value);
+  };
 
   return (
     <div
@@ -45,12 +47,8 @@ const UserProfilePage = ({ params }: any) => {
       <UMBreadCrumb
         items={[
           {
-            label: "super_admin",
-            link: "/super_admin",
-          },
-          {
-            label: "admin",
-            link: "/super_admin/admin",
+            label: `profile`,
+            link: `/profile/${id}`,
           },
         ]}
       />
@@ -147,7 +145,6 @@ const UserProfilePage = ({ params }: any) => {
                   name="address"
                   size="large"
                   label="Address"
-                 
                 />
               </Col>
               <Col
@@ -167,7 +164,7 @@ const UserProfilePage = ({ params }: any) => {
                 }}
               >
                 <Image
-                  src={myData?.profileImg}
+                  src={`/${myData?.profileImg}`}
                   width={150}
                   height={150}
                   alt="image"

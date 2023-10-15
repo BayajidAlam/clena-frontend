@@ -14,10 +14,10 @@ import {
 import { useState } from "react";
 import { useDebounced } from "@/redux/hooks";
 import UMTable from "@/components/ui/UMTable";
-import { useAdminsQuery, useDeleteAdminMutation } from "@/redux/api/userApi";
 import { IDepartment } from "@/types";
 import dayjs from "dayjs";
 import UMModal from "@/components/ui/UMModal";
+import { useAdminsQuery, useDeleteAdminMutation } from "@/redux/api/adminApi";
 
 const AdminPage = () => {
   const query: Record<string, any> = {};
@@ -165,35 +165,44 @@ const AdminPage = () => {
       <UMBreadCrumb
         items={[
           {
-            label: "super_admin",
-            link: "/super_admin",
+            label: "super-admin",
+            link: "/superadmin/admin",
+          },
+          {
+            label: "Create admin",
+            link: "/superadmin/admin/create",
           },
         ]}
       />
-      <ActionBar title="Admin List">
-        <Input
-          size="large"
-          placeholder="Search"
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            width: "20%",
-          }}
-        />
-        <div>
-          <Link href="/super_admin/admin/create">
-            <Button type="primary">Create Admin</Button>
-          </Link>
-          {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button
-              style={{ margin: "0px 5px" }}
-              type="primary"
-              onClick={resetFilters}
-            >
-              <ReloadOutlined />
-            </Button>
-          )}
-        </div>
-      </ActionBar>
+      <div style={{ padding: "10px" }}>
+        <ActionBar>
+          <Input
+            size="large"
+            placeholder="Search"
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              width: "13%",
+            }}
+          />
+          <div>
+            <Link href="/superadmin/admin/create">
+              <button className="text-white shadow-xl bg-[#FF5100] hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-none">
+                Create Admin
+              </button>
+            </Link>
+            {(!!sortBy || !!sortOrder || !!searchTerm) && (
+              <Button
+                className="bg-[#FF5100] font-bold"
+                style={{ margin: "0px 13px" }}
+                type="primary"
+                onClick={resetFilters}
+              >
+                <ReloadOutlined />
+              </Button>
+            )}
+          </div>
+        </ActionBar>
+      </div>
 
       <UMTable
         loading={isLoading}
