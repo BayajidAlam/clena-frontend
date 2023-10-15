@@ -1,11 +1,18 @@
-import HomeHeader from '@/components/Home/HomeHeader';
-import React from 'react';
+import Footer from "@/components/Home/Footer";
+import HomeHeader from "@/components/Home/HomeHeader";
+
+import React from "react";
 
 const ServicePage = () => {
   return (
     <div>
-      <HomeHeader/>
-      <p>ServicePage</p>
+      <HomeHeader />
+      <div
+        style={{
+          minHeight: "100vh",
+        }}
+      ></div>
+      <Footer />
     </div>
   );
 };

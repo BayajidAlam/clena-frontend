@@ -34,11 +34,15 @@ const SideBar = () => {
       <div
         style={{
           color: "#ff5100",
-          fontSize: "2rem",
+          fontSize: collapsed ? "12px" : "32px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
           textAlign: "center",
           fontWeight: "bold",
           padding: "12px 0px",
           backgroundColor: "white",
+          height: "63px"
         }}
       >
         CLEANA

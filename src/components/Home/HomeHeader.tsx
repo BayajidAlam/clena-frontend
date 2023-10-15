@@ -1,9 +1,11 @@
 import Image from "next/image";
-import Logo from "../../assets/clena-logo.png";
 import Link from "next/link";
 import { Button } from "antd";
+import { getUserInfo } from "@/services/auth.service";
 
 const HomeHeader = () => {
+
+  // const { role } = getUserInfo() as any;
   return (
     <div
       style={{
@@ -29,7 +31,7 @@ const HomeHeader = () => {
         alignItems: "center",
         gap: "20px",
       }}>
-        <Link href={`/service`}>
+        <Link href={`/customer/booking`}>
         
           <Button
             style={{
@@ -44,7 +46,7 @@ const HomeHeader = () => {
             Booking
           </Button>
         </Link>
-        <Link href={`/service`}>
+        <Link href={`/customer/cart`}>
     
           <Button
             style={{
@@ -60,7 +62,7 @@ const HomeHeader = () => {
           </Button>
 
         </Link>
-        <Link href={`/service`}>
+        <Link href={`/login`}>
       
           <Button
             style={{
@@ -75,7 +77,7 @@ const HomeHeader = () => {
             Login
           </Button>
         </Link>
-        <Link href={`/service`}>
+        <Link href={`/register`}>
         
           <Button
             style={{

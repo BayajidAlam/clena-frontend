@@ -1,8 +1,14 @@
-import React from 'react';
+import React from "react";
 
 const EventsByCategory = () => {
   return (
-    <div>
+    <div
+      style={{
+        width: "75%",
+        margin: "0 auto",
+        padding: "60px 0",
+      }}
+    >
       <h1>Events by Category</h1>
     </div>
   );
