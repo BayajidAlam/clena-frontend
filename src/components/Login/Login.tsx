@@ -19,9 +19,9 @@ type FormValues = {
 };
 
 const LoginPage = () => {
-  const [userLogin, { isLoading,data }] = useUserLoginMutation();
+  const [userLogin, { isLoading, data }] = useUserLoginMutation();
   const router = useRouter();
-  console.log(data,'userdata');
+
   if (isLoading) {
     return message.loading("Loading...");
   }
@@ -38,13 +38,13 @@ const LoginPage = () => {
         // @ts-ignore
         if (decode?.role === "customer") {
           router.push(`/`);
+          message.success("User logged in successfully!");
+          // @ts-ignore
+          storeUserInfo({ accessToken: res?.token });
         } else {
           // @ts-ignore
           router.push(`/${decode?.role}`);
         }
-        message.success("User logged in successfully!");
-        // @ts-ignore
-        storeUserInfo({ accessToken: res?.token });
       }
 
       // console.log(res);

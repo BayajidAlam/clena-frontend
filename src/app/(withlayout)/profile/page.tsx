@@ -6,8 +6,10 @@ import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
+import { USER_ROLE } from "@/constants/role";
 import { getImgBBUrl } from "@/helpers/config/envConfig";
 import { useAcademicDepartmentsQuery } from "@/redux/api/academic/departmentApi";
+import { useUserSignUpMutation } from "@/redux/api/authApi";
 import { useAddAdminWithFormDataMutation } from "@/redux/api/userApi";
 import { getUserInfo } from "@/services/auth.service";
 import { IDepartment } from "@/types";
@@ -15,29 +17,14 @@ import { Button, Col, Row, message } from "antd";
 import { useEffect, useState } from "react";
 
 const UserProfilePage = () => {
-  const { data, isLoading } = useAcademicDepartmentsQuery({
-    limit: 100,
-    page: 1,
-  });
 
-  const [addAdminWithFormData] = useAddAdminWithFormDataMutation();
-  //@ts-ignore
-  const departments: IDepartment[] = data?.departments;
-  const { role } = getUserInfo() as any;
 
-  const departmentOptions =
-    departments &&
-    departments?.map((department) => {
-      return {
-        label: department?.title,
-        value: department?.id,
-      };
-    });
+  const [userSignUp,{}] = useAddAdminWithFormDataMutation();
 
   const onSubmit = async (values: any) => {
-    console.log(values, "value");
+ 
     try {
-      // await addAdminWithFormData(formData);
+      const res = await userSignUp({...values})
       message.success("Admin created successfully!");
     } catch (err: any) {
       console.error(err.message);

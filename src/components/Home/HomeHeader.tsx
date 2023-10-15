@@ -128,7 +128,7 @@ const HomeHeader = () => {
             Logout
           </Button>
         ) : (
-          <Link href={`/register`}>
+          <Link href={`/registeration`}>
             <Button
               style={{
                 background: "#fd4f1a",
