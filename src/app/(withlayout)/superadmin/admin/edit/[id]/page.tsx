@@ -7,7 +7,7 @@ import FormSelectField from "@/components/Forms/FormSelectField";
 import FormTextArea from "@/components/Forms/FormTextArea";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import { bloodGroupOptions, genderOptions } from "@/constants/global";
-import { useAdminQuery, useUpdateAdminMutation } from "@/redux/api/adminApi";
+import { useAdminQuery, useUpdateAdminMutation } from "@/redux/api/userApi";
 import { useDepartmentsQuery } from "@/redux/api/departmentApi";
 import { IDepartment } from "@/types";
 

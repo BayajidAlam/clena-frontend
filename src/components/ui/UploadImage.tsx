@@ -1,28 +1,11 @@
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { message, Upload } from "antd";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import type { UploadChangeParam } from "antd/es/upload";
-import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
+import type { UploadFile, UploadProps } from "antd/es/upload/interface";
 import Image from "next/image";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
-
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
-  }
-  return isJpgOrPng && isLt2M;
-};
+import { getImgBBUrl } from "@/helpers/config/envConfig";
 
 type ImageUploadProps = {
   name: string;
@@ -32,21 +15,41 @@ const UploadImage = ({ name }: ImageUploadProps) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const { setValue } = useFormContext();
+  const imageHostKey = getImgBBUrl();
 
-  const handleChange: UploadProps["onChange"] = (
+  const handleChange: UploadProps["onChange"] = async (
     info: UploadChangeParam<UploadFile>
   ) => {
     if (info.file.status === "uploading") {
       setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      // Get this url from response in real world.
-      setValue(name, info.file.originFileObj);
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
+    } else if (info.file.status === "done") {
+      // Upload the image to imgBB
+      const formData = new FormData();
+      formData.append("image", info.file.originFileObj as any);
+
+      try {
+        const response = await fetch(
+          `https://api.imgbb.com/1/upload?key=${imageHostKey}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await response.json();
+
+        if (data.status === 200) {
+          // Set the uploaded image URL to your form field or state
+          setValue('profileImg', data.data.url);
+          setImageUrl(data.data.url);
+          message.success("Image uploaded successfully!");
+        } else {
+          message.error("Error uploading image to imgBB");
+        }
+      } catch (error: any) {
+        message.error("Error uploading image: " + error.message);
+      }
+
+      setLoading(false);
     }
   };
 
@@ -59,13 +62,12 @@ const UploadImage = ({ name }: ImageUploadProps) => {
 
   return (
     <>
-      <Upload 
+      <Upload
         name={name}
         listType="picture-card"
         className="avatar-uploader"
         showUploadList={false}
-        action="/api/file"
-        beforeUpload={beforeUpload}
+        action="/api/file" // This might be different in your setup
         onChange={handleChange}
       >
         {imageUrl ? (

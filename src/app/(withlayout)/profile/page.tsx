@@ -6,18 +6,20 @@ import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
+import { getImgBBUrl } from "@/helpers/config/envConfig";
 import { useAcademicDepartmentsQuery } from "@/redux/api/academic/departmentApi";
-import { useAddAdminWithFormDataMutation } from "@/redux/api/adminApi";
+import { useAddAdminWithFormDataMutation } from "@/redux/api/userApi";
 import { getUserInfo } from "@/services/auth.service";
 import { IDepartment } from "@/types";
 import { Button, Col, Row, message } from "antd";
+import { useEffect, useState } from "react";
 
-
-const CreateAdminPage = () => {
+const UserProfilePage = () => {
   const { data, isLoading } = useAcademicDepartmentsQuery({
     limit: 100,
     page: 1,
   });
+
   const [addAdminWithFormData] = useAddAdminWithFormDataMutation();
   //@ts-ignore
   const departments: IDepartment[] = data?.departments;
@@ -33,18 +35,9 @@ const CreateAdminPage = () => {
     });
 
   const onSubmit = async (values: any) => {
-    console.log(values);
-    const obj = { ...values };
-    const file = obj["profileImg"];
-    delete obj["profileImg"];
-    const data = JSON.stringify(obj);
-    const formData = new FormData();
-    formData.append("profileImg", file as Blob);
-    formData.append("data", data);
-    message.loading("Creating...");
-    
+    console.log(values, "value");
     try {
-      await addAdminWithFormData(formData);
+      // await addAdminWithFormData(formData);
       message.success("Admin created successfully!");
     } catch (err: any) {
       console.error(err.message);
@@ -172,7 +165,7 @@ const CreateAdminPage = () => {
                   marginBottom: "10px",
                 }}
               >
-                <UploadImage name="file" />
+                <UploadImage name="profileImg" />
               </Col>
             </Row>
             <div
@@ -193,4 +186,4 @@ const CreateAdminPage = () => {
   );
 };
 
-export default CreateAdminPage;
+export default UserProfilePage;

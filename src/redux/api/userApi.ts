@@ -2,7 +2,7 @@ import { IAdmin, IMeta } from "@/types";
 import { baseApi } from "./baseApi";
 import { tagTypes } from "../tag-types";
 
-const ADMIN_URL = "/admins";
+const ADMIN_URL = "/users";
 
 export const adminApi = baseApi.injectEndpoints({
   endpoints: (build:any) => ({

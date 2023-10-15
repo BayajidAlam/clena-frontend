@@ -13,7 +13,7 @@ import {
 import { useState } from "react";
 import { useDebounced } from "@/redux/hooks";
 import UMTable from "@/components/ui/UMTable";
-import { useAdminsQuery, useDeleteAdminMutation } from "@/redux/api/adminApi";
+import { useAdminsQuery, useDeleteAdminMutation } from "@/redux/api/userApi";
 import { IDepartment } from "@/types";
 import dayjs from "dayjs";
 import UMModal from "@/components/ui/UMModal";
