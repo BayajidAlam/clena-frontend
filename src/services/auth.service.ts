@@ -13,6 +13,7 @@ export const getUserInfo = () => {
   // console.log(authToken);
   if (authToken) {
     const decodedData = decodedToken(authToken);
+    // console.log(decodedData,'de');
     return decodedData;
   } else {
     return "";

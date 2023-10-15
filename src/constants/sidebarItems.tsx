@@ -4,7 +4,7 @@ import Link from "next/link";
 import { USER_ROLE } from "./role";
 
 export const sidebarItems = (role: string) => {
-  console.log(role, "role");
+  // console.log(role, "role");
 
   const defaultSidebarItems: MenuProps["items"] = [
     {

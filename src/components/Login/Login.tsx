@@ -1,5 +1,6 @@
 "use client";
-import { Button, Col, Input, Row, message } from "antd";
+
+import { Button, Col, Row, message } from "antd";
 import loginImage from "../../assets/login-image.png";
 import Image from "next/image";
 import Form from "@/components/Forms/Form";
@@ -10,6 +11,7 @@ import { storeUserInfo } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "@/schemas/login";
+import { decodedToken } from "@/utils/jwt";
 
 type FormValues = {
   email: string;
@@ -17,20 +19,34 @@ type FormValues = {
 };
 
 const LoginPage = () => {
-  const [userLogin] = useUserLoginMutation();
+  const [userLogin, { isLoading }] = useUserLoginMutation();
   const router = useRouter();
+
+  if (isLoading) {
+    return message.loading("Loading...");
+  }
 
   // console.log(isLoggedIn());
   const onSubmit: SubmitHandler<FormValues> = async (data: any) => {
     try {
-      console.log(data,'data');
+      // console.log(data, "data");
       const res = await userLogin({ ...data }).unwrap();
-      console.log(res);
+      // @ts-ignore
       if (res?.token) {
-        router.push("/super_admin/admin");
+        // @ts-ignore
+        const decode = decodedToken(res?.token);
+        // @ts-ignore
+        if (decode?.role === "customer") {
+          router.push(`/`);
+        } else {
+          // @ts-ignore
+          router.push(`/${decode?.role}`);
+        }
         message.success("User logged in successfully!");
+        // @ts-ignore
+        storeUserInfo({ accessToken: res?.token });
       }
-      storeUserInfo({ accessToken: res?.token });
+
       // console.log(res);
     } catch (err: any) {
       console.error(err.message);
@@ -52,7 +68,7 @@ const LoginPage = () => {
         <h1
           style={{
             margin: "15px 0px",
-            color: "#29ABE2;"
+            color: "#29ABE2;",
           }}
         >
           Please login your account

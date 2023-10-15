@@ -3,6 +3,7 @@ import React from "react";
 import CleanSvg from "../../assets/cleaning service-pana.svg";
 import Image from "next/image";
 import { Button } from "antd";
+import Link from "next/link";
 
 const TopBanner = () => {
   return (
@@ -23,7 +24,6 @@ const TopBanner = () => {
           className="tracking-widest"
         >
           Spring <br />
-         
           Cleaning <br /> Don't Panic
         </h1>
         <p className="w-[90%] my-6">
@@ -32,25 +32,30 @@ const TopBanner = () => {
         </p>
 
         <div className="flex items-center gap-4">
-          <Button
-            htmlType="submit"
+          <Link
             style={{
-              background: "#fd4f1a",
-              padding: "8px 30px",
-              color: "white",
-              fontSize: "14px",
-              borderRadius: "20px",
-              cursor: "pointer",
-              display:"flex",
-              justifyContent: "center",
-              alignItems : "center",
+              textDecoration: "none",
+              border: "none",
             }}
-         
+            href={`/service`}
           >
-            Our Service
-          </Button>
+            <Button
+              style={{
+                background: "#fd4f1a",
+                padding: "8px 30px",
+                color: "white",
+                fontSize: "14px",
+                borderRadius: "20px",
+                cursor: "pointer",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Our Service
+            </Button>
+          </Link>
           <Button
-    
             style={{
               background: "#fd4f1a",
               padding: "8px 30px",
@@ -58,18 +63,23 @@ const TopBanner = () => {
               fontSize: "14px",
               borderRadius: "20px",
               cursor: "pointer",
-              display:"flex",
+              display: "flex",
               justifyContent: "center",
-              alignItems : "center",
+              alignItems: "center",
             }}
-           
           >
             Upcoming Events
           </Button>
         </div>
       </div>
 
-      <Image className="w-[100%] lg:w-[800px]" src={CleanSvg} alt="clean svg" width={800} height={400}></Image>
+      <Image
+        className="w-[100%] lg:w-[800px]"
+        src={CleanSvg}
+        alt="clean svg"
+        width={800}
+        height={400}
+      ></Image>
     </div>
   );
 };

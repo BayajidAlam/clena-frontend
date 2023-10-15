@@ -3,14 +3,14 @@ import { baseApi } from "./baseApi"
 const AUTH_URL = "/auth";
 
 export const authApi = baseApi.injectEndpoints({
-  endpoints: (build) => ({
+  endpoints: (build:any) => ({
     userLogin: build.mutation({
-        query: (loginData) => ({
+        query: (loginData:any) => ({
             url:`${ AUTH_URL}/signin`,
             method: "POST",
             data: loginData
         }),
-        invalidatesTags:[tagTypes.user]
+        invalidatesTags:[tagTypes.customer]
     }),
   }),
   overrideExisting: false,

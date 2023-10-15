@@ -1,13 +1,12 @@
 import { IAdmin, IMeta } from "@/types";
-import { baseApi } from "./baseApi";
-import { tagTypes } from "../tag-types";
+import { baseApi } from "../baseApi";
+import { tagTypes } from "@/redux/tag-types";
+const ADMIN_URL = "/admin";
 
-const ADMIN_URL = "/admins";
-
-export const adminApi = baseApi.injectEndpoints({
-  endpoints: (build:any) => ({
+export const serviceApi = baseApi.injectEndpoints({
+  endpoints: (build: any) => ({
     addAdminWithFormData: build.mutation({
-      query: (data:any) => ({
+      query: (data: any) => ({
         url: "/users/create-admin",
         method: "POST",
         data,
@@ -16,20 +15,20 @@ export const adminApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.admin],
     }),
 
-    admins: build.query({
+    getAllServices: build.query({
       query: (arg: Record<string, any>) => {
         return {
-          url: ADMIN_URL,
+          url: "/services",
           method: "GET",
           params: arg,
         };
       },
-      transformResponse: (response: IAdmin[], meta: IMeta) => {
-        return {
-          admins: response,
-          meta,
-        };
-      },
+      // transformResponse: (response: IAdmin[], meta: IMeta) => {
+      //   return {
+      //     admins: response,
+      //     meta,
+      //   };
+      // },
       providesTags: [tagTypes.admin],
     }),
     admin: build.query({
@@ -40,7 +39,7 @@ export const adminApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.admin],
     }),
     updateAdmin: build.mutation({
-      query: (data) => ({
+      query: (data: any) => ({
         url: `${ADMIN_URL}/${data.id}`,
         method: "PATCH",
         data: data.body,
@@ -48,7 +47,7 @@ export const adminApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.admin],
     }),
     deleteAdmin: build.mutation({
-      query: (id) => ({
+      query: (id: any) => ({
         url: `${ADMIN_URL}/${id}`,
         method: "DELETE",
       }),
@@ -58,9 +57,9 @@ export const adminApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useAdminsQuery,
   useAdminQuery,
   useAddAdminWithFormDataMutation,
   useUpdateAdminMutation,
   useDeleteAdminMutation,
-} = adminApi;
+  useGetAllServicesQuery,
+} = serviceApi;

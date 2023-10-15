@@ -1,6 +1,6 @@
 import { Avatar, Button, Dropdown, Layout, MenuProps, Row, Space } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { getUserInfo, removeUserInfo } from "@/services/auth.service";
+import {  removeUserInfo } from "@/services/auth.service";
 import { authKey } from "@/constants/storageKey";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

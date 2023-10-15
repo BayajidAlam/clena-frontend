@@ -26,7 +26,7 @@ instance.interceptors.request.use(
 // Add a response interceptor
 //@ts-ignore
 instance.interceptors.response.use(
-  // @ts-ignore 
+  // @ts-ignore
   function (response) {
     const responseObject: ResponseSuccessType = {
       data: response?.data?.data,
@@ -36,12 +36,12 @@ instance.interceptors.response.use(
     // return Promise.resolve(responseObject);
   },
   function (error) {
-    const responseObject:IGenericErrorResponse = {
-      statusCode: error?.response?.data?.statusCode || 500,
-      message: error?.response?.data?.message || "something went wrong",
-      errorMessages: error?.response?.data?.message,
-    };
-    return responseObject;
+    // const responseObject:IGenericErrorResponse = {
+    //   statusCode: error?.response?.data?.statusCode || 500,
+    //   message: error?.response?.data?.message || "something went wrong",
+    //   errorMessages: error?.response?.data?.message,
+    // };
+    return error.response;
     // return Promise.reject(responseObject);
   }
 );

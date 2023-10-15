@@ -4,7 +4,6 @@ import { Button } from "antd";
 import { getUserInfo } from "@/services/auth.service";
 
 const HomeHeader = () => {
-
   // const { role } = getUserInfo() as any;
   return (
     <div
@@ -17,22 +16,32 @@ const HomeHeader = () => {
         margin: "0px auto",
       }}
     >
-      <p
+      <Link
         style={{
-          fontSize: "30px",
-          color: "#ff5100",
-          fontWeight: "bold"
+          textDecoration: "none",
+          border: "none",
+        }}
+        href={`/`}
+      >
+        {" "}
+        <p
+          style={{
+            fontSize: "30px",
+            color: "#ff5100",
+            fontWeight: "bold",
+          }}
+        >
+          CLENA
+        </p>
+      </Link>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "20px",
         }}
       >
-        CLENA
-      </p>
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "20px",
-      }}>
         <Link href={`/customer/booking`}>
-        
           <Button
             style={{
               background: "#fd4f1a",
@@ -47,7 +56,6 @@ const HomeHeader = () => {
           </Button>
         </Link>
         <Link href={`/customer/cart`}>
-    
           <Button
             style={{
               background: "#fd4f1a",
@@ -60,10 +68,8 @@ const HomeHeader = () => {
           >
             Cart
           </Button>
-
         </Link>
         <Link href={`/login`}>
-      
           <Button
             style={{
               background: "#fd4f1a",
@@ -78,7 +84,6 @@ const HomeHeader = () => {
           </Button>
         </Link>
         <Link href={`/register`}>
-        
           <Button
             style={{
               background: "#fd4f1a",
@@ -93,7 +98,6 @@ const HomeHeader = () => {
           </Button>
         </Link>
       </div>
-
     </div>
   );
 };
