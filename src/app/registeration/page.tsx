@@ -12,7 +12,7 @@ import {
   useUserLoginMutation,
   useUserSignUpMutation,
 } from "@/redux/api/authApi";
-import { getUserInfo } from "@/services/auth.service";
+import { getUserInfo, storeUserInfo } from "@/services/auth.service";
 import { decodedToken } from "@/utils/jwt";
 import { Col, Row, message } from "antd";
 import { Footer } from "antd/es/layout/layout";
@@ -39,18 +39,18 @@ const RegisterationPage = () => {
       // @ts-ignore
       if (res?.data?.success) {
         const res = await userLogin(loginData).unwrap();
-      
+
         // @ts-ignore
         if (res?.token) {
           // @ts-ignore
           const decode = decodedToken(res?.token);
-          console.log(decode,'token');
+          console.log(decode, "token");
           // @ts-ignore
           if (decode?.role === "customer") {
             router.push(`/`);
-            message.success("Account created successfully!");
             // @ts-ignore
             storeUserInfo({ accessToken: res?.token });
+            message.success("Account created successfully!");
           } else {
             // @ts-ignore
             router.push(`/${decode?.role}`);

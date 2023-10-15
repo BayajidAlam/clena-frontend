@@ -2,9 +2,10 @@ import type { MenuProps } from "antd";
 import { ProfileOutlined, TableOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { USER_ROLE } from "./role";
+import { getUserInfo } from "@/services/auth.service";
 
 export const sidebarItems = (role: string) => {
- 
+  const { userId } = getUserInfo();
 
   const defaultSidebarItems: MenuProps["items"] = [
     {
@@ -13,8 +14,8 @@ export const sidebarItems = (role: string) => {
       icon: <ProfileOutlined />,
       children: [
         {
-          label: <Link href={`/profile`}>Account Profile</Link>,
-          key: `/${role}/profile`,
+          label: <Link href={`/profile/${userId}`}>Account Profile</Link>,
+          key: `/${role}/profile/${userId}`,
         },
         {
           label: <Link href={`/${role}/change-password`}>Change Password</Link>,
@@ -50,9 +51,7 @@ export const sidebarItems = (role: string) => {
     },
     {
       label: (
-        <Link href={`/${role}/content-management`}>
-          Content-Management
-        </Link>
+        <Link href={`/${role}/content-management`}>Content-Management</Link>
       ),
       icon: <TableOutlined />,
       key: `/${role}/content-management`,
