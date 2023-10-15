@@ -1,6 +1,6 @@
 import { Avatar, Button, Dropdown, Layout, MenuProps, Row, Space } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import {  removeUserInfo } from "@/services/auth.service";
+import { getUserInfo, removeUserInfo } from "@/services/auth.service";
 import { authKey } from "@/constants/storageKey";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -8,6 +8,7 @@ const { Header: AntHeader } = Layout;
 
 const Header = () => {
   const router = useRouter();
+  const { role } = getUserInfo() as any;
 
   const logOut = () => {
     removeUserInfo(authKey);
@@ -79,7 +80,7 @@ const Header = () => {
               <span className="text-white text-base font-bold">
                 {"John Doe"}
               </span>
-              <span className="text-white text-sm">{"Admin"}</span>
+              <span className="text-white text-sm capitalize">{role}</span>
             </div>
 
             <Dropdown menu={{ items }}>

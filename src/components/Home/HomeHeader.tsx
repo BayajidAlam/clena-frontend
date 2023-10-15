@@ -1,10 +1,27 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
 import { Button } from "antd";
-import { getUserInfo } from "@/services/auth.service";
+import { getUserInfo, removeUserInfo } from "@/services/auth.service";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { authKey } from "@/constants/storageKey";
 
 const HomeHeader = () => {
-  // const { role } = getUserInfo() as any;
+  const [userRole, setUserRole] = useState("");
+  const { role } = getUserInfo() as any;
+  const router = useRouter();
+
+  useEffect(() => {
+    if (role) {
+      setUserRole(role);
+    }
+  }, [role]);
+
+  const logOut = () => {
+    removeUserInfo(authKey);
+    router.push("/login");
+  };
   return (
     <div
       style={{
@@ -41,8 +58,9 @@ const HomeHeader = () => {
           gap: "20px",
         }}
       >
-        <Link href={`/customer/booking`}>
+        <Link href={`/service`}>
           <Button
+            type="primary"
             style={{
               background: "#fd4f1a",
               padding: "6px 30px",
@@ -52,51 +70,79 @@ const HomeHeader = () => {
               cursor: "pointer",
             }}
           >
-            Booking
+            Service
           </Button>
         </Link>
-        <Link href={`/customer/cart`}>
+        {userRole && (
+          <>
+            {" "}
+            <Link href={`/customer/booking`}>
+              <Button
+                type="primary"
+                style={{
+                  background: "#fd4f1a",
+                  padding: "6px 30px",
+                  color: "white",
+                  fontSize: "14px",
+                  borderRadius: "20px",
+                  cursor: "pointer",
+                }}
+              >
+                Booking
+              </Button>
+            </Link>
+            <Link href={`/customer/cart`}>
+              <Button
+                type="primary"
+                style={{
+                  background: "#fd4f1a",
+                  padding: "6px 30px",
+                  color: "white",
+                  fontSize: "14px",
+                  borderRadius: "20px",
+                  cursor: "pointer",
+                }}
+              >
+                Cart
+              </Button>
+            </Link>
+          </>
+        )}
+
+        {userRole ? (
           <Button
             style={{
-              background: "#fd4f1a",
+              // background: "#fd4f1a",
+              border: "1px solid #fd4f1a",
+              color: "#fd4f1a",
               padding: "6px 30px",
-              color: "white",
+              fontWeight: "bold",
               fontSize: "14px",
               borderRadius: "20px",
               cursor: "pointer",
             }}
+            onClick={logOut}
+            type="text"
+            danger
           >
-            Cart
+            Logout
           </Button>
-        </Link>
-        <Link href={`/login`}>
-          <Button
-            style={{
-              background: "#fd4f1a",
-              padding: "6px 30px",
-              color: "white",
-              fontSize: "14px",
-              borderRadius: "20px",
-              cursor: "pointer",
-            }}
-          >
-            Login
-          </Button>
-        </Link>
-        <Link href={`/register`}>
-          <Button
-            style={{
-              background: "#fd4f1a",
-              padding: "6px 30px",
-              color: "white",
-              fontSize: "14px",
-              borderRadius: "20px",
-              cursor: "pointer",
-            }}
-          >
-            Register
-          </Button>
-        </Link>
+        ) : (
+          <Link href={`/register`}>
+            <Button
+              style={{
+                background: "#fd4f1a",
+                padding: "6px 30px",
+                color: "white",
+                fontSize: "14px",
+                borderRadius: "20px",
+                cursor: "pointer",
+              }}
+            >
+              Register
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );

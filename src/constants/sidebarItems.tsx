@@ -4,7 +4,7 @@ import Link from "next/link";
 import { USER_ROLE } from "./role";
 
 export const sidebarItems = (role: string) => {
-  // console.log(role, "role");
+ 
 
   const defaultSidebarItems: MenuProps["items"] = [
     {
@@ -13,7 +13,7 @@ export const sidebarItems = (role: string) => {
       icon: <ProfileOutlined />,
       children: [
         {
-          label: <Link href={`/${role}`}>Account Profile</Link>,
+          label: <Link href={`/profile`}>Account Profile</Link>,
           key: `/${role}/profile`,
         },
         {

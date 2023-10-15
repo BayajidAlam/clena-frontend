@@ -59,7 +59,7 @@ const UploadImage = ({ name }: ImageUploadProps) => {
 
   return (
     <>
-      <Upload
+      <Upload 
         name={name}
         listType="picture-card"
         className="avatar-uploader"

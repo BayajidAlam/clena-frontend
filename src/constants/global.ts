@@ -1,15 +1,15 @@
-export const genderOptions = [
+export const roleOptions = [
   {
-    label: "Male",
-    value: "male",
+    label: 'Super Admin',
+    value: 'superadmin',
   },
   {
-    label: "Female",
-    value: "female",
+    label: 'Admin',
+    value: 'admin',
   },
   {
-    label: "Others",
-    value: "others",
+    label: 'Customer',
+    value: 'customer',
   },
 ];
 export const departmentOptions = [

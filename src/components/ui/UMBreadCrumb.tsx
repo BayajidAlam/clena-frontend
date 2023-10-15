@@ -29,7 +29,16 @@ const UMBreadCrumb = ({
     }),
   ];
 
-  return <Breadcrumb items={breadCrumbItems}></Breadcrumb>;
+  return (
+    <Breadcrumb
+      style={{
+        background: "linear-gradient(45deg, #ffdbcb, transparent)",
+        color: "#444 ",
+      }}
+      className="flex px-5 bg-white shadow-sm py-3 text-gray-700  rounded-md  dark:bg-gray-800 dark:border-gray-700"
+      items={breadCrumbItems}
+    ></Breadcrumb>
+  );
 };
 
 export default UMBreadCrumb;

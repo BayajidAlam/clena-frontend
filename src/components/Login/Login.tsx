@@ -19,9 +19,9 @@ type FormValues = {
 };
 
 const LoginPage = () => {
-  const [userLogin, { isLoading }] = useUserLoginMutation();
+  const [userLogin, { isLoading,data }] = useUserLoginMutation();
   const router = useRouter();
-
+  console.log(data,'userdata');
   if (isLoading) {
     return message.loading("Loading...");
   }
