@@ -100,6 +100,7 @@ const RegisterationPage = () => {
                 border: "1px solid #e9e8e8",
                 boxSizing: "border-box",
               }}
+              className="pb-16"
             >
               <p
                 style={{
@@ -202,6 +203,7 @@ const RegisterationPage = () => {
                 <CleanCommonSaveButton>Register</CleanCommonSaveButton>
               </div>
             </div>
+            
           </Form>
         </div>
       </div>

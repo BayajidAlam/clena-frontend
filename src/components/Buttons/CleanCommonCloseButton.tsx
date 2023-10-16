@@ -1,10 +1,10 @@
 import { Button } from "antd";
 import React from "react";
 
-const CleanCommonCloseButton = ({ children, className, onClick }: any) => {
-
+const CleanCommonCloseButton = ({ children, className, onClick,style }: any) => {
   return (
     <Button
+      type="primary"
       onClick={onClick}
       style={{
         background: "#FF9800",
@@ -12,7 +12,8 @@ const CleanCommonCloseButton = ({ children, className, onClick }: any) => {
         color: "white",
         fontSize: "14px",
         borderRadius: "20px",
-        cursor: "pointer"
+        cursor: "pointer",
+        ...style
       }}
       className={className}
     >

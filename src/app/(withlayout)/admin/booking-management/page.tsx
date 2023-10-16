@@ -2,22 +2,19 @@
 
 import ActionBar from "@/components/ui/ActionBar";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import { Button, Input, message } from "antd";
+import { message } from "antd";
 import Link from "next/link";
-import { ReloadOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
-import { useDebounced } from "@/redux/hooks";
+import { useState } from "react";
 import UMTable from "@/components/ui/UMTable";
 import UMModal from "@/components/ui/UMModal";
-import { useAdminsQuery, useUpdateRoleMutation } from "@/redux/api/adminApi";
-import Image from "next/image";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";
-import {
-  useDeleteServiceMutation,
-  useGetAllServicesQuery,
-} from "@/redux/api/services/ServiceApi";
 import Loading from "@/app/loading";
+import {
+  useGetAllBookingsQuery,
+  useUpdateBookingStatusMutation,
+} from "@/redux/api/bookingApi";
+import moment from 'moment';
 
 const ServiceManagementPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -27,7 +24,6 @@ const ServiceManagementPage = () => {
   const [size, setSize] = useState<number>(5);
   const [sortBy, setSortBy] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
   query["limit"] = size;
@@ -35,89 +31,174 @@ const ServiceManagementPage = () => {
   query["sortBy"] = sortBy;
   query["sortOrder"] = sortOrder;
 
-  const { data, isLoading, refetch } = useGetAllServicesQuery({ ...query });
-  const [deleteService] = useDeleteServiceMutation();
+  const { data, isLoading, refetch } = useGetAllBookingsQuery({ ...query });
+  const [updateBookingStatus] = useUpdateBookingStatusMutation();
+  // console.log(data?.data, "data");
   // @ts-ignore
-  const serviceData = data?.data?.data;
+  const bookingsData = data?.data;
+  console.log(bookingsData, "book");
   // @ts-ignore
-  const serviceDataLength = data?.data?.meta;
+  const bookingsDataLength = data?.data?.meta;
 
-  const handleDelete = async (id: any) => {
-    const res = await deleteService(id).unwrap();
-    // @ts-ignore 
+  const handleAccept = async (id: any) => {
+    const res = await updateBookingStatus({
+      id: id?.id,
+      body: { status: "accepted" },
+    }).unwrap();
+    // @ts-ignore
     if (res?.success) {
+      refetch();
+      message.success("Booking Status Updated successfully!");
+    }
+  };
+
+  const handleDelivered = async (id: any) => {
+    console.log(id);
+    const res = await updateBookingStatus({
+      id: id?.id,
+      body: { status: "delivered" },
+    }).unwrap();
+    // @ts-ignore
+    if (res?.success) {
+      refetch();
+      message.success("Booking Status Updated successfully!");
+    }
+  };
+
+  const handleReject = async (id: any) => {
+    const res = await updateBookingStatus({
+      id: id?.id,
+      body: { status: "rejected" },
+    }).unwrap();
+    // @ts-ignore
+    if (res?.success) {
+      refetch();
+      message.success("Booking Status Updated successfully!");
+    }
+  };
+
+  const renderActionButtons = (status: any, record: any) => {
+    switch (status) {
+      case "pending":
+        return (
+          <div className="flex justify-center items-center gap-1">
+            <CleanCommonSaveButton onClick={() => handleReject(record)}>
+              Reject
+            </CleanCommonSaveButton>
+            <CleanCommonCloseButton
+              style={{ background: "green" }}
+              onClick={() => handleAccept(record)}
+            >
+              Accept
+            </CleanCommonCloseButton>
+            <Link href={`/admin/booking-management/schedule/${record.id}`}>
+              <CleanCommonCloseButton
+                style={{
+                  background: "orange",
+                }}
+              >
+                Reschedule
+              </CleanCommonCloseButton>
+            </Link>
+          </div>
+        );
+      case "accepted":
+        return (
+          <div>
+            <CleanCommonSaveButton onClick={() => handleDelivered(record)}>
+              Delivery
+            </CleanCommonSaveButton>
+          </div>
+        );
+      case "rejected":
+        return <p className="text-red-500 font-bold text lg">Rejected</p>;
+      default:
+        return <p className="text-green-500 font-bold text lg">Delivered</p>;
     }
   };
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      width: "15%",
+      title: "Service Name",
+      dataIndex: ["user", "name"],
       align: "center",
+      render: (text: any, record: any) => {
+        return <p>{text}</p>;
+      },
+      width: "15%",
+    },
+    {
+      title: "Location",
+      dataIndex: ["service", "location"],
+      align: "center",
+      render: (text: any, record: any) => {
+        return <p>{text}</p>;
+      },
     },
     {
       title: "Price",
-      dataIndex: "price",
-      width: "10%",
+      dataIndex: ["service", "price"],
       align: "center",
-    },
-    {
-      title: "Category Name",
-      dataIndex: ["category", "title"],
-      render: (text: string, record: any) => (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "5px",
-          }}
-        >
-          {text}
-        </div>
-      ),
-      width: "15%",
-      align: "center",
+      render: (text: any, record: any) => {
+        return <p>{text}</p>;
+      },
     },
 
     {
-      title: "Location",
-      dataIndex: "location",
-      width: "20%",
+      title: "Customer",
+      dataIndex: ["user", "name"],
+      align: "center",
+      render: (text: any, record: any) => {
+        return <p>{text}</p>;
+      },
     },
     {
-      title: "Status",
+      title: "Customer Email",
+      dataIndex: ["user", "email"],
+      align: "center",
+      render: (text: any, record: any) => {
+        return <p>{text}</p>;
+      },
+    },
+    {
+      title: "Contact",
+      dataIndex: ["user", "contactNo"],
+      align: "center",
+      render: (text: any, record: any) => {
+        return <p>{text}</p>;
+      },
+    },
+    {
+      title: "Address",
+      dataIndex: ["user", "address"],
+      align: "center",
+      render: (text: any, record: any) => {
+        return <p>{text}</p>;
+      },
+    },
+    {
+      title: "Schedule",
+      dataIndex: "booking_schedult",
+      align: "center",
+      render: (text: any, record: any) => {
+        // Assuming text is the ISO date string, format it to a more readable format
+        const formattedDate = moment(text).format('MMMM DD, YYYY HH:mm:ss');
+        return <p>{formattedDate}</p>;
+      },
+    },
+    {
+      title: "Booking Status",
       dataIndex: "status",
-      width: "10%",
-    },
-    {
-      title: "Stock",
-      dataIndex: "inStock",
-      width: "15%",
+      align: "center",
     },
     {
       title: "Action",
-      dataIndex: "id",
-      render: (record: any) => (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "5px",
-          }}
-        >
-          <Link href={`/admin/service-management/edit/${record}`}>
-            <CleanCommonCloseButton>Edit</CleanCommonCloseButton>
-          </Link>
-          <CleanCommonSaveButton onClick={() => handleDelete(record)}>
-            Delete
-          </CleanCommonSaveButton>
-        </div>
-      ),
+      dataIndex: "status",
+      width: "10%",
+      render: (status: any, record: any) => {
+        return renderActionButtons(status, record);
+      },
       align: "center",
-      width: "20%",
     },
   ];
 
@@ -162,11 +243,11 @@ const ServiceManagementPage = () => {
             }}
           /> */}
           <div>
-            <Link href="/admin/service-management/create">
+            {/* <Link href="/admin/service-management/create">
               <button className="text-white shadow-xl bg-[#FF5100] hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-none">
                 Create Service
               </button>
-            </Link>
+            </Link> */}
             {/* {(!!sortBy || !!sortOrder || !!searchTerm) && (
               <Button
                 className="bg-[#FF5100] font-bold"
@@ -184,10 +265,10 @@ const ServiceManagementPage = () => {
       <UMTable
         loading={isLoading}
         columns={columns}
-        dataSource={serviceData}
+        dataSource={bookingsData}
         pageSize={size}
         // @ts-ignore
-        totalPages={serviceDataLength}
+        totalPages={bookingsDataLength}
         showSizeChanger={true}
         onPaginationChange={onPaginationChange}
         onTableChange={onTableChange}

@@ -186,7 +186,8 @@ const AdminPage = () => {
         </ActionBar>
       </div>
 
-      <UMTable
+      <UMTable 
+        
         loading={isLoading}
         columns={columns}
         dataSource={adminData}

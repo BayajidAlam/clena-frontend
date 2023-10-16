@@ -32,7 +32,7 @@ const FormDatePicker = ({
         control={control}
         render={({ field }) => (
           <DatePicker
-            defaultValue={dayjs(field.value) || Date.now()}
+            defaultValue={field.value ? dayjs(field.value) : undefined}
             size={size}
             onChange={handleOnChange}
             style={{ width: "100%" }}

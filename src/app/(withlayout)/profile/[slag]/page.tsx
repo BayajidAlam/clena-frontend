@@ -20,6 +20,7 @@ const UserProfilePage = ({ params }: any) => {
 
   const { data, error, isLoading } = useGetSingleUserQuery(id);
 
+  console.log(data);
   // @ts-ignore 
   const myData = data?.data[0];
   useEffect(() => {

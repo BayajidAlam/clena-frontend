@@ -12,6 +12,7 @@ type UMTableProps = {
   onPaginationChange?: (page: number, pageSize: number) => void;
   onTableChange?: (pagination: any, filter: any, sorter: any) => void;
   showPagination?: boolean;
+  style?: any;
 };
 
 const UMTable = ({
@@ -24,6 +25,7 @@ const UMTable = ({
   onPaginationChange,
   onTableChange,
   showPagination = true,
+  style,
 }: UMTableProps) => {
   const paginationConfig = showPagination
     ? {
@@ -37,6 +39,7 @@ const UMTable = ({
 
   return (
     <Table
+      style={style}
       className="shadow-md"
       scroll={{ x: 300 }}
       loading={loading}

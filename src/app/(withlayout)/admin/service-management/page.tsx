@@ -41,7 +41,7 @@ const ServiceManagementPage = () => {
   const serviceData = data?.data?.data;
   // @ts-ignore
   const serviceDataLength = data?.data?.meta;
-
+  console.log(serviceData);
   const handleDelete = async (id: any) => {
     const res = await deleteService(id).unwrap();
     // @ts-ignore 

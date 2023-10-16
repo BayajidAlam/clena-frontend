@@ -29,7 +29,7 @@ const UploadImage = ({ name }: ImageUploadProps) => {
 
       try {
         const response = await fetch(
-          `https://api.imgbb.com/1/upload?key=${imageHostKey}`,
+          `https://api.imgbb.com/1/upload?expiration=1728000&key=${imageHostKey}`,
           {
             method: "POST",
             body: formData,
