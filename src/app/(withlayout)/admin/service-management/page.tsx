@@ -13,12 +13,15 @@ import { useAdminsQuery, useUpdateRoleMutation } from "@/redux/api/adminApi";
 import Image from "next/image";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";
-import { useGetAllServicesQuery } from "@/redux/api/services/ServiceApi";
+import {
+  useDeleteServiceMutation,
+  useGetAllServicesQuery,
+} from "@/redux/api/services/ServiceApi";
+import Loading from "@/app/loading";
 
 const ServiceManagementPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const query: Record<string, any> = {};
-  const [updateRole] = useUpdateRoleMutation();
 
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(5);
@@ -32,35 +35,31 @@ const ServiceManagementPage = () => {
   query["sortBy"] = sortBy;
   query["sortOrder"] = sortOrder;
 
-  // const debouncedSearchTerm = useDebounced({
-  //   searchQuery: searchTerm,
-  //   delay: 600,
-  // });
-
-  // useEffect(() => {
-  //   if (!!debouncedSearchTerm) {
-  //     query["searchTerm"] = debouncedSearchTerm;
-  //   }
-  // }, [debouncedSearchTerm, query]);
-
-  const { data, isLoading } = useGetAllServicesQuery({ ...query });
-
+  const { data, isLoading, refetch } = useGetAllServicesQuery({ ...query });
+  const [deleteService] = useDeleteServiceMutation();
   // @ts-ignore
   const serviceData = data?.data?.data;
   // @ts-ignore
   const serviceDataLength = data?.data?.meta;
-  console.log(serviceData, "data");
+
+  const handleDelete = async (id: any) => {
+    const res = await deleteService(id).unwrap();
+    // @ts-ignore 
+    if (res?.success) {
+    }
+  };
+
   const columns = [
     {
       title: "Name",
       dataIndex: "name",
-      width: "20%",
+      width: "15%",
       align: "center",
     },
     {
       title: "Price",
       dataIndex: "price",
-      width: "15%",
+      width: "10%",
       align: "center",
     },
     {
@@ -79,17 +78,22 @@ const ServiceManagementPage = () => {
         </div>
       ),
       width: "15%",
-      align: "center"
+      align: "center",
     },
 
     {
       title: "Location",
       dataIndex: "location",
-      width: "15%",
+      width: "20%",
     },
     {
       title: "Status",
       dataIndex: "status",
+      width: "10%",
+    },
+    {
+      title: "Stock",
+      dataIndex: "inStock",
       width: "15%",
     },
     {
@@ -107,13 +111,14 @@ const ServiceManagementPage = () => {
           <Link href={`/admin/service-management/edit/${record}`}>
             <CleanCommonCloseButton>Edit</CleanCommonCloseButton>
           </Link>
-          <CleanCommonSaveButton>Delete</CleanCommonSaveButton>
+          <CleanCommonSaveButton onClick={() => handleDelete(record)}>
+            Delete
+          </CleanCommonSaveButton>
         </div>
       ),
       align: "center",
       width: "20%",
-    }
-    
+    },
   ];
 
   const onPaginationChange = (page: number, pageSize: number) => {
@@ -128,18 +133,9 @@ const ServiceManagementPage = () => {
     setSortOrder(order === "ascend" ? "asc" : "desc");
   };
 
-  const resetFilters = () => {
-    setSortBy("");
-    setSortOrder("");
-    setSearchTerm("");
-  };
-
-  const handleEdit = async (id: string) => {
-    try {
-    } catch (error: any) {
-      message.error(error.message);
-    }
-  };
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div>
@@ -170,7 +166,6 @@ const ServiceManagementPage = () => {
               <button className="text-white shadow-xl bg-[#FF5100] hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-none">
                 Create Service
               </button>
-       
             </Link>
             {/* {(!!sortBy || !!sortOrder || !!searchTerm) && (
               <Button

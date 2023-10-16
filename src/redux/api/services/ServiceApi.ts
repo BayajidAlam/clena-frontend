@@ -58,6 +58,14 @@ export const serviceApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.admin, tagTypes.category, tagTypes.service],
     }),
 
+    deleteService: build.mutation({
+      query: (id: any) => ({
+        url: `/services/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.admin, tagTypes.category, tagTypes.service],
+    }),
+
     updateAdmin: build.mutation({
       query: (data: any) => ({
         url: `${ADMIN_URL}/${data.id}`,
@@ -77,4 +85,5 @@ export const {
   useAddNewServiceMutation,
   useUpdateSingleServiceMutation,
   useGetSingleServiceQuery,
+  useDeleteServiceMutation
 } = serviceApi;

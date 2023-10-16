@@ -7,7 +7,11 @@ import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
-import { locationOptions, statusOptions } from "@/constants/global";
+import {
+  StockOptions,
+  locationOptions,
+  statusOptions,
+} from "@/constants/global";
 import { USER_ROLE } from "@/constants/role";
 import { useUserSignUpMutation } from "@/redux/api/authApi";
 import { useAddNewServiceMutation } from "@/redux/api/services/ServiceApi";
@@ -23,7 +27,7 @@ const CreateServicePage = () => {
   const onSubmit = async (values: any) => {
     console.log({ rating: 5, ...values }, "data from form");
     try {
-      const res = await addNewService({ rating:"5", ...values });
+      const res = await addNewService({ rating: "5", ...values });
       console.log(res, "customer create on admin");
       // @ts-ignore
       if (res?.data?.success) {
@@ -177,6 +181,27 @@ const CreateServicePage = () => {
                   size="large"
                   label="Details"
                 />
+              </Col>
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <ClenaSelectField
+                  style={{
+                    width: "100%",
+                    textAlign: "left",
+                  }}
+                  size="large"
+                  name="inStock"
+                  options={StockOptions}
+                  label="Stock"
+                  placeholder="Select Status"
+                  onSearch={onSearch}
+                  filterOption={filterOption}
+                ></ClenaSelectField>
               </Col>
               <Col
                 className="gutter-row"

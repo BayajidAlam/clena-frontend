@@ -2,30 +2,22 @@
 
 import Loading from "@/app/loading";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
-import CategoryField from "@/components/Forms/ClenaCategoryField";
-import ClenaSelectField from "@/components/Forms/ClenaSelectField";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
-import { locationOptions, statusOptions } from "@/constants/global";
 import {
-  useAddNewServiceMutation,
-  useGetAllServicesQuery,
   useGetSingleServiceQuery,
   useUpdateSingleServiceMutation,
 } from "@/redux/api/services/ServiceApi";
-import { useGetSingleUserQuery } from "@/redux/api/userApi";
 import { Col, Row, message } from "antd";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ServiceEditPage = ({ params }: any) => {
+  
   const id = params.slug;
-
   const [value, setValue] = useState({});
-
   const [updateSingleService] = useUpdateSingleServiceMutation();
   const { data, error, isLoading, refetch } = useGetSingleServiceQuery(id);
 
@@ -41,10 +33,10 @@ const ServiceEditPage = ({ params }: any) => {
         status: myData.status,
         rating: myData.rating,
         image: myData?.image,
+        inStock: myData?.inStock
       });
     }
   }, [data, myData]);
-
 
   const onSubmit = async (values: any) => {
     console.log(values);
@@ -63,17 +55,6 @@ const ServiceEditPage = ({ params }: any) => {
       console.error(err.message);
     }
   };
-
-  const onSearch = (value: string) => {
-    console.log("search:", value);
-  };
-
-  // filter on select
-  const filterOption = (
-    input: string,
-    option?: { label: string; value: string }
-  ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-
   if (isLoading) {
     return <Loading />;
   }
@@ -201,6 +182,23 @@ const ServiceEditPage = ({ params }: any) => {
                   label="Details"
                 />
               </Col>
+
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <FormInput
+                  type="text"
+                  name="inStock"
+                  size="large"
+                  label="Details"
+                />
+              </Col>
+
+
               <Col
                 className="gutter-row"
                 span={6}

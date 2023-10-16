@@ -1,26 +1,41 @@
 export const statusOptions = [
   {
-    label: 'Active',
-    value: ' active',
+    label: "Active",
+    value: "active",
   },
   {
-    label: 'InActive',
-    value: 'inActive',
+    label: "InActive",
+    value: "inActive",
   },
 ];
 
 export const locationOptions = [
-  { label: 'Dhaka', value: 'Dhaka' },
-  { label: 'Rangpur', value: 'Rangpur' },
-  { label: 'Rajshahi', value: 'Rajshahi' },
-  { label: 'Khulna', value: 'Khulna' },
-  { label: 'Barishal', value: 'Barishal' },
-  { label: 'Chittagong', value: 'Chittagong' },
-  { label: 'Chattagram', value: 'Chattagram' },
-  { label: 'Sylhet', value: 'Sylhet' },
-  { label: 'Mymensingh', value: 'Mymensingh' },
+  { label: "Dhaka", value: "Dhaka" },
+  { label: "Rangpur", value: "Rangpur" },
+  { label: "Rajshahi", value: "Rajshahi" },
+  { label: "Khulna", value: "Khulna" },
+  { label: "Barishal", value: "Barishal" },
+  { label: "Chittagong", value: "Chittagong" },
+  { label: "Chattagram", value: "Chattagram" },
+  { label: "Sylhet", value: "Sylhet" },
+  { label: "Mymensingh", value: "Mymensingh" },
 ];
 
+export const StockOptions = [
+  {
+    label: "In Stock",
+    value: "inStock",
+  },
+  {
+    label: "Our Of Stock",
+    value: "outOfStock",
+  },
+];
+
+export const Stock = {
+  inStock: "",
+  outOfStock: "",
+};
 
 export const bloodGroupOptions = [
   {
