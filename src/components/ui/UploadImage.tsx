@@ -67,7 +67,7 @@ const UploadImage = ({ name }: ImageUploadProps) => {
         listType="picture-card"
         className="avatar-uploader"
         showUploadList={false}
-        action="/api/file" // This might be different in your setup
+        action="/api/file" 
         onChange={handleChange}
       >
         {imageUrl ? (

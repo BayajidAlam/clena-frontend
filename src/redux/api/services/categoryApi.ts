@@ -12,7 +12,16 @@ export const serviceApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.category],
     }),
-
+    getAllCategory: build.query({
+      query: (arg: Record<string, any>) => {
+        return {
+          url: "/categories",
+          method: "GET",
+          params: arg,
+        };
+      },
+      providesTags: [tagTypes.admin, tagTypes.category,tagTypes.service],
+    }),
     
     // updateAdmin: build.mutation({
     //   query: (data: any) => ({
@@ -26,5 +35,6 @@ export const serviceApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useAddNewCategoryMutation
+  useAddNewCategoryMutation,
+  useGetAllCategoryQuery
 } = serviceApi;

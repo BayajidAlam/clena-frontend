@@ -170,11 +170,7 @@ const ServiceManagementPage = () => {
               <button className="text-white shadow-xl bg-[#FF5100] hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-none">
                 Create Service
               </button>
-            </Link>
-            <Link href="/admin/service-management/create-category">
-              <button className="text-white shadow-xl bg-[#FF5100] hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-none">
-                Create Category
-              </button>
+       
             </Link>
             {/* {(!!sortBy || !!sortOrder || !!searchTerm) && (
               <Button

@@ -31,6 +31,16 @@ export const sidebarItems = (role: string) => {
       ),
       icon: <TableOutlined />,
       key: `/${role}/service-management`,
+      children: [
+        {
+          label: <Link href={`/admin/service-management/create-category`}>Create Category</Link>,
+          key: `/admin/service-management/create-category`,
+        },
+        {
+          label: <Link href={`/admin/service-management/create`}>Create Service</Link>,
+          key: `/admin/service-management/create`,
+        },
+      ],
     },
     {
       label: (

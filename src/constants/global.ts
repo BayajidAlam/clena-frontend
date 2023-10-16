@@ -1,31 +1,26 @@
-export const roleOptions = [
+export const statusOptions = [
   {
-    label: 'Super Admin',
-    value: 'superadmin',
+    label: 'Active',
+    value: ' active',
   },
   {
-    label: 'Admin',
-    value: 'admin',
-  },
-  {
-    label: 'Customer',
-    value: 'customer',
+    label: 'InActive',
+    value: 'inActive',
   },
 ];
-export const departmentOptions = [
-  {
-    label: "HR",
-    value: "hr manager",
-  },
-  {
-    label: "Finance",
-    value: "finance",
-  },
-  {
-    label: "Management",
-    value: "management",
-  },
+
+export const locationOptions = [
+  { label: 'Dhaka', value: 'Dhaka' },
+  { label: 'Rangpur', value: 'Rangpur' },
+  { label: 'Rajshahi', value: 'Rajshahi' },
+  { label: 'Khulna', value: 'Khulna' },
+  { label: 'Barishal', value: 'Barishal' },
+  { label: 'Chittagong', value: 'Chittagong' },
+  { label: 'Chattagram', value: 'Chattagram' },
+  { label: 'Sylhet', value: 'Sylhet' },
+  { label: 'Mymensingh', value: 'Mymensingh' },
 ];
+
 
 export const bloodGroupOptions = [
   {
