@@ -5,7 +5,7 @@ import { baseApi } from "./baseApi";
 const USER_URL = "/users";
 
 export const userApi = baseApi.injectEndpoints({
-  endpoints: (build) => ({
+  endpoints: (build: any) => ({
     // get all academic departments
     // academicDepartments: build.query({
     //   query: (arg: Record<string, any>) => {
@@ -40,15 +40,15 @@ export const userApi = baseApi.injectEndpoints({
     //   }),
     //   invalidatesTags: [tagTypes.academicDepartment],
     // }),
-    // // update ac department
-    // updateAcademicDepartment: build.mutation({
-    //   query: (data) => ({
-    //     url: `${ACADEMIC_DEPARTMENT_URL}/${data.id}`,
-    //     method: "PATCH",
-    //     data: data.body,
-    //   }),
-    //   invalidatesTags: [tagTypes.academicDepartment],
-    // }),
+
+    updateUser: build.mutation({
+      query: (data: any) => ({
+        url: `${USER_URL}/${data.id}`,
+        method: "PATCH",
+        data: data.body,
+      }),
+      invalidatesTags: [tagTypes.customer, tagTypes.admin],
+    }),
 
     // // delete ac department
     // deleteAcademicDepartment: build.mutation({
@@ -61,4 +61,4 @@ export const userApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetSingleUserQuery } = userApi;
+export const { useGetSingleUserQuery,useUpdateUserMutation } = userApi;

@@ -6,13 +6,10 @@ import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
 import { USER_ROLE } from "@/constants/role";
-
 import { useUserSignUpMutation } from "@/redux/api/authApi";
-import { getUserInfo, storeUserInfo } from "@/services/auth.service";
-
+import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
 import { useRouter } from "next/navigation";
-
 
 const RegisterationPage = () => {
   const [userSignUp, {}] = useUserSignUpMutation();
@@ -20,13 +17,15 @@ const RegisterationPage = () => {
   const router = useRouter();
 
   const onSubmit = async (values: any) => {
-    const dataWithRole = { ...values, role: USER_ROLE.ADMIN };
+    const dataWithRole = { ...values, role: USER_ROLE.CUSTOMER };
+    console.log(dataWithRole,);
     try {
       const res = await userSignUp(dataWithRole);
-      // @ts-ignore 
+      console.log(res,'customer create on admin');
+      // @ts-ignore
       if (res?.data?.success) {
-        router.push("/superadmin/admin")
-        message.success("Admin Created Successfully!");
+        router.push("/admin/user-management");
+        message.success("Customer Created Successfully!");
       }
     } catch (err: any) {
       console.error(err.message);
@@ -38,12 +37,12 @@ const RegisterationPage = () => {
       <UMBreadCrumb
         items={[
           {
-            label: "super-admin",
-            link: "/superadmin/admin",
+            label: "admin",
+            link: "/admin",
           },
           {
-            label: "Create admin",
-            link: "/superadmin/admin/create",
+            label: "Create customer",
+            link: "/admin/create",
           },
         ]}
       />

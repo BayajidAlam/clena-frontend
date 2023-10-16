@@ -6,7 +6,10 @@ import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
-import { useGetSingleUserQuery } from "@/redux/api/userApi";
+import {
+  useGetSingleUserQuery,
+  useUpdateUserMutation,
+} from "@/redux/api/userApi";
 import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
 import Image from "next/image";
@@ -17,10 +20,10 @@ const UserProfilePage = ({ params }: any) => {
   const { role } = getUserInfo();
   const id = params.slag;
   const [value, setValue] = useState({});
+  const [updateUser] = useUpdateUserMutation();
+  const { data, error, isLoading, refetch } = useGetSingleUserQuery(id);
 
-  const { data, error, isLoading } = useGetSingleUserQuery(id);
-
-  const myData = data?.data[0];
+  const myData = data?.data[0] as any;
   useEffect(() => {
     if (data) {
       setValue({
@@ -35,7 +38,17 @@ const UserProfilePage = ({ params }: any) => {
   }, [data, myData]);
 
   const onSubmit = async (values: any) => {
-    console.log(value);
+    console.log(value, "values");
+    try {
+      const res = await updateUser({ id: params?.slag, body: values }).unwrap();
+      console.log(res, "update response");
+      if (res?.success) {
+        refetch();
+        message.success("Admin Successfully Updated!");
+      }
+    } catch (err: any) {
+      console.error(err.message);
+    }
   };
 
   return (
@@ -178,12 +191,9 @@ const UserProfilePage = ({ params }: any) => {
                 gap: "10px",
               }}
             >
-              <Link href={`/profile/${id}`}>
-                <CleanCommonCloseButton>Close</CleanCommonCloseButton>
-              </Link>
-              <Link href={`/profile/edit/${id}`}>
-                <CleanCommonSaveButton>Update</CleanCommonSaveButton>
-              </Link>
+             
+
+              <CleanCommonSaveButton>Update</CleanCommonSaveButton>
             </div>
           </div>
         </Form>

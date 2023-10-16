@@ -18,7 +18,7 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         data: loginData,
       }),
-      invalidatesTags: [tagTypes.auth],
+      invalidatesTags: [tagTypes.auth,tagTypes.admin],
     }),
   }),
   overrideExisting: false,

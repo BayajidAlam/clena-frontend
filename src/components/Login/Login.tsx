@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "@/schemas/login";
 import { decodedToken } from "@/utils/jwt";
+import Link from "next/link";
 
 type FormValues = {
   email: string;
@@ -31,11 +32,12 @@ const LoginPage = () => {
     try {
       // console.log(data, "data");
       const res = await userLogin({ ...data }).unwrap();
-      console.log(res?.token, "userData");
+
       // @ts-ignore
       if (res?.token) {
         // @ts-ignore
         const decode = decodedToken(res?.token);
+        console.log(decode, "decode token from login");
         // @ts-ignore
         if (decode?.role === "customer") {
           router.push(`/`);
@@ -99,16 +101,19 @@ const LoginPage = () => {
                 required
               />
             </div>
-            <p
-              style={{
-                margin: "10px 0px",
-                fontSize: "16px",
-                color: "#29ABE2;",
-                fontWeight: "bold",
-              }}
-            >
-              New to Clena?<span>create new account</span>
-            </p>
+            <Link href={`/registeration`}>
+              {" "}
+              <p
+                style={{
+                  margin: "10px 0px",
+                  fontSize: "16px",
+                  color: "#29ABE2;",
+                  fontWeight: "bold",
+                }}
+              >
+                New to Clena?<span>create new account</span>
+              </p>
+            </Link>
             <Button
               style={{
                 color: "white",
