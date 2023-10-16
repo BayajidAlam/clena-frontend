@@ -1,52 +1,31 @@
 "use client";
 
-import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
-import {
-  useGetSingleUserQuery,
-  useUpdateUserMutation,
-} from "@/redux/api/userApi";
+import { USER_ROLE } from "@/constants/role";
+import { useUserSignUpMutation } from "@/redux/api/authApi";
 import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-const UserProfilePage = ({ params }: any) => {
-  const { role } = getUserInfo();
-  const id = params.slag;
-  const [value, setValue] = useState({});
-  const [updateUser] = useUpdateUserMutation();
-  const { data, error, isLoading, refetch } = useGetSingleUserQuery(id);
-
-  // @ts-ignore 
-  const myData = data?.data[0] as any;
-  useEffect(() => {
-    if (data) {
-      setValue({
-        name: myData.name,
-        email: myData.email,
-        address: myData.address,
-        profileImg: myData.profileImg,
-        contactNo: myData.contactNo,
-        password: myData.password,
-      });
-    }
-  }, [data, myData]);
+const RegisterationPage = () => {
+  const [userSignUp, {}] = useUserSignUpMutation();
+  const { role } = getUserInfo() as any;
+  const router = useRouter();
 
   const onSubmit = async (values: any) => {
-    console.log(value, "values");
+    const dataWithRole = { ...values, role: USER_ROLE.CUSTOMER };
+    console.log(dataWithRole);
     try {
-      const res = await updateUser({ id: params?.slag, body: values }).unwrap();
-      console.log(res, "update response");
-      // @ts-ignore 
-      if (res?.success) {
-        refetch();
-        message.success("Admin Successfully Updated!");
+      const res = await userSignUp(dataWithRole);
+      console.log(res, "customer create on admin");
+      // @ts-ignore
+      if (res?.data?.success) {
+        router.push("/admin/user-management");
+        message.success("Customer Created Successfully!");
       }
     } catch (err: any) {
       console.error(err.message);
@@ -54,16 +33,16 @@ const UserProfilePage = ({ params }: any) => {
   };
 
   return (
-    <div
-      style={{
-        padding: "10px",
-      }}
-    >
+    <div>
       <UMBreadCrumb
         items={[
           {
-            label: `profile`,
-            link: `/profile/${id}`,
+            label: "content-management",
+            link: "/admin/content-management",
+          },
+          {
+            label: "add-blogs",
+            link: "/admin/content-management/blogs",
           },
         ]}
       />
@@ -75,7 +54,7 @@ const UserProfilePage = ({ params }: any) => {
         }}
       >
         {/* resolver={yupResolver(adminSchema)} */}
-        <Form submitHandler={onSubmit} defaultValues={value}>
+        <Form submitHandler={onSubmit}>
           <div
             style={{
               marginBottom: "10px",
@@ -94,7 +73,7 @@ const UserProfilePage = ({ params }: any) => {
               }}
               className="capitalize"
             >
-              {role} Information
+              Customer Information
             </p>
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col
@@ -134,6 +113,7 @@ const UserProfilePage = ({ params }: any) => {
                   label="Password"
                 />
               </Col>
+
               <Col
                 className="gutter-row"
                 span={6}
@@ -164,26 +144,12 @@ const UserProfilePage = ({ params }: any) => {
               </Col>
               <Col
                 className="gutter-row"
-                span={6}
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
-                <UploadImage name="profileImg" />
-              </Col>
-              <Col
-                className="gutter-row"
                 span={12}
                 style={{
                   marginBottom: "10px",
                 }}
               >
-                <Image
-                  src={myData?.profileImg}
-                  width={150}
-                  height={150}
-                  alt="image"
-                ></Image>
+                <UploadImage name="profileImg" />
               </Col>
             </Row>
             <div
@@ -193,7 +159,7 @@ const UserProfilePage = ({ params }: any) => {
                 gap: "10px",
               }}
             >
-              <CleanCommonSaveButton>Save</CleanCommonSaveButton>
+              <CleanCommonSaveButton>Register</CleanCommonSaveButton>
             </div>
           </div>
         </Form>
@@ -202,4 +168,4 @@ const UserProfilePage = ({ params }: any) => {
   );
 };
 
-export default UserProfilePage;
+export default RegisterationPage;

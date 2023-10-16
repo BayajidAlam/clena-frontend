@@ -14,7 +14,7 @@ import {
   useGetAllBookingsQuery,
   useUpdateBookingStatusMutation,
 } from "@/redux/api/bookingApi";
-import moment from 'moment';
+import moment from "moment";
 
 const ServiceManagementPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -182,7 +182,7 @@ const ServiceManagementPage = () => {
       align: "center",
       render: (text: any, record: any) => {
         // Assuming text is the ISO date string, format it to a more readable format
-        const formattedDate = moment(text).format('MMMM DD, YYYY HH:mm:ss');
+        const formattedDate = moment(text).format("MMMM DD, YYYY HH:mm:ss");
         return <p>{formattedDate}</p>;
       },
     },

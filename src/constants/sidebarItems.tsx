@@ -21,9 +21,9 @@ export const sidebarItems = (role: string) => {
   const adminSidebarItems: MenuProps["items"] = [
     ...defaultSidebarItems,
     {
-      label: <Link href={`/${role}/user-management`}>User-Management</Link>,
+      label: <Link href={`/admin/user-management`}>Customer-Management</Link>,
       icon: <TableOutlined />,
-      key: `/${role}/user-management`,
+      key: `/admin/user-management`,
     },
     {
       label: (
@@ -33,11 +33,19 @@ export const sidebarItems = (role: string) => {
       key: `/${role}/service-management`,
       children: [
         {
-          label: <Link href={`/admin/service-management/create-category`}>Create Category</Link>,
+          label: (
+            <Link href={`/admin/service-management/create-category`}>
+              Create Category
+            </Link>
+          ),
           key: `/admin/service-management/create-category`,
         },
         {
-          label: <Link href={`/admin/service-management/create`}>Create Service</Link>,
+          label: (
+            <Link href={`/admin/service-management/create`}>
+              Create Service
+            </Link>
+          ),
           key: `/admin/service-management/create`,
         },
       ],
@@ -47,14 +55,26 @@ export const sidebarItems = (role: string) => {
         <Link href={`/${role}/booking-management`}>Booking-Management</Link>
       ),
       icon: <TableOutlined />,
-      key: `/${role}/booking-management`,
+      key: `/admin/booking-management`,
     },
     {
-      label: (
-        <Link href={`/${role}/content-management`}>Content-Management</Link>
-      ),
+      label: <Link href={`/admin/content-management`}>Content-Management</Link>,
       icon: <TableOutlined />,
-      key: `/${role}/content-management`,
+      key: `/admin/content-management`,
+      children: [
+        {
+          label: (
+            <Link href={`/admin/content-management/blogs`}>Add Blogs</Link>
+          ),
+          icon: <TableOutlined />,
+          key: `/admin/booking-management/blogs`,
+        },
+        {
+          label: <Link href={`/admin/content-management/faqs`}>Add FAQS</Link>,
+          icon: <TableOutlined />,
+          key: `/admin/booking-management/faqs`,
+        },
+      ],
     },
   ];
 

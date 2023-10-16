@@ -6,37 +6,16 @@ import React, { useState } from "react";
 import { Button, Col, Rate, Row } from "antd";
 import Link from "next/link";
 import Loading from "@/app/loading";
+import { ArrowRightOutlined } from "@ant-design/icons";
 const UpcomingService = () => {
-  // temp
-
-  const query: Record<string, any> = {};
-  const [page, setPage] = useState<number>(1);
-  const [size, setSize] = useState<number>(10);
-  const [sortBy, setSortBy] = useState<string>("");
-  const [sortOrder, setSortOrder] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState<string>("");
-
-  query["limit"] = size;
-  query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
-
-  const debouncedSearchTerm = useDebounced({
-    searchQuery: searchTerm,
-    delay: 600,
-  });
-
-  if (!!debouncedSearchTerm) {
-    query["searchTerm"] = debouncedSearchTerm;
-  }
-  const { data, isLoading } = useGetAllServicesQuery({ ...query });
+  const { data, isLoading } = useGetAllServicesQuery();
   // @ts-ignore
   const services = data?.data?.data;
 
-  // services?.map(service=>{
-  //   console.log(service,'ser');
-  // })
-  console.log(services);
+  const filterData = services?.filter(
+    (service: any) => service.status !== "inActive"
+  );
+
   // console.log("🚀 ~ file: page.tsx:41 ~ ServicePage ~ data:", data)
   if (isLoading) {
     return <Loading />;
@@ -50,9 +29,30 @@ const UpcomingService = () => {
         padding: "60px 0",
       }}
     >
-      <h1 className="my-4">Upcoming Service</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h1 className="my-4">Upcoming Service</h1>
+        <Link
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            textDecoration: "none",
+            gap: "5",
+            color: "#fd4f1a",
+          }}
+          href={`/service`}
+        >
+          <p>See All</p> <ArrowRightOutlined className="ml-2" />
+        </Link>
+      </div>
       <Row gutter={[16, 16]}>
-        {services?.map((service: any) => {
+        {filterData?.map((service: any) => {
           return (
             <Col key={service.id} sm={24} md={12} lg={6}>
               <div
@@ -62,7 +62,7 @@ const UpcomingService = () => {
                 className=" rounded overflow-hidden shadow-lg relative"
               >
                 <Image
-                  src={`/${service?.image}`}
+                  src={service?.image}
                   alt="image"
                   className="md:w-[280px] lg:w-[350px] w-[350px]"
                   width={350}

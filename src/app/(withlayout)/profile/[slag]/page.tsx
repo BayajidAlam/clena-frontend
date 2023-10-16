@@ -21,7 +21,7 @@ const UserProfilePage = ({ params }: any) => {
   const { data, error, isLoading } = useGetSingleUserQuery(id);
 
   console.log(data);
-  // @ts-ignore 
+  // @ts-ignore
   const myData = data?.data[0];
   useEffect(() => {
     if (data) {
@@ -170,7 +170,7 @@ const UserProfilePage = ({ params }: any) => {
                 }}
               >
                 <Image
-                  src={`/${myData?.profileImg}`}
+                  src={myData?.profileImg}
                   width={150}
                   height={150}
                   alt="image"

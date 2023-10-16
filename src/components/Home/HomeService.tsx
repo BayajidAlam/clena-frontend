@@ -8,6 +8,7 @@ import Loading from "@/app/loading";
 import { Button, Col, Rate, Row } from "antd";
 import Link from "next/link";
 import { FaCartPlus } from "react-icons/fa";
+import { ArrowRightOutlined } from "@ant-design/icons";
 
 const HomeService = () => {
   // temp
@@ -51,8 +52,29 @@ const HomeService = () => {
         padding: "60px 0",
       }}
     >
-      <h1 className="my-4">Available Service</h1>
-
+     
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+         <h1 className="my-4">Available Service</h1>
+        <Link
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            textDecoration: "none",
+            gap: "5",
+            color: "#fd4f1a",
+          }}
+          href={`/service`}
+        >
+          <p>See All</p> <ArrowRightOutlined className="ml-2" />
+        </Link>
+      </div>
       <Row gutter={[16, 16]}>
         {services?.map((service: any) => {
           return (
@@ -65,7 +87,7 @@ const HomeService = () => {
                   className=" rounded overflow-hidden shadow-lg relative"
                 >
                   <Image
-                    src={`/${service?.image}`}
+                    src={service?.image}
                     alt="image"
                     className="md:w-[280px] lg:w-[350px] w-[350px]"
                     width={350}
