@@ -133,12 +133,12 @@ const UserManagementPage = () => {
       <UMBreadCrumb
         items={[
           {
-            label: "admin",
-            link: "/admin",
+            label: "user management",
+            link: "/admin/user-management",
           },
           {
             label: "Create Customer",
-            link: "/admin/create",
+            link: "/admin/user-management/create",
           },
         ]}
       />
@@ -153,9 +153,9 @@ const UserManagementPage = () => {
             }}
           /> */}
           <div>
-            <Link href="/admin/create">
+            <Link href="/admin/user-management/create">
               <button className="text-white shadow-xl bg-[#FF5100] hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-none">
-                Create Admin
+                Create Customer
               </button>
             </Link>
             {/* {(!!sortBy || !!sortOrder || !!searchTerm) && (

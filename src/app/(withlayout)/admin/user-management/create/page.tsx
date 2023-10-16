@@ -18,10 +18,10 @@ const RegisterationPage = () => {
 
   const onSubmit = async (values: any) => {
     const dataWithRole = { ...values, role: USER_ROLE.CUSTOMER };
-    console.log(dataWithRole,);
+    console.log(dataWithRole);
     try {
       const res = await userSignUp(dataWithRole);
-      console.log(res,'customer create on admin');
+      console.log(res, "customer create on admin");
       // @ts-ignore
       if (res?.data?.success) {
         router.push("/admin/user-management");
@@ -37,12 +37,8 @@ const RegisterationPage = () => {
       <UMBreadCrumb
         items={[
           {
-            label: "admin",
-            link: "/admin",
-          },
-          {
-            label: "Create customer",
-            link: "/admin/create",
+            label: "user management",
+            link: "/admin/user-management",
           },
         ]}
       />
@@ -73,7 +69,7 @@ const RegisterationPage = () => {
               }}
               className="capitalize"
             >
-              {role} Information
+              Customer Information
             </p>
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col

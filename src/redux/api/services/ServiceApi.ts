@@ -23,13 +23,7 @@ export const serviceApi = baseApi.injectEndpoints({
           params: arg,
         };
       },
-      // transformResponse: (response: IAdmin[], meta: IMeta) => {
-      //   return {
-      //     admins: response,
-      //     meta,
-      //   };
-      // },
-      providesTags: [tagTypes.admin],
+      providesTags: [tagTypes.admin, tagTypes.category],
     }),
     admin: build.query({
       query: (id: string | string[] | undefined) => ({
