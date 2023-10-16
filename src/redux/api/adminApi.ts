@@ -16,6 +16,8 @@ export const adminApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.admin],
     }),
 
+    
+
     admins: build.query({
       query: (arg: Record<string, any>) => {
         return {

@@ -104,7 +104,7 @@ const ServiceManagementPage = () => {
             gap: "5px",
           }}
         >
-          <Link href={`/profile/edit/${record}`}>
+          <Link href={`/admin/service-management/edit/${record}`}>
             <CleanCommonCloseButton>Edit</CleanCommonCloseButton>
           </Link>
           <CleanCommonSaveButton>Delete</CleanCommonSaveButton>

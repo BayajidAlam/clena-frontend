@@ -6,9 +6,10 @@ import FormInput from "@/components/Forms/FormInput";
 import FormSelectField from "@/components/Forms/FormSelectField";
 import FormTextArea from "@/components/Forms/FormTextArea";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import { bloodGroupOptions, genderOptions } from "@/constants/global";
-import { useAdminQuery, useUpdateAdminMutation } from "@/redux/api/userApi";
-import { useDepartmentsQuery } from "@/redux/api/departmentApi";
+import { locationOptions } from "@/constants/global";
+import { useAdminQuery } from "@/redux/api/adminApi";
+import { useUpdateAdminMutation } from "@/redux/api/services/ServiceApi";
+
 import { IDepartment } from "@/types";
 
 import { Button, Col, Row, message } from "antd";
@@ -149,7 +150,7 @@ const EditAdminPage = ({ params }: any) => {
                 <FormSelectField
                   size="large"
                   name="gender"
-                  options={genderOptions}
+                  options={locationOptions}
                   label="Gender"
                   placeholder="Select"
                 />

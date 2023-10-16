@@ -13,7 +13,7 @@ type ImageUploadProps = {
 
 const UploadImage = ({ name }: ImageUploadProps) => {
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>();
+  const [imageUrl, setImageUrl] = useState<"">();
   const { setValue } = useFormContext();
   const imageHostKey = getImgBBUrl();
 
@@ -39,7 +39,7 @@ const UploadImage = ({ name }: ImageUploadProps) => {
 
         if (data.status === 200) {
           // Set the uploaded image URL to your form field or state
-          setValue('profileImg', data.data.url);
+          setValue(`${name ? name : "profileImg"}`, data.data.url);
           setImageUrl(data.data.url);
           message.success("Image uploaded successfully!");
         } else {
@@ -67,7 +67,7 @@ const UploadImage = ({ name }: ImageUploadProps) => {
         listType="picture-card"
         className="avatar-uploader"
         showUploadList={false}
-        action="/api/file" 
+        action="/api/file"
         onChange={handleChange}
       >
         {imageUrl ? (

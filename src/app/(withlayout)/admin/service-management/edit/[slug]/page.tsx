@@ -1,57 +1,90 @@
 "use client";
 
-import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";
+import Loading from "@/app/loading";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
+import CategoryField from "@/components/Forms/ClenaCategoryField";
+import ClenaSelectField from "@/components/Forms/ClenaSelectField";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
+import { locationOptions, statusOptions } from "@/constants/global";
+import {
+  useAddNewServiceMutation,
+  useGetAllServicesQuery,
+  useGetSingleServiceQuery,
+  useUpdateSingleServiceMutation,
+} from "@/redux/api/services/ServiceApi";
 import { useGetSingleUserQuery } from "@/redux/api/userApi";
-import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const UserProfilePage = ({ params }: any) => {
-  const { role } = getUserInfo();
-  const id = params.slag;
+const ServiceEditPage = ({ params }: any) => {
+  const id = params.slug;
+
   const [value, setValue] = useState({});
 
-  const { data, error, isLoading } = useGetSingleUserQuery(id);
+  const [updateSingleService] = useUpdateSingleServiceMutation();
+  const { data, error, isLoading, refetch } = useGetSingleServiceQuery(id);
 
-  // @ts-ignore 
-  const myData = data?.data[0];
+  // @ts-ignore
+  const myData = data?.data as any;
   useEffect(() => {
     if (data) {
       setValue({
         name: myData.name,
-        email: myData.email,
-        address: myData.address,
-        profileImg: myData.profileImg,
-        contactNo: myData.contactNo,
-        password: myData.password,
+        price: myData?.price,
+        details: myData?.details,
+        location: myData?.location,
+        status: myData.status,
+        rating: myData.rating,
+        image: myData?.image,
       });
     }
   }, [data, myData]);
 
-  const onSubmit = async (values: any) => {};
+
+  const onSubmit = async (values: any) => {
+    console.log(values);
+    try {
+      const res = await updateSingleService({
+        id: params?.slug,
+        body: values,
+      }).unwrap();
+      console.log(res, "update response");
+      // @ts-ignore
+      if (res?.success) {
+        refetch();
+        message.success("Admin Successfully Updated!");
+      }
+    } catch (err: any) {
+      console.error(err.message);
+    }
+  };
+
+  const onSearch = (value: string) => {
+    console.log("search:", value);
+  };
+
+  // filter on select
+  const filterOption = (
+    input: string,
+    option?: { label: string; value: string }
+  ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
-    <div
-      style={{
-        padding: "10px",
-      }}
-    >
+    <div>
       <UMBreadCrumb
         items={[
           {
-            label: `profile`,
-            link: `/profile/${id}`,
-          },
-          {
-            label: `edit`,
-            link: `/profile/edit/${id}`,
+            label: "user management",
+            link: "/admin/user-management",
           },
         ]}
       />
@@ -82,7 +115,7 @@ const UserProfilePage = ({ params }: any) => {
               }}
               className="capitalize"
             >
-              {role} Information
+              Customer Information
             </p>
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col
@@ -92,13 +125,7 @@ const UserProfilePage = ({ params }: any) => {
                   marginBottom: "10px",
                 }}
               >
-                <FormInput
-                  disable
-                  type="text"
-                  name="name"
-                  size="large"
-                  label="Name"
-                />
+                <FormInput type="text" name="name" size="large" label="Name" />
               </Col>
               <Col
                 className="gutter-row"
@@ -109,25 +136,9 @@ const UserProfilePage = ({ params }: any) => {
               >
                 <FormInput
                   type="text"
-                  name="email"
+                  name="price"
                   size="large"
-                  label="Email"
-                  disable
-                />
-              </Col>
-              <Col
-                className="gutter-row"
-                span={6}
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
-                <FormInput
-                  type="text"
-                  name="password"
-                  size="large"
-                  label="Password"
-                  disable
+                  label="Price"
                 />
               </Col>
 
@@ -140,12 +151,12 @@ const UserProfilePage = ({ params }: any) => {
               >
                 <FormInput
                   type="text"
-                  name="contactNo"
+                  name="location"
                   size="large"
-                  label="Contact No"
-                  disable
+                  label="location"
                 />
               </Col>
+
               <Col
                 className="gutter-row"
                 span={6}
@@ -155,25 +166,63 @@ const UserProfilePage = ({ params }: any) => {
               >
                 <FormInput
                   type="text"
-                  name="address"
+                  name="status"
                   size="large"
-                  label="Address"
-                  disable
+                  label="status"
+                />
+              </Col>
+
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <FormInput
+                  type="text"
+                  name="rating"
+                  size="large"
+                  label="Rating"
+                />
+              </Col>
+
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <FormInput
+                  type="text"
+                  name="details"
+                  size="large"
+                  label="Details"
                 />
               </Col>
               <Col
                 className="gutter-row"
-                span={12}
+                span={6}
                 style={{
                   marginBottom: "10px",
                 }}
               >
                 <Image
-                  src={`/${myData?.profileImg}`}
+                  src={`/${myData?.image}`}
                   width={150}
                   height={150}
                   alt="image"
                 ></Image>
+              </Col>
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <UploadImage name="image" />
               </Col>
             </Row>
             <div
@@ -183,9 +232,7 @@ const UserProfilePage = ({ params }: any) => {
                 gap: "10px",
               }}
             >
-              <Link href={`/profile/edit/${id}`}>
-                <CleanCommonSaveButton>Update</CleanCommonSaveButton>
-              </Link>
+              <CleanCommonSaveButton>Save</CleanCommonSaveButton>
             </div>
           </div>
         </Form>
@@ -194,4 +241,4 @@ const UserProfilePage = ({ params }: any) => {
   );
 };
 
-export default UserProfilePage;
+export default ServiceEditPage;

@@ -1,4 +1,3 @@
-import { IAdmin, IMeta } from "@/types";
 import { baseApi } from "../baseApi";
 import { tagTypes } from "@/redux/tag-types";
 const ADMIN_URL = "/admin";
@@ -10,9 +9,17 @@ export const serviceApi = baseApi.injectEndpoints({
         url: "/users/create-admin",
         method: "POST",
         data,
-        contentType: "multipart/form-data",
       }),
-      invalidatesTags: [tagTypes.admin],
+      invalidatesTags: [tagTypes.service, tagTypes.category, tagTypes.admin],
+    }),
+
+    addNewService: build.mutation({
+      query: (data: any) => ({
+        url: "/create-service",
+        method: "POST",
+        data,
+      }),
+      invalidatesTags: [tagTypes.service, tagTypes.category, tagTypes.admin],
     }),
 
     getAllServices: build.query({
@@ -25,6 +32,7 @@ export const serviceApi = baseApi.injectEndpoints({
       },
       providesTags: [tagTypes.admin, tagTypes.category],
     }),
+
     admin: build.query({
       query: (id: string | string[] | undefined) => ({
         url: `${ADMIN_URL}/${id}`,
@@ -32,18 +40,29 @@ export const serviceApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.admin],
     }),
+
+    getSingleService: build.query({
+      query: (id: string) => ({
+        url: `/services/${id}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.service, tagTypes.category, tagTypes.admin],
+    }),
+
+    updateSingleService: build.mutation({
+      query: (data: any) => ({
+        url: `/services/${data.id}`,
+        method: "PATCH",
+        data: data.body,
+      }),
+      invalidatesTags: [tagTypes.admin, tagTypes.category, tagTypes.service],
+    }),
+
     updateAdmin: build.mutation({
       query: (data: any) => ({
         url: `${ADMIN_URL}/${data.id}`,
         method: "PATCH",
         data: data.body,
-      }),
-      invalidatesTags: [tagTypes.admin],
-    }),
-    deleteAdmin: build.mutation({
-      query: (id: any) => ({
-        url: `${ADMIN_URL}/${id}`,
-        method: "DELETE",
       }),
       invalidatesTags: [tagTypes.admin],
     }),
@@ -54,6 +73,8 @@ export const {
   useAdminQuery,
   useAddAdminWithFormDataMutation,
   useUpdateAdminMutation,
-  useDeleteAdminMutation,
   useGetAllServicesQuery,
+  useAddNewServiceMutation,
+  useUpdateSingleServiceMutation,
+  useGetSingleServiceQuery,
 } = serviceApi;

@@ -65,7 +65,7 @@ const HomeService = () => {
                   className=" rounded overflow-hidden shadow-lg relative"
                 >
                   <Image
-                    src={service?.image}
+                    src={`/${service?.image}`}
                     alt="image"
                     className="md:w-[280px] lg:w-[350px] w-[350px]"
                     width={350}

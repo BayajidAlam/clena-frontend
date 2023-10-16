@@ -10,27 +10,26 @@ import UploadImage from "@/components/ui/UploadImage";
 import { locationOptions, statusOptions } from "@/constants/global";
 import { USER_ROLE } from "@/constants/role";
 import { useUserSignUpMutation } from "@/redux/api/authApi";
+import { useAddNewServiceMutation } from "@/redux/api/services/ServiceApi";
 import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
 import { useRouter } from "next/navigation";
 
 const CreateServicePage = () => {
-  const [userSignUp, {}] = useUserSignUpMutation();
+  const [addNewService, {}] = useAddNewServiceMutation();
   const { role } = getUserInfo() as any;
   const router = useRouter();
 
   const onSubmit = async (values: any) => {
-    console.log(values,'data');
-    // const dataWithRole = { ...values, role: USER_ROLE.CUSTOMER };
-    // console.log(dataWithRole);
+    console.log({ rating: 5, ...values }, "data from form");
     try {
-      // const res = await userSignUp(dataWithRole);
-      // console.log(res, "customer create on admin");
-      // // @ts-ignore
-      // if (res?.data?.success) {
-      //   router.push("/admin/user-management");
-      //   message.success("Customer Created Successfully!");
-      // }
+      const res = await addNewService({ rating:"5", ...values });
+      console.log(res, "customer create on admin");
+      // @ts-ignore
+      if (res?.data?.success) {
+        router.push("/admin/service-management");
+        message.success("Service Created Successfully!");
+      }
     } catch (err: any) {
       console.error(err.message);
     }
@@ -174,9 +173,9 @@ const CreateServicePage = () => {
               >
                 <FormInput
                   type="text"
-                  name="address"
+                  name="details"
                   size="large"
-                  label="Address"
+                  label="Details"
                 />
               </Col>
               <Col
@@ -186,21 +185,7 @@ const CreateServicePage = () => {
                   marginBottom: "10px",
                 }}
               >
-                <FormInput
-                  type="text"
-                  name="Details"
-                  size="large"
-                  label="details"
-                />
-              </Col>
-              <Col
-                className="gutter-row"
-                span={6}
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
-                <UploadImage name="profileImg" />
+                <UploadImage name="image" />
               </Col>
             </Row>
             <div
