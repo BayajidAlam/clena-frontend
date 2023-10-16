@@ -11,7 +11,7 @@ import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
 import { useRouter } from "next/navigation";
 
-const RegisterationPage = () => {
+const AddFAQSPage = () => {
   const [userSignUp, {}] = useUserSignUpMutation();
   const { role } = getUserInfo() as any;
   const router = useRouter();
@@ -168,4 +168,4 @@ const RegisterationPage = () => {
   );
 };
 
-export default RegisterationPage;
+export default AddFAQSPage;

@@ -70,7 +70,7 @@ export const sidebarItems = (role: string) => {
           key: `/admin/booking-management/blogs`,
         },
         {
-          label: <Link href={`/admin/content-management/faqs`}>Add FAQS</Link>,
+          label: <Link href={`/admin/booking-management/faqs`}>Add FAQS</Link>,
           icon: <TableOutlined />,
           key: `/admin/booking-management/faqs`,
         },
