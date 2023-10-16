@@ -1,9 +1,10 @@
 import { Button } from "antd";
 import React from "react";
 
-const CleanCommonSaveButton = ({ children, className, color }: any) => {
+const CleanCommonSaveButton = ({ children, className, onClick }: any) => {
   return (
     <Button
+      onClick={onClick}
       htmlType="submit"
       style={{
         background: "#fd4f1a",

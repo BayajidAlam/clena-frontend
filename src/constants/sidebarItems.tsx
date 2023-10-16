@@ -9,19 +9,9 @@ export const sidebarItems = (role: string) => {
 
   const defaultSidebarItems: MenuProps["items"] = [
     {
-      label: "Profile",
-      key: "profile",
+      label: <Link href={`/profile/${userId}`}>Account Profile</Link>,
+      key: `/${role}/change-password`,
       icon: <ProfileOutlined />,
-      children: [
-        {
-          label: <Link href={`/profile/${userId}`}>Account Profile</Link>,
-          key: `/${role}/profile/${userId}`,
-        },
-        {
-          label: <Link href={`/${role}/change-password`}>Change Password</Link>,
-          key: `/${role}/change-password`,
-        },
-      ],
       style: {
         background: "#ff5100",
       },
