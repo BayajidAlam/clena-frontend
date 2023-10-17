@@ -22,16 +22,16 @@ const UserProfilePage = ({ params }: any) => {
 
   console.log(data);
   // @ts-ignore
-  const myData = data?.data[0];
+  const myData = data?.data;
   useEffect(() => {
     if (data) {
       setValue({
-        name: myData.name,
-        email: myData.email,
-        address: myData.address,
-        profileImg: myData.profileImg,
-        contactNo: myData.contactNo,
-        password: myData.password,
+        name: myData?.name,
+        email: myData?.email,
+        address: myData?.address,
+        profileImg: myData?.profileImg,
+        contactNo: myData?.contactNo,
+        password: myData?.password,
       });
     }
   }, [data, myData]);

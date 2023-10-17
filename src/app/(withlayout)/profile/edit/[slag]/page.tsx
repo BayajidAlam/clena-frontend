@@ -24,7 +24,7 @@ const UserProfilePage = ({ params }: any) => {
   const { data, error, isLoading, refetch } = useGetSingleUserQuery(id);
 
   // @ts-ignore 
-  const myData = data?.data[0] as any;
+  const myData = data?.data as any;
   useEffect(() => {
     if (data) {
       setValue({

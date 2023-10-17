@@ -6,24 +6,7 @@ const USER_URL = "/users";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (build: any) => ({
-    // get all academic departments
-    // academicDepartments: build.query({
-    //   query: (arg: Record<string, any>) => {
-    //     return {
-    //       url: ACADEMIC_DEPARTMENT_URL,
-    //       method: "GET",
-    //       params: arg,
-    //     };
-    //   },
-    //   transformResponse: (response: IAcademicDepartment[], meta: IMeta) => {
-    //     return {
-    //       academicDepartments: response,
-    //       meta,
-    //     };
-    //   },
-    //   providesTags: [tagTypes.academicDepartment],
-    // }),
-    // // get single academic department
+
     getSingleUser: build.query({
       query: (id: string) => ({
         url: `${USER_URL}/${id}`,
@@ -31,16 +14,7 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.user],
     }),
-    // // create a new academic department
-    // addAcademicDepartment: build.mutation({
-    //   query: (data) => ({
-    //     url: ACADEMIC_DEPARTMENT_URL,
-    //     method: "POST",
-    //     data,
-    //   }),
-    //   invalidatesTags: [tagTypes.academicDepartment],
-    // }),
-
+    
     updateUser: build.mutation({
       query: (data: any) => ({
         url: `${USER_URL}/${data.id}`,

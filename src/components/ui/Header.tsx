@@ -4,11 +4,16 @@ import { getUserInfo, removeUserInfo } from "@/services/auth.service";
 import { authKey } from "@/constants/storageKey";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useGetSingleUserQuery } from "@/redux/api/userApi";
+import Image from "next/image";
 const { Header: AntHeader } = Layout;
 
 const Header = () => {
   const router = useRouter();
-  const { role } = getUserInfo() as any;
+  const { role, userId } = getUserInfo() as any;
+  const { data } = useGetSingleUserQuery(userId);
+  // @ts-ignore
+  const userData = data?.data;
 
   const logOut = () => {
     removeUserInfo(authKey);
@@ -74,22 +79,33 @@ const Header = () => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "start",
               }}
             >
-              <span className="text-white text-base font-bold">
-                {"John Doe"}
-              </span>
-              <span className="text-white text-sm capitalize">{role}</span>
+              <h1 className="text-white text-base font-bold">
+                {userData?.name}
+              </h1>
+              <p className="text-white text-sm capitalize">{userData?.role}</p>
             </div>
 
             <Dropdown menu={{ items }}>
-              <a href="">
-                {" "}
-                <Space wrap size={24}>
-                  <Avatar size="large" icon={<UserOutlined />} />
-                </Space>
-              </a>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Image
+                  style={{
+                    borderRadius: "50%",
+                  }}
+                  src={userData?.profileImg}
+                  width={50}
+                  height={50}
+                  alt={userData ? userData : ""}
+                />
+              </div>
             </Dropdown>
           </div>
         </div>

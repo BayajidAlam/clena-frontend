@@ -9,7 +9,7 @@ import { authKey } from "@/constants/storageKey";
 
 const HomeHeader = () => {
   const [userRole, setUserRole] = useState("");
-  const { role } = getUserInfo() as any;
+  const { role, userId } = getUserInfo() as any;
   const router = useRouter();
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const HomeHeader = () => {
             Service
           </Button>
         </Link>
-        {userRole && (
+        {userRole && userRole === "customer" ? (
           <>
             {" "}
             <Link href={`/customer/booking`}>
@@ -104,6 +104,29 @@ const HomeHeader = () => {
                 }}
               >
                 Cart
+              </Button>
+            </Link>
+          </>
+        ) : (
+          ""
+        )}
+
+        {((userRole && userRole === "admin") || "superadmin") && (
+          <>
+            {" "}
+            <Link href={`/profile/${userId}`}>
+              <Button
+                type="primary"
+                style={{
+                  background: "#fd4f1a",
+                  padding: "6px 30px",
+                  color: "white",
+                  fontSize: "14px",
+                  borderRadius: "20px",
+                  cursor: "pointer",
+                }}
+              >
+                Dashboard
               </Button>
             </Link>
           </>
