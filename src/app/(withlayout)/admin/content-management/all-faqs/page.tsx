@@ -2,15 +2,10 @@
 
 import ActionBar from "@/components/ui/ActionBar";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import { Button, Input, message } from "antd";
 import Link from "next/link";
-import { ReloadOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
-import { useDebounced } from "@/redux/hooks";
-import UMTable from "@/components/ui/UMTable";
+import { useState } from "react";
+import CLENATable from "@/components/ui/CLENATable";
 import UMModal from "@/components/ui/UMModal";
-import { useAdminsQuery, useUpdateRoleMutation } from "@/redux/api/adminApi";
-import Image from "next/image";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";
 import {
@@ -44,7 +39,7 @@ const AllFaqsPage = () => {
   console.log(serviceData);
   const handleDelete = async (id: any) => {
     const res = await deleteService(id).unwrap();
-    // @ts-ignore 
+    // @ts-ignore
     if (res?.success) {
     }
   };
@@ -142,46 +137,24 @@ const AllFaqsPage = () => {
       <UMBreadCrumb
         items={[
           {
-            label: "service management",
-            link: "/admin/service-management",
-          },
-          {
-            label: "create service",
-            link: "/admin/service-management/create",
+            label: "all-faqs",
+            link: "/admin/content-management/all-faqs",
           },
         ]}
       />
       <div style={{ padding: "10px" }}>
         <ActionBar>
-          {/* <Input
-            size="large"
-            placeholder="Search"
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: "13%",
-            }}
-          /> */}
           <div>
-            <Link href="/admin/service-management/create">
+            <Link href="/admin/content-management/faqs">
               <button className="text-white shadow-xl bg-[#FF5100] hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-none">
-                Create Service
+                Create FAQ
               </button>
             </Link>
-            {/* {(!!sortBy || !!sortOrder || !!searchTerm) && (
-              <Button
-                className="bg-[#FF5100] font-bold"
-                style={{ margin: "0px 13px" }}
-                type="primary"
-                onClick={resetFilters}
-              >
-                <ReloadOutlined />
-              </Button>
-            )} */}
           </div>
         </ActionBar>
       </div>
 
-      <UMTable
+      <CLENATable
         loading={isLoading}
         columns={columns}
         dataSource={serviceData}
@@ -207,4 +180,3 @@ const AllFaqsPage = () => {
 };
 
 export default AllFaqsPage;
-;

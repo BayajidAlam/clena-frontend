@@ -5,7 +5,7 @@ import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import { message } from "antd";
 import Link from "next/link";
 import { useState } from "react";
-import UMTable from "@/components/ui/UMTable";
+import UMTable from "@/components/ui/CLENATable";
 import UMModal from "@/components/ui/UMModal";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";

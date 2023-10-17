@@ -7,12 +7,9 @@ import Link from "next/link";
 import { ReloadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDebounced } from "@/redux/hooks";
-import UMTable from "@/components/ui/UMTable";
+import UMTable from "@/components/ui/CLENATable";
 import UMModal from "@/components/ui/UMModal";
-import {
-  useAdminsQuery,
-  useUpdateRoleMutation,
-} from "@/redux/api/adminApi";
+import { useAdminsQuery, useUpdateRoleMutation } from "@/redux/api/adminApi";
 import Image from "next/image";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";
@@ -52,7 +49,7 @@ const AdminPage = () => {
   const adminData = data?.data?.data;
   // @ts-ignore
   const adminDataLength = data?.data?.meta;
-  
+
   const columns = [
     {
       title: "Name",
@@ -124,15 +121,13 @@ const AdminPage = () => {
     setSearchTerm("");
   };
 
-
   const makeUserHandler = async (id: string) => {
-    
     try {
       const res = await updateRole({
         id,
         body: { role: "customer" },
       });
-      // @ts-ignore 
+      // @ts-ignore
       if (res?.data?.success) {
         console.log(res, "up res");
         message.success("Role Updated Deleted!");
@@ -186,8 +181,7 @@ const AdminPage = () => {
         </ActionBar>
       </div>
 
-      <UMTable 
-        
+      <UMTable
         loading={isLoading}
         columns={columns}
         dataSource={adminData}

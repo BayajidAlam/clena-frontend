@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ReloadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDebounced } from "@/redux/hooks";
-import UMTable from "@/components/ui/UMTable";
+import UMTable from "@/components/ui/CLENATable";
 import UMModal from "@/components/ui/UMModal";
 import { useAdminsQuery, useUpdateRoleMutation } from "@/redux/api/adminApi";
 import Image from "next/image";

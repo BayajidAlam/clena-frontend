@@ -4,8 +4,7 @@ const ADMIN_URL = "/admin";
 
 export const BlogAndFaqApi = baseApi.injectEndpoints({
   endpoints: (build: any) => ({
-
-    // add new blog 
+    // add new blog
     addNewBlog: build.mutation({
       query: (data: any) => ({
         url: "/blog/create-blog",
@@ -25,32 +24,28 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.blog],
     }),
 
-    addNewService: build.mutation({
-      query: (data: any) => ({
-        url: "/create-service",
-        method: "POST",
-        data,
-      }),
-      invalidatesTags: [tagTypes.service, tagTypes.category, tagTypes.admin],
-    }),
-
-    getAllServices: build.query({
+    // get all blogs
+    getAllBlogs: build.query({
       query: (arg: Record<string, any>) => {
         return {
-          url: "/services",
+          url: "/blogs",
           method: "GET",
           params: arg,
         };
       },
-      providesTags: [tagTypes.admin, tagTypes.category],
+      providesTags: [tagTypes.blog],
     }),
 
-    admin: build.query({
-      query: (id: string | string[] | undefined) => ({
-        url: `${ADMIN_URL}/${id}`,
-        method: "GET",
-      }),
-      providesTags: [tagTypes.admin],
+    // get all faqs
+    getAllFaqs: build.query({
+      query: (arg: Record<string, any>) => {
+        return {
+          url: "/faqs",
+          method: "GET",
+          params: arg,
+        };
+      },
+      providesTags: [tagTypes.blog],
     }),
 
     getSingleService: build.query({
@@ -77,19 +72,12 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.admin, tagTypes.category, tagTypes.service],
     }),
-
-    updateAdmin: build.mutation({
-      query: (data: any) => ({
-        url: `${ADMIN_URL}/${data.id}`,
-        method: "PATCH",
-        data: data.body,
-      }),
-      invalidatesTags: [tagTypes.admin],
-    }),
   }),
 });
 
 export const {
   useAddNewBlogMutation,
-  useAddNewFaqMutation
+  useAddNewFaqMutation,
+  useGetAllBlogsQuery,
+  useGetAllFaqsQuery,
 } = BlogAndFaqApi;

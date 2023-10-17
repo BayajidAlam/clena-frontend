@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ReloadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDebounced } from "@/redux/hooks";
-import UMTable from "@/components/ui/UMTable";
+import UMTable from "@/components/ui/CLENATable";
 import UMModal from "@/components/ui/UMModal";
 import { useAdminsQuery, useUpdateRoleMutation } from "@/redux/api/adminApi";
 import Image from "next/image";
@@ -18,6 +18,7 @@ import {
   useGetAllServicesQuery,
 } from "@/redux/api/services/ServiceApi";
 import Loading from "@/app/loading";
+import { useGetAllBlogsQuery } from "@/redux/api/services/blogAndFAQApi";
 
 const AllBlogsPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -35,16 +36,16 @@ const AllBlogsPage = () => {
   query["sortBy"] = sortBy;
   query["sortOrder"] = sortOrder;
 
-  const { data, isLoading, refetch } = useGetAllServicesQuery({ ...query });
+  const { data, isLoading, refetch } = useGetAllBlogsQuery({ ...query });
   const [deleteService] = useDeleteServiceMutation();
   // @ts-ignore
-  const serviceData = data?.data?.data;
+  const BlogsData = data?.data?.data;
   // @ts-ignore
-  const serviceDataLength = data?.data?.meta;
-  console.log(serviceData);
+  const BlogsDataLength = data?.data?.meta;
+  console.log(BlogsData);
   const handleDelete = async (id: any) => {
     const res = await deleteService(id).unwrap();
-    // @ts-ignore 
+    // @ts-ignore
     if (res?.success) {
     }
   };
@@ -81,21 +82,6 @@ const AllBlogsPage = () => {
       align: "center",
     },
 
-    {
-      title: "Location",
-      dataIndex: "location",
-      width: "20%",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      width: "10%",
-    },
-    {
-      title: "Stock",
-      dataIndex: "inStock",
-      width: "15%",
-    },
     {
       title: "Action",
       dataIndex: "id",
@@ -142,41 +128,19 @@ const AllBlogsPage = () => {
       <UMBreadCrumb
         items={[
           {
-            label: "service management",
-            link: "/admin/service-management",
-          },
-          {
-            label: "create service",
-            link: "/admin/service-management/create",
+            label: "all blogs",
+            link: "/admin/content-management/all-blogs",
           },
         ]}
       />
       <div style={{ padding: "10px" }}>
         <ActionBar>
-          {/* <Input
-            size="large"
-            placeholder="Search"
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: "13%",
-            }}
-          /> */}
           <div>
-            <Link href="/admin/service-management/create">
+            <Link href="/admin/content-management/blogs">
               <button className="text-white shadow-xl bg-[#FF5100] hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-none">
-                Create Service
+                Create Blog
               </button>
             </Link>
-            {/* {(!!sortBy || !!sortOrder || !!searchTerm) && (
-              <Button
-                className="bg-[#FF5100] font-bold"
-                style={{ margin: "0px 13px" }}
-                type="primary"
-                onClick={resetFilters}
-              >
-                <ReloadOutlined />
-              </Button>
-            )} */}
           </div>
         </ActionBar>
       </div>
@@ -184,10 +148,10 @@ const AllBlogsPage = () => {
       <UMTable
         loading={isLoading}
         columns={columns}
-        dataSource={serviceData}
+        dataSource={BlogsData}
         pageSize={size}
         // @ts-ignore
-        totalPages={serviceDataLength}
+        totalPages={BlogsDataLength}
         showSizeChanger={true}
         onPaginationChange={onPaginationChange}
         onTableChange={onTableChange}

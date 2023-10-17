@@ -12,7 +12,7 @@ import {
 } from "@ant-design/icons";
 import { useState } from "react";
 import { useDebounced } from "@/redux/hooks";
-import UMTable from "@/components/ui/UMTable";
+import UMTable from "@/components/ui/CLENATable";
 import { useAdminsQuery, useDeleteAdminMutation } from "@/redux/api/userApi";
 import { IDepartment } from "@/types";
 import dayjs from "dayjs";
