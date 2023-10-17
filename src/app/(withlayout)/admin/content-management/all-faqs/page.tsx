@@ -13,10 +13,17 @@ import {
   useGetAllServicesQuery,
 } from "@/redux/api/services/ServiceApi";
 import Loading from "@/app/loading";
+import { useRouter } from "next/navigation";
+import { message } from "antd";
+import {
+  useDeleteFaqMutation,
+  useGetAllFaqsQuery,
+} from "@/redux/api/services/blogAndFAQApi";
 
 const AllFaqsPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const query: Record<string, any> = {};
+  const router = useRouter();
 
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(5);
@@ -30,37 +37,28 @@ const AllFaqsPage = () => {
   query["sortBy"] = sortBy;
   query["sortOrder"] = sortOrder;
 
-  const { data, isLoading, refetch } = useGetAllServicesQuery({ ...query });
-  const [deleteService] = useDeleteServiceMutation();
+  const { data, isLoading, refetch } = useGetAllFaqsQuery({ ...query });
+  const [deleteFaq, { isLoading: faqLoading }] = useDeleteFaqMutation();
   // @ts-ignore
-  const serviceData = data?.data?.data;
+  const FaqData = data?.data?.data;
+
   // @ts-ignore
-  const serviceDataLength = data?.data?.meta;
-  console.log(serviceData);
+  const FaqDataLength = data?.data?.meta;
+
   const handleDelete = async (id: any) => {
-    const res = await deleteService(id).unwrap();
+    const res = await deleteFaq(id).unwrap();
     // @ts-ignore
     if (res?.success) {
+      router.push("/admin/content-management/all-faqs");
+      message.success("FAQ deleted successfully!");
+      refetch();
     }
   };
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      width: "15%",
-      align: "center",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      width: "10%",
-      align: "center",
-    },
-    {
-      title: "Category Name",
-      dataIndex: ["category", "title"],
-      render: (text: string, record: any) => (
+      title: "No",
+      render: (text: string, record: any, index: number) => (
         <div
           style={{
             display: "flex",
@@ -69,27 +67,51 @@ const AllFaqsPage = () => {
             gap: "5px",
           }}
         >
-          {text}
+          {index + 1}
         </div>
       ),
-      width: "15%",
+      width: "5%",
       align: "center",
     },
-
     {
-      title: "Location",
-      dataIndex: "location",
-      width: "20%",
+      title: "Question",
+      dataIndex: "question",
+      width: "30%",
+      render: (text: string) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+            fontWeight: "bold",
+            color: "blue",
+          }}
+        >
+          {text.length > 20 ? `${text.substring(0, 40)}...` : text}
+        </div>
+      ),
+      align: "center",
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      width: "10%",
-    },
-    {
-      title: "Stock",
-      dataIndex: "inStock",
-      width: "15%",
+      title: "Ans",
+      dataIndex: "ans",
+      width: "40%",
+      align: "center",
+      render: (text: string) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+            fontWeight: "bold",
+            color: "blue",
+          }}
+        >
+          {text.length > 20 ? `${text.substring(0, 90)}...` : text}
+        </div>
+      ),
     },
     {
       title: "Action",
@@ -103,7 +125,7 @@ const AllFaqsPage = () => {
             gap: "5px",
           }}
         >
-          <Link href={`/admin/service-management/edit/${record}`}>
+          <Link href={`/admin/content-management/faqs/edit/${record}`}>
             <CleanCommonCloseButton>Edit</CleanCommonCloseButton>
           </Link>
           <CleanCommonSaveButton onClick={() => handleDelete(record)}>
@@ -112,7 +134,7 @@ const AllFaqsPage = () => {
         </div>
       ),
       align: "center",
-      width: "20%",
+      width: "25%",
     },
   ];
 
@@ -128,7 +150,7 @@ const AllFaqsPage = () => {
     setSortOrder(order === "ascend" ? "asc" : "desc");
   };
 
-  if (isLoading) {
+  if (isLoading || faqLoading) {
     return <Loading />;
   }
 
@@ -157,10 +179,10 @@ const AllFaqsPage = () => {
       <CLENATable
         loading={isLoading}
         columns={columns}
-        dataSource={serviceData}
+        dataSource={FaqData}
         pageSize={size}
         // @ts-ignore
-        totalPages={serviceDataLength}
+        totalPages={FaqDataLength}
         showSizeChanger={true}
         onPaginationChange={onPaginationChange}
         onTableChange={onTableChange}

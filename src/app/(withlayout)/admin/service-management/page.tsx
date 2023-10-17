@@ -2,15 +2,10 @@
 
 import ActionBar from "@/components/ui/ActionBar";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import { Button, Input, message } from "antd";
 import Link from "next/link";
-import { ReloadOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
-import { useDebounced } from "@/redux/hooks";
+import { useState } from "react";
 import UMTable from "@/components/ui/CLENATable";
 import UMModal from "@/components/ui/UMModal";
-import { useAdminsQuery, useUpdateRoleMutation } from "@/redux/api/adminApi";
-import Image from "next/image";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";
 import {
@@ -18,16 +13,18 @@ import {
   useGetAllServicesQuery,
 } from "@/redux/api/services/ServiceApi";
 import Loading from "@/app/loading";
+import { message } from "antd";
+import { useRouter } from "next/navigation";
 
 const ServiceManagementPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const query: Record<string, any> = {};
+  const router = useRouter();
 
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(5);
   const [sortBy, setSortBy] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
   query["limit"] = size;
@@ -36,7 +33,8 @@ const ServiceManagementPage = () => {
   query["sortOrder"] = sortOrder;
 
   const { data, isLoading, refetch } = useGetAllServicesQuery({ ...query });
-  const [deleteService] = useDeleteServiceMutation();
+  const [deleteService, { isLoading: isBookLoading }] =
+    useDeleteServiceMutation();
   // @ts-ignore
   const serviceData = data?.data?.data;
   // @ts-ignore
@@ -46,10 +44,30 @@ const ServiceManagementPage = () => {
     const res = await deleteService(id).unwrap();
     // @ts-ignore
     if (res?.success) {
+      router.push("/admin/service-management");
+      message.success("Booking Deleted Successfully!");
+      refetch();
     }
   };
 
   const columns = [
+    {
+      title: "No",
+      render: (text: string, record: any, index: number) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
+          {index + 1}
+        </div>
+      ),
+      width: "5%",
+      align: "center",
+    },
     {
       title: "Name",
       dataIndex: "name",
@@ -133,7 +151,7 @@ const ServiceManagementPage = () => {
     setSortOrder(order === "ascend" ? "asc" : "desc");
   };
 
-  if (isLoading) {
+  if (isLoading || isBookLoading) {
     return <Loading />;
   }
 

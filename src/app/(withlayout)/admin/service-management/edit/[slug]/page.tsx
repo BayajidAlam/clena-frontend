@@ -12,13 +12,16 @@ import {
 } from "@/redux/api/services/ServiceApi";
 import { Col, Row, message } from "antd";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ServiceEditPage = ({ params }: any) => {
-  
   const id = params.slug;
+  const router = useRouter();
+
   const [value, setValue] = useState({});
-  const [updateSingleService] = useUpdateSingleServiceMutation();
+  const [updateSingleService, { isLoading: isServiceLoading }] =
+    useUpdateSingleServiceMutation();
   const { data, error, isLoading, refetch } = useGetSingleServiceQuery(id);
 
   // @ts-ignore
@@ -33,29 +36,31 @@ const ServiceEditPage = ({ params }: any) => {
         status: myData.status,
         rating: myData.rating,
         image: myData?.image,
-        inStock: myData?.inStock
+        inStock: myData?.inStock,
       });
     }
   }, [data, myData]);
 
   const onSubmit = async (values: any) => {
-    console.log(values);
+    // console.log(values);
     try {
       const res = await updateSingleService({
         id: params?.slug,
         body: values,
       }).unwrap();
-      console.log(res, "update response");
+      // console.log(res, "update response");
       // @ts-ignore
       if (res?.success) {
-        refetch();
+        router.push("/admin/service-management");
         message.success("Admin Successfully Updated!");
+        refetch();
       }
     } catch (err: any) {
       console.error(err.message);
     }
   };
-  if (isLoading) {
+
+  if (isLoading || isServiceLoading) {
     return <Loading />;
   }
 
@@ -198,7 +203,6 @@ const ServiceEditPage = ({ params }: any) => {
                 />
               </Col>
 
-
               <Col
                 className="gutter-row"
                 span={6}
@@ -207,7 +211,7 @@ const ServiceEditPage = ({ params }: any) => {
                 }}
               >
                 <Image
-                  src={`/${myData?.image}`}
+                  src={myData?.image}
                   width={150}
                   height={150}
                   alt="image"

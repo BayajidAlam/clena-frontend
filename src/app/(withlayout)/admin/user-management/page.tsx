@@ -32,17 +32,6 @@ const UserManagementPage = () => {
   query["sortOrder"] = sortOrder;
   query["role"] = "customer";
 
-  // const debouncedSearchTerm = useDebounced({
-  //   searchQuery: searchTerm,
-  //   delay: 600,
-  // });
-
-  // useEffect(() => {
-  //   if (!!debouncedSearchTerm) {
-  //     query["searchTerm"] = debouncedSearchTerm;
-  //   }
-  // }, [debouncedSearchTerm, query]);
-
   const { data, isLoading } = useAdminsQuery({ ...query });
 
   // @ts-ignore
@@ -51,6 +40,48 @@ const UserManagementPage = () => {
   const adminDataLength = data?.data?.meta;
 
   const columns = [
+    {
+      title: "No",
+      render: (text: string, record: any, index: number) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
+          {index + 1}
+        </div>
+      ),
+      width: "5%",
+      align: "center",
+    },
+    {
+      title: "Image",
+      dataIndex: "profileImg",
+      render: (imageURL: string, record: any) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
+          <Image style={{
+            borderRadius: "50%"
+          }}
+            src={imageURL}
+            width={50}
+            height={50}
+            alt={imageURL ? imageURL : ""}
+          ></Image>
+        </div>
+      ),
+      width: "15%",
+      align: "center",
+    },
     {
       title: "Name",
       dataIndex: "name",

@@ -45,7 +45,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
           params: arg,
         };
       },
-      providesTags: [tagTypes.blog],
+      providesTags: [tagTypes.faq],
     }),
 
     // get single blog
@@ -55,6 +55,15 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: [tagTypes.blog],
+    }),
+
+    // get single faq
+    getSingleFaq: build.query({
+      query: (id: string) => ({
+        url: `/faq/${id}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.faq],
     }),
 
     // update blog
@@ -67,6 +76,16 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.blog],
     }),
 
+    // update blog
+    updateSingleFaq: build.mutation({
+      query: (data: any) => ({
+        url: `/faq/${data.id}`,
+        method: "PATCH",
+        data: data.body,
+      }),
+      invalidatesTags: [tagTypes.faq],
+    }),
+
     // delete blog
     deleteBlog: build.mutation({
       query: (id: any) => ({
@@ -74,6 +93,15 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.blog],
+    }),
+
+    // delete blog
+    deleteFaq: build.mutation({
+      query: (id: any) => ({
+        url: `/faq/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.faq],
     }),
   }),
 });
@@ -85,5 +113,8 @@ export const {
   useGetAllFaqsQuery,
   useGetSingleBlogQuery,
   useUpdateSingleBlogMutation,
-  useDeleteBlogMutation
+  useDeleteBlogMutation,
+  useGetSingleFaqQuery,
+  useUpdateSingleFaqMutation,
+  useDeleteFaqMutation,
 } = BlogAndFaqApi;

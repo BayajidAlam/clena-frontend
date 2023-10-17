@@ -32,11 +32,12 @@ const ServiceManagementPage = () => {
   query["sortOrder"] = sortOrder;
 
   const { data, isLoading, refetch } = useGetAllBookingsQuery({ ...query });
-  const [updateBookingStatus] = useUpdateBookingStatusMutation();
-  // console.log(data?.data, "data");
+  const [updateBookingStatus, { isLoading: isBookLoading }] =
+    useUpdateBookingStatusMutation();
+
   // @ts-ignore
   const bookingsData = data?.data;
-  console.log(bookingsData, "book");
+
   // @ts-ignore
   const bookingsDataLength = data?.data?.meta;
 
@@ -119,6 +120,23 @@ const ServiceManagementPage = () => {
 
   const columns = [
     {
+      title: "No",
+      render: (text: string, record: any, index: number) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
+          {index + 1}
+        </div>
+      ),
+      width: "5%",
+      align: "center",
+    },
+    {
       title: "Service Name",
       dataIndex: ["user", "name"],
       align: "center",
@@ -190,6 +208,7 @@ const ServiceManagementPage = () => {
       title: "Booking Status",
       dataIndex: "status",
       align: "center",
+      width: "10%",
     },
     {
       title: "Action",
@@ -207,6 +226,7 @@ const ServiceManagementPage = () => {
     setPage(page);
     setSize(pageSize);
   };
+  
   const onTableChange = (pagination: any, filter: any, sorter: any) => {
     const { order, field } = sorter;
     // console.log(order, field);
@@ -214,7 +234,7 @@ const ServiceManagementPage = () => {
     setSortOrder(order === "ascend" ? "asc" : "desc");
   };
 
-  if (isLoading) {
+  if (isLoading || isBookLoading) {
     return <Loading />;
   }
 
@@ -232,35 +252,7 @@ const ServiceManagementPage = () => {
           },
         ]}
       />
-      <div style={{ padding: "10px" }}>
-        <ActionBar>
-          {/* <Input
-            size="large"
-            placeholder="Search"
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: "13%",
-            }}
-          /> */}
-          <div>
-            {/* <Link href="/admin/service-management/create">
-              <button className="text-white shadow-xl bg-[#FF5100] hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-none">
-                Create Service
-              </button>
-            </Link> */}
-            {/* {(!!sortBy || !!sortOrder || !!searchTerm) && (
-              <Button
-                className="bg-[#FF5100] font-bold"
-                style={{ margin: "0px 13px" }}
-                type="primary"
-                onClick={resetFilters}
-              >
-                <ReloadOutlined />
-              </Button>
-            )} */}
-          </div>
-        </ActionBar>
-      </div>
+      <div style={{ padding: "10px" }}></div>
 
       <UMTable
         loading={isLoading}
