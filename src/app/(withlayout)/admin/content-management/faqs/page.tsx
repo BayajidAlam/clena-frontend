@@ -70,7 +70,7 @@ const AddFAQSPage = () => {
               }}
               className="capitalize"
             >
-              Customer Information
+              Create a new FAQ
             </p>
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col

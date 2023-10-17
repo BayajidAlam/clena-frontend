@@ -48,29 +48,32 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.blog],
     }),
 
-    getSingleService: build.query({
+    // get single blog
+    getSingleBlog: build.query({
       query: (id: string) => ({
-        url: `/services/${id}`,
+        url: `/blog/${id}`,
         method: "GET",
       }),
-      providesTags: [tagTypes.service, tagTypes.category, tagTypes.admin],
+      providesTags: [tagTypes.blog],
     }),
 
-    updateSingleService: build.mutation({
+    // update blog
+    updateSingleBlog: build.mutation({
       query: (data: any) => ({
-        url: `/services/${data.id}`,
+        url: `/blog/${data.id}`,
         method: "PATCH",
         data: data.body,
       }),
-      invalidatesTags: [tagTypes.admin, tagTypes.category, tagTypes.service],
+      invalidatesTags: [tagTypes.blog],
     }),
 
-    deleteService: build.mutation({
+    // delete blog
+    deleteBlog: build.mutation({
       query: (id: any) => ({
-        url: `/services/${id}`,
+        url: `/blog/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: [tagTypes.admin, tagTypes.category, tagTypes.service],
+      invalidatesTags: [tagTypes.blog],
     }),
   }),
 });
@@ -80,4 +83,7 @@ export const {
   useAddNewFaqMutation,
   useGetAllBlogsQuery,
   useGetAllFaqsQuery,
+  useGetSingleBlogQuery,
+  useUpdateSingleBlogMutation,
+  useDeleteBlogMutation
 } = BlogAndFaqApi;

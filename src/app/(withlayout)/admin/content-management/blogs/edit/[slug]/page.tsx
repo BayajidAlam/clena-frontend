@@ -1,44 +1,75 @@
 "use client";
 
+import Loading from "@/app/loading";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
-import { useAddNewBlogMutation } from "@/redux/api/services/blogAndFAQApi";
+import {
+  useGetSingleBlogQuery,
+  useUpdateSingleBlogMutation,
+} from "@/redux/api/services/blogAndFAQApi";
+import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const AddBlogsPage = () => {
+const UserProfilePage = ({ params }: any) => {
+  const { role } = getUserInfo();
+  const router = useRouter()
+  const id = params.slug;
+  const [value, setValue] = useState({});
+  const [updateSingleBlog, { isLoading: BlogLoading }] =
+    useUpdateSingleBlogMutation();
+  const { data, error, isLoading, refetch } = useGetSingleBlogQuery(id);
 
-  const [addNewBlog, {}] = useAddNewBlogMutation();
-  const router = useRouter();
+  // @ts-ignore
+  const myData = data?.data as any;
+  useEffect(() => {
+    if (data) {
+      setValue({
+        title: myData?.title,
+        text: myData?.text,
+        image: myData?.image,
+      });
+    }
+  }, [data, myData]);
 
   const onSubmit = async (values: any) => {
+    console.log(value, "values");
     try {
-      const res = await addNewBlog(values);
-      console.log(res, "customer create on admin");
+      const res = await updateSingleBlog({
+        id: params?.slug,
+        body: values,
+      }).unwrap();
       // @ts-ignore
-      if (res?.data?.success) {
-        router.push("/admin/content-management");
-        message.success("Blog Created Successfully!");
+      if (res?.success) {
+        refetch();
+        message.success("Blog Successfully Updated!");
+        router.push("/admin/content-management/all-blogs")
       }
     } catch (err: any) {
       console.error(err.message);
     }
   };
 
+  if (isLoading || BlogLoading) {
+    return <Loading />;
+  }
+
   return (
-    <div>
+    <div
+      style={{
+        padding: "10px",
+      }}
+    >
       <UMBreadCrumb
         items={[
           {
-            label: "content-management",
-            link: "/admin/content-management",
-          },
-          {
-            label: "add-blogs",
-            link: "/admin/content-management/blogs",
+            label: `profile`,
+            link: `/profile/${id}`,
           },
         ]}
       />
@@ -50,7 +81,7 @@ const AddBlogsPage = () => {
         }}
       >
         {/* resolver={yupResolver(adminSchema)} */}
-        <Form submitHandler={onSubmit}>
+        <Form submitHandler={onSubmit} defaultValues={value}>
           <div
             style={{
               marginBottom: "10px",
@@ -69,7 +100,7 @@ const AddBlogsPage = () => {
               }}
               className="capitalize"
             >
-             Create Blog Post
+              Create Blog Post
             </p>
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col
@@ -79,7 +110,12 @@ const AddBlogsPage = () => {
                   marginBottom: "10px",
                 }}
               >
-                <FormInput type="text" name="title" size="large" label="Title" />
+                <FormInput
+                  type="text"
+                  name="title"
+                  size="large"
+                  label="Title"
+                />
               </Col>
 
               <Col
@@ -89,12 +125,22 @@ const AddBlogsPage = () => {
                   marginBottom: "10px",
                 }}
               >
-                <FormInput
-                  type="text"
-                  name="text"
-                  size="large"
-                  label="Text"
-                />
+                <FormInput type="text" name="text" size="large" label="Text" />
+              </Col>
+
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <Image
+                  src={myData?.image}
+                  width={150}
+                  height={150}
+                  alt="image"
+                ></Image>
               </Col>
 
               <Col
@@ -123,4 +169,4 @@ const AddBlogsPage = () => {
   );
 };
 
-export default AddBlogsPage;
+export default UserProfilePage;

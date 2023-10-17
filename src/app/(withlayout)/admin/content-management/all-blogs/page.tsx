@@ -13,12 +13,12 @@ import { useAdminsQuery, useUpdateRoleMutation } from "@/redux/api/adminApi";
 import Image from "next/image";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";
-import {
-  useDeleteServiceMutation,
-  useGetAllServicesQuery,
-} from "@/redux/api/services/ServiceApi";
 import Loading from "@/app/loading";
-import { useGetAllBlogsQuery } from "@/redux/api/services/blogAndFAQApi";
+import {
+  useDeleteBlogMutation,
+  useGetAllBlogsQuery,
+} from "@/redux/api/services/blogAndFAQApi";
+import moment from "moment";
 
 const AllBlogsPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -28,7 +28,6 @@ const AllBlogsPage = () => {
   const [size, setSize] = useState<number>(5);
   const [sortBy, setSortBy] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
   query["limit"] = size;
@@ -37,36 +36,25 @@ const AllBlogsPage = () => {
   query["sortOrder"] = sortOrder;
 
   const { data, isLoading, refetch } = useGetAllBlogsQuery({ ...query });
-  const [deleteService] = useDeleteServiceMutation();
+  const [deleteBlog, { isLoading: blogLoading }] = useDeleteBlogMutation();
   // @ts-ignore
   const BlogsData = data?.data?.data;
   // @ts-ignore
   const BlogsDataLength = data?.data?.meta;
-  console.log(BlogsData);
+
   const handleDelete = async (id: any) => {
-    const res = await deleteService(id).unwrap();
+    const res = await deleteBlog(id).unwrap();
     // @ts-ignore
     if (res?.success) {
+      refetch();
+      message.success("Blog deleted successfully!");
     }
   };
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      width: "15%",
-      align: "center",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      width: "10%",
-      align: "center",
-    },
-    {
-      title: "Category Name",
-      dataIndex: ["category", "title"],
-      render: (text: string, record: any) => (
+      title: "No",
+      render: (text: string, record: any, index: number) => (
         <div
           style={{
             display: "flex",
@@ -75,13 +63,83 @@ const AllBlogsPage = () => {
             gap: "5px",
           }}
         >
-          {text}
+          {index + 1}
+        </div>
+      ),
+      width: "5%",
+      align: "center",
+    },
+    {
+      title: "Image",
+      dataIndex: "image",
+      render: (imageURL: string, record: any) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
+          <Image
+            src={imageURL}
+            width={60}
+            height={60}
+            alt={imageURL ? imageURL : ""}
+          ></Image>
         </div>
       ),
       width: "15%",
       align: "center",
     },
-
+    {
+      title: "Title",
+      dataIndex: "title",
+      width: "20%",
+      align: "center",
+      render: (text: string) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+            fontWeight: "bold",
+            color: "blue",
+          }}
+        >
+          {text.length > 20 ? `${text.substring(0, 30)}...` : text}
+        </div>
+      ),
+    },
+    {
+      title: "Text",
+      dataIndex: "text",
+      width: "25%",
+      render: (text: string) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
+          {text.length > 20 ? `${text.substring(0, 90)}...` : text}
+        </div>
+      ),
+      align: "center",
+    },
+    {
+      title: "CreatedAt",
+      dataIndex: "createdAt",
+      width: "15%",
+      align: "center",
+      render: (text: any, record: any) => {
+        const formattedDate = moment(text).format("MMMM DD, YYYY HH:mm:ss");
+        return <p>{formattedDate}</p>;
+      },
+    },
     {
       title: "Action",
       dataIndex: "id",
@@ -94,7 +152,7 @@ const AllBlogsPage = () => {
             gap: "5px",
           }}
         >
-          <Link href={`/admin/service-management/edit/${record}`}>
+          <Link href={`/admin/content-management/blogs/edit/${record}`}>
             <CleanCommonCloseButton>Edit</CleanCommonCloseButton>
           </Link>
           <CleanCommonSaveButton onClick={() => handleDelete(record)}>
@@ -119,7 +177,7 @@ const AllBlogsPage = () => {
     setSortOrder(order === "ascend" ? "asc" : "desc");
   };
 
-  if (isLoading) {
+  if (isLoading || isLoading) {
     return <Loading />;
   }
 
