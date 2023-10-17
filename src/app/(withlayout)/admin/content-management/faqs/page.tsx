@@ -38,8 +38,8 @@ const AddFAQSPage = () => {
             link: "/admin/content-management",
           },
           {
-            label: "add-blogs",
-            link: "/admin/content-management/blogs",
+            label: "add-faqs",
+            link: "/admin/content-management/faqs",
           },
         ]}
       />
@@ -106,7 +106,7 @@ const AddFAQSPage = () => {
                 gap: "10px",
               }}
             >
-              <CleanCommonSaveButton>Register</CleanCommonSaveButton>
+              <CleanCommonSaveButton>Save</CleanCommonSaveButton>
             </div>
           </div>
         </Form>

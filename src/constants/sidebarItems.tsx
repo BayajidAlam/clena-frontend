@@ -1,8 +1,13 @@
 import type { MenuProps } from "antd";
-import { ProfileOutlined, TableOutlined } from "@ant-design/icons";
+import { BookOutlined, CloudUploadOutlined, ProfileOutlined, TableOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { USER_ROLE } from "./role";
 import { getUserInfo } from "@/services/auth.service";
+import { MdContentPaste, MdMiscellaneousServices } from 'react-icons/md';
+import { RiCustomerService2Fill } from 'react-icons/ri';
+import { CgProfile } from 'react-icons/cg';
+import { FaQuestionCircle } from "react-icons/fa";
+
 
 export const sidebarItems = (role: string) => {
   const { userId } = getUserInfo();
@@ -11,7 +16,7 @@ export const sidebarItems = (role: string) => {
     {
       label: <Link href={`/profile/${userId}`}>Account Profile</Link>,
       key: `/${role}/change-password`,
-      icon: <ProfileOutlined />,
+      icon:<div className="text-xl"><CgProfile /></div>,
       style: {
         background: "#ff5100",
       },
@@ -22,7 +27,7 @@ export const sidebarItems = (role: string) => {
     ...defaultSidebarItems,
     {
       label: <p>Customer-Management</p>,
-      icon: <TableOutlined />,
+      icon: <div className="text-xl"><RiCustomerService2Fill /></div>,
       key: `/admin/user-management/customer`,
       children: [
         {
@@ -37,7 +42,7 @@ export const sidebarItems = (role: string) => {
     },
     {
       label: <p>Service-Management</p>,
-      icon: <TableOutlined />,
+      icon: <div className="text-xl"><MdMiscellaneousServices /></div>,
       key: `/admin/service-management/service`,
       children: [
         {
@@ -66,18 +71,30 @@ export const sidebarItems = (role: string) => {
       label: (
         <Link href={`/${role}/booking-management`}>Booking-Management</Link>
       ),
-      icon: <TableOutlined />,
+      icon: <BookOutlined />,
       key: `/admin/booking-management`,
     },
     {
       label: <p>Content-Management</p>,
-      icon: <TableOutlined />,
+      icon: <CloudUploadOutlined />,
       key: `/admin/content-management/ok`,
       children: [
         {
-          label: <Link href={`/admin/content-management`}>All Content</Link>,
+          label: <p>All Content</p>,
           icon: <TableOutlined />,
           key: `/admin/content-management`,
+          children: [
+            {
+              label: <Link href={`/admin/content-management/all-blogs`}>All Blogs</Link>,
+              icon: <MdContentPaste/>,
+              key: `/admin/content-management/all-blogs`,
+            },
+            {
+              label: <Link href={`/admin/content-management/all-faqs`}>All FAQS</Link>,
+              icon: <FaQuestionCircle/>,
+              key: `/admin/content-management/all-faqss`,
+            }
+          ]
         },
         {
           label: (

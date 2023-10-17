@@ -114,7 +114,7 @@ const AddBlogsPage = () => {
                 gap: "10px",
               }}
             >
-              <CleanCommonSaveButton>Register</CleanCommonSaveButton>
+              <CleanCommonSaveButton>Save</CleanCommonSaveButton>
             </div>
           </div>
         </Form>
