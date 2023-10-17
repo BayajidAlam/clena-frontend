@@ -5,27 +5,24 @@ import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
-import { USER_ROLE } from "@/constants/role";
-import { useUserSignUpMutation } from "@/redux/api/authApi";
-import { getUserInfo } from "@/services/auth.service";
+import { useAddNewBlogMutation, useAddNewFaqMutation } from "@/redux/api/services/blogAndFAQApi";
 import { Col, Row, message } from "antd";
 import { useRouter } from "next/navigation";
 
 const AddFAQSPage = () => {
-  const [userSignUp, {}] = useUserSignUpMutation();
-  const { role } = getUserInfo() as any;
+
+  const [addNewFaq, {}] = useAddNewFaqMutation();
   const router = useRouter();
 
   const onSubmit = async (values: any) => {
-    const dataWithRole = { ...values, role: USER_ROLE.CUSTOMER };
-    console.log(dataWithRole);
     try {
-      const res = await userSignUp(dataWithRole);
-      console.log(res, "customer create on admin");
+      console.log(values,'value');
+      const res = await addNewFaq(values);
+      console.log(res, "FAQ!");
       // @ts-ignore
       if (res?.data?.success) {
-        router.push("/admin/user-management");
-        message.success("Customer Created Successfully!");
+        router.push("/admin/content-management");
+        message.success("FAQ Create Successfully!");
       }
     } catch (err: any) {
       console.error(err.message);
@@ -41,8 +38,8 @@ const AddFAQSPage = () => {
             link: "/admin/content-management",
           },
           {
-            label: "faqs",
-            link: "/admin/content-management/faqs",
+            label: "add-blogs",
+            link: "/admin/content-management/blogs",
           },
         ]}
       />
@@ -83,35 +80,7 @@ const AddFAQSPage = () => {
                   marginBottom: "10px",
                 }}
               >
-                <FormInput type="text" name="name" size="large" label="Name" />
-              </Col>
-              <Col
-                className="gutter-row"
-                span={6}
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
-                <FormInput
-                  type="text"
-                  name="email"
-                  size="large"
-                  label="Email"
-                />
-              </Col>
-              <Col
-                className="gutter-row"
-                span={6}
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
-                <FormInput
-                  type="password"
-                  name="password"
-                  size="large"
-                  label="Password"
-                />
+                <FormInput type="text" name="question" size="large" label="Question" />
               </Col>
 
               <Col
@@ -123,34 +92,12 @@ const AddFAQSPage = () => {
               >
                 <FormInput
                   type="text"
-                  name="contactNo"
+                  name="ans"
                   size="large"
-                  label="Contact No"
+                  label="Ans"
                 />
               </Col>
-              <Col
-                className="gutter-row"
-                span={6}
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
-                <FormInput
-                  type="text"
-                  name="address"
-                  size="large"
-                  label="Address"
-                />
-              </Col>
-              <Col
-                className="gutter-row"
-                span={12}
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
-                <UploadImage name="profileImg" />
-              </Col>
+              
             </Row>
             <div
               style={{

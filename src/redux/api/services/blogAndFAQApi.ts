@@ -15,6 +15,16 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.blog],
     }),
 
+    // add new Faq
+    addNewFaq: build.mutation({
+      query: (data: any) => ({
+        url: "/blog/create-faq",
+        method: "POST",
+        data,
+      }),
+      invalidatesTags: [tagTypes.blog],
+    }),
+
     addNewService: build.mutation({
       query: (data: any) => ({
         url: "/create-service",
@@ -80,5 +90,6 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useAddNewBlogMutation
+  useAddNewBlogMutation,
+  useAddNewFaqMutation
 } = BlogAndFaqApi;

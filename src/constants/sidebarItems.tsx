@@ -21,17 +21,29 @@ export const sidebarItems = (role: string) => {
   const adminSidebarItems: MenuProps["items"] = [
     ...defaultSidebarItems,
     {
-      label: <Link href={`/admin/user-management`}>Customer-Management</Link>,
+      label: <p>Customer-Management</p>,
       icon: <TableOutlined />,
-      key: `/admin/user-management`,
+      key: `/admin/user-management/customer`,
+      children: [
+        {
+          label: <Link href={`/admin/user-management`}>All Customer</Link>,
+          key: `/admin/user-management`,
+        },
+        {
+          label: <Link href={`/admin/user-management/create`}>Add Customer</Link>,
+          key: `/admin/user-management/create`,
+        },
+      ]
     },
     {
-      label: (
-        <Link href={`/${role}/service-management`}>Service-Management</Link>
-      ),
+      label: <p>Service-Management</p>,
       icon: <TableOutlined />,
-      key: `/${role}/service-management`,
+      key: `/admin/service-management/service`,
       children: [
+        {
+          label: <Link href={`/admin/service-management`}>All Service</Link>,
+          key: `/admin/service-management`,
+        },
         {
           label: (
             <Link href={`/admin/service-management/create-category`}>
@@ -58,10 +70,15 @@ export const sidebarItems = (role: string) => {
       key: `/admin/booking-management`,
     },
     {
-      label: <Link href={`/admin/content-management`}>Content-Management</Link>,
+      label: <p>Content-Management</p>,
       icon: <TableOutlined />,
-      key: `/admin/content-management`,
+      key: `/admin/content-management/ok`,
       children: [
+        {
+          label: <Link href={`/admin/content-management`}>All Content</Link>,
+          icon: <TableOutlined />,
+          key: `/admin/content-management`,
+        },
         {
           label: (
             <Link href={`/admin/content-management/blogs`}>Add Blogs</Link>
@@ -70,9 +87,9 @@ export const sidebarItems = (role: string) => {
           key: `/admin/booking-management/blogs`,
         },
         {
-          label: <Link href={`/admin/booking-management/faqs`}>Add FAQS</Link>,
+          label: <Link href={`/admin/content-management/faqs`}>Add FAQS</Link>,
           icon: <TableOutlined />,
-          key: `/admin/booking-management/faqs`,
+          key: `/admin/content-management/faqs`,
         },
       ],
     },
