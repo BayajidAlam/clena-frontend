@@ -176,7 +176,7 @@ const AdminPage = () => {
             <CleanCommonCloseButton>Edit</CleanCommonCloseButton>
           </Link>
           <CleanCommonCloseButton onClick={() => makeUserHandler(record)}>
-            Remove Admin
+            Demote to user
           </CleanCommonCloseButton>
 
           <Button

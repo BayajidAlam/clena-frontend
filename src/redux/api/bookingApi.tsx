@@ -13,6 +13,16 @@ export const serviceApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.service, tagTypes.category, tagTypes.admin],
     }),
 
+    // add a booking
+    addNewBooking: build.mutation({
+      query: (data: any) => ({
+        url: "/book",
+        method: "POST",
+        data,
+      }),
+      invalidatesTags: [tagTypes.bookings, tagTypes.cart],
+    }),
+
     addNewService: build.mutation({
       query: (data: any) => ({
         url: "/create-service",
@@ -46,6 +56,7 @@ export const serviceApi = baseApi.injectEndpoints({
         tagTypes.bookings,
         tagTypes.service,
         tagTypes.user,
+        tagTypes.cart
       ],
     }),
 
@@ -90,6 +101,14 @@ export const serviceApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.admin],
     }),
+
+    deleteSingleItemFormCart: build.mutation({
+      query: (id: any) => ({
+        url: `/myCart/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.cart, tagTypes.bookings],
+    }),
   }),
 });
 
@@ -97,10 +116,12 @@ export const {
   useAdminQuery,
   useAddAdminWithFormDataMutation,
   useUpdateAdminMutation,
-  useGetAllBookingsQuery, //get all bookings
+  useGetAllBookingsQuery, 
   useAddNewServiceMutation,
   useUpdateSingleServiceMutation,
   useGetSingleServiceQuery,
   useDeleteServiceMutation,
-  useUpdateBookingStatusMutation, //update booking status
+  useUpdateBookingStatusMutation, 
+  useAddNewBookingMutation,
+  useDeleteSingleItemFormCartMutation,
 } = serviceApi;
