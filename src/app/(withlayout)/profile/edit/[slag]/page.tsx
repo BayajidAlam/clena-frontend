@@ -23,7 +23,7 @@ const UserProfilePage = ({ params }: any) => {
   const [updateUser] = useUpdateUserMutation();
   const { data, error, isLoading, refetch } = useGetSingleUserQuery(id);
 
-  // @ts-ignore 
+  // @ts-ignore
   const myData = data?.data as any;
   useEffect(() => {
     if (data) {
@@ -39,11 +39,11 @@ const UserProfilePage = ({ params }: any) => {
   }, [data, myData]);
 
   const onSubmit = async (values: any) => {
-    console.log(value, "values");
+    // console.log(value, "values");
     try {
       const res = await updateUser({ id: params?.slag, body: values }).unwrap();
-      console.log(res, "update response");
-      // @ts-ignore 
+      // console.log(res, "update response");
+      // @ts-ignore
       if (res?.success) {
         refetch();
         message.success("Admin Successfully Updated!");
@@ -169,21 +169,21 @@ const UserProfilePage = ({ params }: any) => {
                   marginBottom: "10px",
                 }}
               >
-                <UploadImage name="profileImg" />
-              </Col>
-              <Col
-                className="gutter-row"
-                span={12}
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
                 <Image
                   src={myData?.profileImg}
                   width={150}
                   height={150}
                   alt="image"
                 ></Image>
+              </Col>
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <UploadImage name="profileImg" />
               </Col>
             </Row>
             <div
