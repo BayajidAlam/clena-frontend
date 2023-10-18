@@ -1,11 +1,26 @@
 "use client";
 
+import Loading from "@/app/loading";
+import { useGetSingleCartItemQuery } from "@/redux/api/services/cartApi";
+import { useGetSingleUserQuery } from "@/redux/api/userApi";
+import { getUserInfo } from "@/services/auth.service";
 import { Button } from "antd";
+import Image from "next/image";
 import { useState } from "react";
 import { AiOutlinePlusSquare, AiOutlineMinusSquare } from "react-icons/ai";
 const CartPage = () => {
+  const { userId } = getUserInfo();
+  const { data, isLoading } = useGetSingleUserQuery(userId);
+  // @ts-ignore
+  const id = data?.data.id;
   const [quantity, setQuantity] = useState(1);
-  console.log(quantity);
+  const { data: cartData } = useGetSingleCartItemQuery(id);
+  // @ts-ignore
+  const carts = cartData?.data;
+  console.log(carts);
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <div className="container mx-auto mt-10">
       <div className="flex shadow-md my-10">
@@ -14,6 +29,7 @@ const CartPage = () => {
             <h1 className="font-semibold text-2xl">Shopping Cart</h1>
             <h2 className="font-semibold text-2xl">3 Items</h2>
           </div>
+
           <div className="flex mt-10 mb-5">
             <h3 className="font-semibold text-gray-600 text-xs uppercase w-2/5">
               Product Details
@@ -28,55 +44,65 @@ const CartPage = () => {
               Total
             </h3>
           </div>
-          <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
-            <div className="flex w-2/5">
-              <div className="w-20">
-                <img
-                  className="h-24"
-                  src="https://drive.google.com/uc?id=18KkAVkGFvaGNqPy2DIvTqmUH_nk39o3z"
-                  alt=""
-                />
-              </div>
-              <div className="flex flex-col justify-between ml-4 flex-grow">
-                <span className="font-bold text-sm">Iphone 6S</span>
-                <span className="text-red-500 text-xs">Apple</span>
-                <a
-                  href="#"
-                  className="font-semibold hover:text-red-500 text-gray-500 text-xs"
-                >
-                  Remove
-                </a>
-              </div>
-            </div>
-            <div className="flex justify-center w-1/5 border-none hover:bg-gray-100">
-              <div className="flex items-center justify-center">
-                <Button
-                  className="bg-none border-none text-xl hover:text-[#fd4f1a]"
-                  onClick={() => setQuantity(quantity - 1)}
-                >
-                  <AiOutlineMinusSquare />
-                </Button>
-                <input
-                  className="mx-2 text-center w-8 h-8 "
-                  type="text"
-                  value={quantity}
-                />
-                <Button
-                  className="bg-none border-none text-xl hover:text-[#fd4f1a]"
-                  onClick={() => setQuantity(quantity + 1)}
-                >
-                  <AiOutlinePlusSquare />
-                </Button>
-              </div>
-            </div>
+          {carts?.map((cart) => {
+            return (
+              <>
+                {" "}
+                <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
+                  <div className="flex w-2/5">
+                    <div className="w-20">
+                      <Image
+                        src={cart?.service?.image}
+                        alt={cart?.service?.image}
+                        width={70}
+                        height={96}
+                      />
+                    </div>
+                    <div className="flex flex-col justify-between ml-4 flex-grow">
+                      <span className="font-bold text-sm">
+                        {cart?.service?.name}
+                      </span>
+                      <span className="text-red-500 text-xs">Apple</span>
+                      <a
+                        href="#"
+                        className="font-semibold hover:text-red-500 text-gray-500 text-xs"
+                      >
+                        Remove
+                      </a>
+                    </div>
+                  </div>
+                  <div className="flex justify-center w-1/5 border-none hover:bg-gray-100">
+                    <div className="flex items-center justify-center">
+                      <Button
+                        className="bg-none border-none text-xl hover:text-[#fd4f1a]"
+                        onClick={() => setQuantity(quantity - 1)}
+                      >
+                        <AiOutlineMinusSquare />
+                      </Button>
+                      <input
+                        className="mx-2 text-center w-8 h-8 "
+                        type="text"
+                        value={quantity}
+                      />
+                      <Button
+                        className="bg-none border-none text-xl hover:text-[#fd4f1a]"
+                        onClick={() => setQuantity(quantity + 1)}
+                      >
+                        <AiOutlinePlusSquare />
+                      </Button>
+                    </div>
+                  </div>
 
-            <span className="text-center w-1/5 font-semibold text-sm">
-              $400.00
-            </span>
-            <span className="text-center w-1/5 font-semibold text-sm">
-              $400.00
-            </span>
-          </div>
+                  <span className="text-center w-1/5 font-semibold text-sm">
+                    {`$ ${cart?.service?.price}`}
+                  </span>
+                  <span className="text-center w-1/5 font-semibold text-sm">
+                    $400.00
+                  </span>
+                </div>
+              </>
+            );
+          })}
 
           <a
             href="#"
