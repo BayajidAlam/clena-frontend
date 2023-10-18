@@ -1,32 +1,52 @@
 "use client";
 
+import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
-import { USER_ROLE } from "@/constants/role";
-
-import { useUserSignUpMutation } from "@/redux/api/authApi";
-import { getUserInfo, storeUserInfo } from "@/services/auth.service";
-
+import {
+  useGetSingleUserQuery,
+  useUpdateUserMutation,
+} from "@/redux/api/userApi";
+import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
+const UserProfilePage = ({ params }: any) => {
+  const { role } = getUserInfo();
+  const id = params.slag;
+  const [value, setValue] = useState({});
+  const [updateUser] = useUpdateUserMutation();
+  const { data, error, isLoading, refetch } = useGetSingleUserQuery(id);
 
-const RegisterationPage = () => {
-  const [userSignUp, {}] = useUserSignUpMutation();
-  const { role } = getUserInfo() as any;
-  const router = useRouter();
+  // @ts-ignore 
+  const myData = data?.data as any;
+  useEffect(() => {
+    if (data) {
+      setValue({
+        name: myData.name,
+        email: myData.email,
+        address: myData.address,
+        profileImg: myData.profileImg,
+        contactNo: myData.contactNo,
+        password: myData.password,
+      });
+    }
+  }, [data, myData]);
 
   const onSubmit = async (values: any) => {
-    const dataWithRole = { ...values, role: USER_ROLE.ADMIN };
+    console.log(value, "values");
     try {
-      const res = await userSignUp(dataWithRole);
+      const res = await updateUser({ id: params?.slag, body: values }).unwrap();
+      console.log(res, "update response");
       // @ts-ignore 
-      if (res?.data?.success) {
-        router.push("/superadmin/admin")
-        message.success("Admin Created Successfully!");
+      if (res?.success) {
+        refetch();
+        message.success("Admin Successfully Updated!");
       }
     } catch (err: any) {
       console.error(err.message);
@@ -34,16 +54,16 @@ const RegisterationPage = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        padding: "10px",
+      }}
+    >
       <UMBreadCrumb
         items={[
           {
-            label: "super-admin",
-            link: "/superadmin/admin",
-          },
-          {
-            label: "Create admin",
-            link: "/superadmin/admin/create",
+            label: `profile`,
+            link: `/profile/${id}`,
           },
         ]}
       />
@@ -55,7 +75,7 @@ const RegisterationPage = () => {
         }}
       >
         {/* resolver={yupResolver(adminSchema)} */}
-        <Form submitHandler={onSubmit}>
+        <Form submitHandler={onSubmit} defaultValues={value}>
           <div
             style={{
               marginBottom: "10px",
@@ -114,7 +134,6 @@ const RegisterationPage = () => {
                   label="Password"
                 />
               </Col>
-
               <Col
                 className="gutter-row"
                 span={6}
@@ -145,12 +164,26 @@ const RegisterationPage = () => {
               </Col>
               <Col
                 className="gutter-row"
-                span={12}
+                span={6}
                 style={{
                   marginBottom: "10px",
                 }}
               >
                 <UploadImage name="profileImg" />
+              </Col>
+              <Col
+                className="gutter-row"
+                span={12}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <Image
+                  src={myData?.profileImg}
+                  width={150}
+                  height={150}
+                  alt="image"
+                ></Image>
               </Col>
             </Row>
             <div
@@ -169,4 +202,4 @@ const RegisterationPage = () => {
   );
 };
 
-export default RegisterationPage;
+export default UserProfilePage;

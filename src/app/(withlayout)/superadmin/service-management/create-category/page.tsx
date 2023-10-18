@@ -1,76 +1,43 @@
 "use client";
 
-import Loading from "@/app/loading";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import {
-  useGetSingleFaqQuery,
-  useUpdateSingleBlogMutation,
-  useUpdateSingleFaqMutation,
-} from "@/redux/api/services/blogAndFAQApi";
+import { USER_ROLE } from "@/constants/role";
+import { useUserSignUpMutation } from "@/redux/api/authApi";
+import { useAddNewCategoryMutation } from "@/redux/api/services/categoryApi";
 import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
-const UserProfilePage = ({ params }: any) => {
-
-  const { role } = getUserInfo();
+const CreateCategoryPage = () => {
+  const [AddNewCategory, {}] = useAddNewCategoryMutation();
+  const { role } = getUserInfo() as any;
   const router = useRouter();
-  const id = params.slug;
-  const [value, setValue] = useState({});
-
-  const [updateSingleFaq, { isLoading: BlogLoading }] =
-    useUpdateSingleFaqMutation();
-  const { data, error, isLoading, refetch } = useGetSingleFaqQuery(id);
- 
-  
-  // @ts-ignore
-  const myData = data?.data as any;
-  useEffect(() => {
-    if (data) {
-      setValue({
-        ans: myData?.ans,
-        question: myData?.question,
-      });
-    }
-  }, [data, myData]);
 
   const onSubmit = async (values: any) => {
     
     try {
-      const res = await updateSingleFaq({
-        id,
-        body: values,
-      }).unwrap();
+      const res = await AddNewCategory(values);
+      console.log(res, "customer create on admin");
       // @ts-ignore
-      if (res?.success) {
-        refetch();
-        message.success("Faq Successfully Updated!");
-        router.push("/admin/content-management/all-faqs");
+      if (res?.data?.success) {
+        router.push("/admin/service-management");
+        message.success("Category Created Successfully!");
       }
     } catch (err: any) {
       console.error(err.message);
     }
   };
 
-  if (isLoading || BlogLoading) {
-    return <Loading />;
-  }
-
   return (
-    <div
-      style={{
-        padding: "10px",
-      }}
-    >
+    <div>
       <UMBreadCrumb
         items={[
           {
-            label: `faqs`,
-            link: `/admin/content-management/all-faqs`,
+            label: "service management",
+            link: "/admin/service-management",
           },
         ]}
       />
@@ -82,7 +49,7 @@ const UserProfilePage = ({ params }: any) => {
         }}
       >
         {/* resolver={yupResolver(adminSchema)} */}
-        <Form submitHandler={onSubmit} defaultValues={value}>
+        <Form submitHandler={onSubmit}>
           <div
             style={{
               marginBottom: "10px",
@@ -101,7 +68,7 @@ const UserProfilePage = ({ params }: any) => {
               }}
               className="capitalize"
             >
-              Create Blog Post
+              Add New Category
             </p>
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col
@@ -113,20 +80,10 @@ const UserProfilePage = ({ params }: any) => {
               >
                 <FormInput
                   type="text"
-                  name="question"
+                  name="title"
                   size="large"
-                  label="Question"
+                  label="Title"
                 />
-              </Col>
-
-              <Col
-                className="gutter-row"
-                span={6}
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
-                <FormInput type="Ans" name="ans" size="large" label="Text" />
               </Col>
             </Row>
             <div
@@ -145,4 +102,4 @@ const UserProfilePage = ({ params }: any) => {
   );
 };
 
-export default UserProfilePage;
+export default CreateCategoryPage;

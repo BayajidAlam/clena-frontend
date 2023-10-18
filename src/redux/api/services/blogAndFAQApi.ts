@@ -21,7 +21,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
         method: "POST",
         data,
       }),
-      invalidatesTags: [tagTypes.blog],
+      invalidatesTags: [tagTypes.faq],
     }),
 
     // get all blogs

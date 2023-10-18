@@ -13,35 +13,43 @@ import { useAdminsQuery, useUpdateRoleMutation } from "@/redux/api/adminApi";
 import Image from "next/image";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";
-import { useDeleteSingleUserMutation } from "@/redux/api/userApi";
 import Loading from "@/app/loading";
+import {
+  useDeleteBlogMutation,
+  useGetAllBlogsQuery,
+} from "@/redux/api/services/blogAndFAQApi";
+import moment from "moment";
 
-const UserManagementPage = () => {
+const AllBlogsPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const query: Record<string, any> = {};
-  const [updateRole, { isLoading: updateLoading }] = useUpdateRoleMutation();
-  const [deleteSingleUser, { isLoading: userLoading }] =
-    useDeleteSingleUserMutation();
 
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(5);
   const [sortBy, setSortBy] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
   query["limit"] = size;
   query["page"] = page;
   query["sortBy"] = sortBy;
   query["sortOrder"] = sortOrder;
-  query["role"] = "customer";
 
-  const { data, isLoading, refetch } = useAdminsQuery({ ...query });
+  const { data, isLoading, refetch } = useGetAllBlogsQuery({ ...query });
+  const [deleteBlog, { isLoading: blogLoading }] = useDeleteBlogMutation();
+  // @ts-ignore
+  const BlogsData = data?.data?.data;
+  // @ts-ignore
+  const BlogsDataLength = data?.data?.meta;
 
-  // @ts-ignore
-  const adminData = data?.data?.data;
-  // @ts-ignore
-  const adminDataLength = data?.data?.meta;
+  const handleDelete = async (id: any) => {
+    const res = await deleteBlog(id).unwrap();
+    // @ts-ignore
+    if (res?.success) {
+      refetch();
+      message.success("Blog deleted successfully!");
+    }
+  };
 
   const columns = [
     {
@@ -63,7 +71,7 @@ const UserManagementPage = () => {
     },
     {
       title: "Image",
-      dataIndex: "profileImg",
+      dataIndex: "image",
       render: (imageURL: string, record: any) => (
         <div
           style={{
@@ -74,12 +82,9 @@ const UserManagementPage = () => {
           }}
         >
           <Image
-            style={{
-              borderRadius: "50%",
-            }}
             src={imageURL}
-            width={50}
-            height={50}
+            width={60}
+            height={60}
             alt={imageURL ? imageURL : ""}
           ></Image>
         </div>
@@ -88,34 +93,52 @@ const UserManagementPage = () => {
       align: "center",
     },
     {
-      title: "Name",
-      dataIndex: "name",
-      render: function (data: any) {
-        const fullName = `${data}`;
-        return <>{fullName}</>;
-      },
+      title: "Title",
+      dataIndex: "title",
       width: "20%",
+      align: "center",
+      render: (text: string) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+            fontWeight: "bold",
+            color: "blue",
+          }}
+        >
+          {text.length > 20 ? `${text.substring(0, 30)}...` : text}
+        </div>
+      ),
+    },
+    {
+      title: "Text",
+      dataIndex: "text",
+      width: "25%",
+      render: (text: string) => (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
+          {text.length > 20 ? `${text.substring(0, 90)}...` : text}
+        </div>
+      ),
       align: "center",
     },
     {
-      title: "Email",
-      dataIndex: "email",
+      title: "CreatedAt",
+      dataIndex: "createdAt",
       width: "15%",
-    },
-    {
-      title: "Role",
-      dataIndex: "role",
-      width: "10%",
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      width: "20%",
-    },
-    {
-      title: "Contact no.",
-      dataIndex: "contactNo",
-      width: "20%",
+      align: "center",
+      render: (text: any, record: any) => {
+        const formattedDate = moment(text).format("MMMM DD, YYYY HH:mm:ss");
+        return <p>{formattedDate}</p>;
+      },
     },
     {
       title: "Action",
@@ -129,28 +152,16 @@ const UserManagementPage = () => {
             gap: "5px",
           }}
         >
-          <Link href={`/profile/edit/${record}`}>
+          <Link href={`/admin/content-management/blogs/edit/${record}`}>
             <CleanCommonCloseButton>Edit</CleanCommonCloseButton>
           </Link>
-          <Button
-            onClick={() => deleteHandler(record)}
-            htmlType="submit"
-            type="primary"
-            style={{
-              background: "Red",
-              padding: "4px 22px",
-              color: "white",
-              fontSize: "14px",
-              borderRadius: "20px",
-              cursor: "pointer",
-            }}
-          >
+          <CleanCommonSaveButton onClick={() => handleDelete(record)}>
             Delete
-          </Button>
+          </CleanCommonSaveButton>
         </div>
       ),
       align: "center",
-      width: "15%",
+      width: "20%",
     },
   ];
 
@@ -166,22 +177,7 @@ const UserManagementPage = () => {
     setSortOrder(order === "ascend" ? "asc" : "desc");
   };
 
-
-  const deleteHandler = async (id: string) => {
-    try {
-      const res: any = await deleteSingleUser(id).unwrap();
-
-      // @ts-ignore
-      if (res?.success) {
-        refetch();
-        message.success("User Deleted Successfully!");
-      } else {
-        message.error(res?.message);
-      }
-    } catch (error: any) {}
-  };
-
-  if (isLoading || userLoading || updateLoading) {
+  if (isLoading || isLoading) {
     return <Loading />;
   }
 
@@ -190,21 +186,17 @@ const UserManagementPage = () => {
       <UMBreadCrumb
         items={[
           {
-            label: "user management",
-            link: "/admin/user-management",
-          },
-          {
-            label: "Create Customer",
-            link: "/admin/user-management/create",
+            label: "all blogs",
+            link: "/admin/content-management/all-blogs",
           },
         ]}
       />
       <div style={{ padding: "10px" }}>
         <ActionBar>
           <div>
-            <Link href="/admin/user-management/create">
+            <Link href="/admin/content-management/blogs">
               <button className="text-white shadow-xl bg-[#FF5100] hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-none">
-                Create Customer
+                Create Blog
               </button>
             </Link>
           </div>
@@ -214,10 +206,10 @@ const UserManagementPage = () => {
       <UMTable
         loading={isLoading}
         columns={columns}
-        dataSource={adminData}
+        dataSource={BlogsData}
         pageSize={size}
         // @ts-ignore
-        totalPages={adminDataLength}
+        totalPages={BlogsDataLength}
         showSizeChanger={true}
         onPaginationChange={onPaginationChange}
         onTableChange={onTableChange}
@@ -236,4 +228,4 @@ const UserManagementPage = () => {
   );
 };
 
-export default UserManagementPage;
+export default AllBlogsPage;

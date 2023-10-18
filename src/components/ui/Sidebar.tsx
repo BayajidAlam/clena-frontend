@@ -1,19 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Layout, Menu } from "antd";
 
 import { sidebarItems } from "@/constants/sidebarItems";
 import { USER_ROLE } from "@/constants/role";
 import { getUserInfo } from "@/services/auth.service";
+import { useGetSingleUserQuery } from "@/redux/api/userApi";
+import Loading from "@/app/loading";
 
 const { Sider } = Layout;
 
 const SideBar = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [role, setRole] = useState("");
+  const [id, setId] = useState("");
 
-  const { role } = getUserInfo() as any;
-  // console.log(role);
+  const { userId } = getUserInfo() as any;
+  const { data } = useGetSingleUserQuery(userId);
+
+  useEffect(() => {
+    // @ts-ignore
+    if (data?.data) {
+      // @ts-ignore
+      setRole(data?.data.role);
+      // @ts-ignore
+      setId(data?.data?.id);
+    }
+    // @ts-ignore
+  }, [data?.data]);
+
+
 
   return (
     <Sider
@@ -42,7 +59,7 @@ const SideBar = () => {
           fontWeight: "bold",
           padding: "12px 0px",
           backgroundColor: "white",
-          height: "63px"
+          height: "63px",
         }}
       >
         CLEANA
@@ -54,7 +71,7 @@ const SideBar = () => {
         theme="dark"
         defaultSelectedKeys={["1"]}
         mode="inline"
-        items={sidebarItems(role)}
+        items={sidebarItems(role, id)}
       />
     </Sider>
   );

@@ -1,51 +1,48 @@
 "use client";
 
-import Loading from "@/app/loading";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import Form from "@/components/Forms/Form";
-import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import UploadImage from "@/components/ui/UploadImage";
-import {
-  useAddNewBlogMutation,
-  useAddNewFaqMutation,
-} from "@/redux/api/services/blogAndFAQApi";
+import { useAddNewCategoryMutation } from "@/redux/api/services/categoryApi";
+import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
+import FormDatePicker from "@/components/Forms/FormDatePicker";
+import { useState } from "react";
+import { useUpdateBookingStatusMutation } from "@/redux/api/bookingApi";
 
-const AddFAQSPage = () => {
-  const [addNewFaq, { isLoading }] = useAddNewFaqMutation();
+const CreateCategoryPage = ({ params }: any) => {
+  const [updateBookingStatus] = useUpdateBookingStatusMutation();
   const router = useRouter();
+  const [newData, setNewDate] = useState("");
 
   const onSubmit = async (values: any) => {
-    try {
-      console.log(values, "value");
-      const res = await addNewFaq(values);
-      // @ts-ignore
-      if (res?.data?.success) {
-        router.push("/admin/content-management/all-faqs");
-        message.success("FAQ Create Successfully!");
-      }
-    } catch (err: any) {
-      console.error(err.message);
+    console.log(newData, "newData");
+    const res = await updateBookingStatus({
+      id: params.slag,
+      body: { booking_schedult: newData },
+    }).unwrap();
+    console.log(res, "data");
+    // @ts-ignore
+    if (res?.success) {
+      router.push("/admin/booking-management");
+      message.success("Booking Status Updated successfully!");
     }
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const handleOnChange = (date: any, dateString: any) => {
+    const isoDate = date.toISOString(); 
+    setNewDate(isoDate);
+  };
 
   return (
     <div>
       <UMBreadCrumb
         items={[
           {
-            label: "content-management",
-            link: "/admin/content-management/all-faqs",
-          },
-          {
-            label: "add-faqs",
-            link: "/admin/content-management/faqs",
+            label: "service management",
+            link: "/admin/service-management",
           },
         ]}
       />
@@ -76,7 +73,7 @@ const AddFAQSPage = () => {
               }}
               className="capitalize"
             >
-              Create a new FAQ
+              Reschedule Booking
             </p>
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col
@@ -86,22 +83,11 @@ const AddFAQSPage = () => {
                   marginBottom: "10px",
                 }}
               >
-                <FormInput
-                  type="text"
-                  name="question"
-                  size="large"
-                  label="Question"
-                />
-              </Col>
-
-              <Col
-                className="gutter-row"
-                span={6}
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
-                <FormInput type="text" name="ans" size="large" label="Ans" />
+                <FormDatePicker
+                  onChange={handleOnChange}
+                  label="Time"
+                  name="booking_schedult"
+                ></FormDatePicker>
               </Col>
             </Row>
             <div
@@ -120,4 +106,4 @@ const AddFAQSPage = () => {
   );
 };
 
-export default AddFAQSPage;
+export default CreateCategoryPage;

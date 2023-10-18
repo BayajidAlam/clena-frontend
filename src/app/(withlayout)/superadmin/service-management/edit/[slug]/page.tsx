@@ -1,49 +1,76 @@
 "use client";
 
+import Loading from "@/app/loading";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
-import { USER_ROLE } from "@/constants/role";
-
-import { useUserSignUpMutation } from "@/redux/api/authApi";
-import { getUserInfo, storeUserInfo } from "@/services/auth.service";
-
+import {
+  useGetSingleServiceQuery,
+  useUpdateSingleServiceMutation,
+} from "@/redux/api/services/ServiceApi";
 import { Col, Row, message } from "antd";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-
-const RegisterationPage = () => {
-  const [userSignUp, {}] = useUserSignUpMutation();
-  const { role } = getUserInfo() as any;
+const ServiceEditPage = ({ params }: any) => {
+  const id = params.slug;
   const router = useRouter();
 
+  const [value, setValue] = useState({});
+  const [updateSingleService, { isLoading: isServiceLoading }] =
+    useUpdateSingleServiceMutation();
+  const { data, error, isLoading, refetch } = useGetSingleServiceQuery(id);
+
+  // @ts-ignore
+  const myData = data?.data as any;
+  useEffect(() => {
+    if (data) {
+      setValue({
+        name: myData.name,
+        price: myData?.price,
+        details: myData?.details,
+        location: myData?.location,
+        status: myData.status,
+        rating: myData.rating,
+        image: myData?.image,
+        inStock: myData?.inStock,
+      });
+    }
+  }, [data, myData]);
+
   const onSubmit = async (values: any) => {
-    const dataWithRole = { ...values, role: USER_ROLE.ADMIN };
+    // console.log(values);
     try {
-      const res = await userSignUp(dataWithRole);
-      // @ts-ignore 
-      if (res?.data?.success) {
-        router.push("/superadmin/admin")
-        message.success("Admin Created Successfully!");
+      const res = await updateSingleService({
+        id: params?.slug,
+        body: values,
+      }).unwrap();
+      // console.log(res, "update response");
+      // @ts-ignore
+      if (res?.success) {
+        router.push("/admin/service-management");
+        message.success("Admin Successfully Updated!");
+        refetch();
       }
     } catch (err: any) {
       console.error(err.message);
     }
   };
 
+  if (isLoading || isServiceLoading) {
+    return <Loading />;
+  }
+
   return (
     <div>
       <UMBreadCrumb
         items={[
           {
-            label: "super-admin",
-            link: "/superadmin/admin",
-          },
-          {
-            label: "Create admin",
-            link: "/superadmin/admin/create",
+            label: "user management",
+            link: "/admin/user-management",
           },
         ]}
       />
@@ -55,7 +82,7 @@ const RegisterationPage = () => {
         }}
       >
         {/* resolver={yupResolver(adminSchema)} */}
-        <Form submitHandler={onSubmit}>
+        <Form submitHandler={onSubmit} defaultValues={value}>
           <div
             style={{
               marginBottom: "10px",
@@ -74,7 +101,7 @@ const RegisterationPage = () => {
               }}
               className="capitalize"
             >
-              {role} Information
+              Customer Information
             </p>
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col
@@ -95,23 +122,9 @@ const RegisterationPage = () => {
               >
                 <FormInput
                   type="text"
-                  name="email"
+                  name="price"
                   size="large"
-                  label="Email"
-                />
-              </Col>
-              <Col
-                className="gutter-row"
-                span={6}
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
-                <FormInput
-                  type="password"
-                  name="password"
-                  size="large"
-                  label="Password"
+                  label="Price"
                 />
               </Col>
 
@@ -124,11 +137,12 @@ const RegisterationPage = () => {
               >
                 <FormInput
                   type="text"
-                  name="contactNo"
+                  name="location"
                   size="large"
-                  label="Contact No"
+                  label="location"
                 />
               </Col>
+
               <Col
                 className="gutter-row"
                 span={6}
@@ -138,19 +152,79 @@ const RegisterationPage = () => {
               >
                 <FormInput
                   type="text"
-                  name="address"
+                  name="status"
                   size="large"
-                  label="Address"
+                  label="status"
                 />
               </Col>
+
               <Col
                 className="gutter-row"
-                span={12}
+                span={6}
                 style={{
                   marginBottom: "10px",
                 }}
               >
-                <UploadImage name="profileImg" />
+                <FormInput
+                  type="text"
+                  name="rating"
+                  size="large"
+                  label="Rating"
+                />
+              </Col>
+
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <FormInput
+                  type="text"
+                  name="details"
+                  size="large"
+                  label="Details"
+                />
+              </Col>
+
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <FormInput
+                  type="text"
+                  name="inStock"
+                  size="large"
+                  label="Details"
+                />
+              </Col>
+
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <Image
+                  src={myData?.image}
+                  width={150}
+                  height={150}
+                  alt="image"
+                ></Image>
+              </Col>
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <UploadImage name="image" />
               </Col>
             </Row>
             <div
@@ -169,4 +243,4 @@ const RegisterationPage = () => {
   );
 };
 
-export default RegisterationPage;
+export default ServiceEditPage;

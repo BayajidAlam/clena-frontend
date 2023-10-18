@@ -1,49 +1,58 @@
 "use client";
 
+import CleanCommonCloseButton from "@/components/Buttons/CleanCommonCloseButton";
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
-import { USER_ROLE } from "@/constants/role";
-
-import { useUserSignUpMutation } from "@/redux/api/authApi";
-import { getUserInfo, storeUserInfo } from "@/services/auth.service";
-
+import { useGetSingleUserQuery } from "@/redux/api/userApi";
+import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
+const UserProfilePage = ({ params }: any) => {
+  const { role } = getUserInfo();
+  const id = params.slag;
+  const [value, setValue] = useState({});
 
-const RegisterationPage = () => {
-  const [userSignUp, {}] = useUserSignUpMutation();
-  const { role } = getUserInfo() as any;
-  const router = useRouter();
+  const { data, error, isLoading } = useGetSingleUserQuery(id);
 
-  const onSubmit = async (values: any) => {
-    const dataWithRole = { ...values, role: USER_ROLE.ADMIN };
-    try {
-      const res = await userSignUp(dataWithRole);
-      // @ts-ignore 
-      if (res?.data?.success) {
-        router.push("/superadmin/admin")
-        message.success("Admin Created Successfully!");
-      }
-    } catch (err: any) {
-      console.error(err.message);
+  console.log(data);
+  // @ts-ignore
+  const myData = data?.data;
+  useEffect(() => {
+    if (data) {
+      setValue({
+        name: myData?.name,
+        email: myData?.email,
+        address: myData?.address,
+        profileImg: myData?.profileImg,
+        contactNo: myData?.contactNo,
+        password: myData?.password,
+      });
     }
-  };
+  }, [data, myData]);
+
+  const onSubmit = async (values: any) => {};
 
   return (
-    <div>
+    <div
+      style={{
+        padding: "10px",
+      }}
+    >
       <UMBreadCrumb
         items={[
           {
-            label: "super-admin",
-            link: "/superadmin/admin",
+            label: `profile`,
+            link: `/profile/${id}`,
           },
           {
-            label: "Create admin",
-            link: "/superadmin/admin/create",
+            label: `edit`,
+            link: `/profile/edit/${id}`,
           },
         ]}
       />
@@ -55,7 +64,7 @@ const RegisterationPage = () => {
         }}
       >
         {/* resolver={yupResolver(adminSchema)} */}
-        <Form submitHandler={onSubmit}>
+        <Form submitHandler={onSubmit} defaultValues={value}>
           <div
             style={{
               marginBottom: "10px",
@@ -84,7 +93,13 @@ const RegisterationPage = () => {
                   marginBottom: "10px",
                 }}
               >
-                <FormInput type="text" name="name" size="large" label="Name" />
+                <FormInput
+                  disable
+                  type="text"
+                  name="name"
+                  size="large"
+                  label="Name"
+                />
               </Col>
               <Col
                 className="gutter-row"
@@ -98,6 +113,7 @@ const RegisterationPage = () => {
                   name="email"
                   size="large"
                   label="Email"
+                  disable
                 />
               </Col>
               <Col
@@ -108,10 +124,11 @@ const RegisterationPage = () => {
                 }}
               >
                 <FormInput
-                  type="password"
+                  type="text"
                   name="password"
                   size="large"
                   label="Password"
+                  disable
                 />
               </Col>
 
@@ -127,6 +144,7 @@ const RegisterationPage = () => {
                   name="contactNo"
                   size="large"
                   label="Contact No"
+                  disable
                 />
               </Col>
               <Col
@@ -141,6 +159,7 @@ const RegisterationPage = () => {
                   name="address"
                   size="large"
                   label="Address"
+                  disable
                 />
               </Col>
               <Col
@@ -150,7 +169,12 @@ const RegisterationPage = () => {
                   marginBottom: "10px",
                 }}
               >
-                <UploadImage name="profileImg" />
+                <Image
+                  src={myData?.profileImg}
+                  width={150}
+                  height={150}
+                  alt="image"
+                ></Image>
               </Col>
             </Row>
             <div
@@ -160,7 +184,9 @@ const RegisterationPage = () => {
                 gap: "10px",
               }}
             >
-              <CleanCommonSaveButton>Save</CleanCommonSaveButton>
+              <Link href={`/superadmin/admin/edit/${id}`}>
+                <CleanCommonSaveButton>Update Admin</CleanCommonSaveButton>
+              </Link>
             </div>
           </div>
         </Form>
@@ -169,4 +195,4 @@ const RegisterationPage = () => {
   );
 };
 
-export default RegisterationPage;
+export default UserProfilePage;

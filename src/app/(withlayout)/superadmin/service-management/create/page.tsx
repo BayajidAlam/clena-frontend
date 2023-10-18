@@ -1,49 +1,61 @@
 "use client";
 
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
+import CategoryField from "@/components/Forms/ClenaCategoryField";
+import ClenaSelectField from "@/components/Forms/ClenaSelectField";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
+import {
+  StockOptions,
+  locationOptions,
+  statusOptions,
+} from "@/constants/global";
 import { USER_ROLE } from "@/constants/role";
-
 import { useUserSignUpMutation } from "@/redux/api/authApi";
-import { getUserInfo, storeUserInfo } from "@/services/auth.service";
-
+import { useAddNewServiceMutation } from "@/redux/api/services/ServiceApi";
+import { getUserInfo } from "@/services/auth.service";
 import { Col, Row, message } from "antd";
 import { useRouter } from "next/navigation";
 
-
-const RegisterationPage = () => {
-  const [userSignUp, {}] = useUserSignUpMutation();
+const CreateServicePage = () => {
+  const [addNewService, {}] = useAddNewServiceMutation();
   const { role } = getUserInfo() as any;
   const router = useRouter();
 
   const onSubmit = async (values: any) => {
-    const dataWithRole = { ...values, role: USER_ROLE.ADMIN };
+    console.log({ rating: 5, ...values }, "data from form");
     try {
-      const res = await userSignUp(dataWithRole);
-      // @ts-ignore 
+      const res = await addNewService({ rating: "5", ...values });
+      console.log(res, "customer create on admin");
+      // @ts-ignore
       if (res?.data?.success) {
-        router.push("/superadmin/admin")
-        message.success("Admin Created Successfully!");
+        router.push("/admin/service-management");
+        message.success("Service Created Successfully!");
       }
     } catch (err: any) {
       console.error(err.message);
     }
   };
 
+  const onSearch = (value: string) => {
+    console.log("search:", value);
+  };
+
+  // filter on select
+  const filterOption = (
+    input: string,
+    option?: { label: string; value: string }
+  ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+
   return (
     <div>
       <UMBreadCrumb
         items={[
           {
-            label: "super-admin",
-            link: "/superadmin/admin",
-          },
-          {
-            label: "Create admin",
-            link: "/superadmin/admin/create",
+            label: "user management",
+            link: "/admin/user-management",
           },
         ]}
       />
@@ -74,7 +86,7 @@ const RegisterationPage = () => {
               }}
               className="capitalize"
             >
-              {role} Information
+              Customer Information
             </p>
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
               <Col
@@ -95,9 +107,9 @@ const RegisterationPage = () => {
               >
                 <FormInput
                   type="text"
-                  name="email"
+                  name="price"
                   size="large"
-                  label="Email"
+                  label="Price"
                 />
               </Col>
               <Col
@@ -107,12 +119,19 @@ const RegisterationPage = () => {
                   marginBottom: "10px",
                 }}
               >
-                <FormInput
-                  type="password"
-                  name="password"
+                <ClenaSelectField
+                  style={{
+                    width: "100%",
+                    textAlign: "left",
+                  }}
                   size="large"
-                  label="Password"
-                />
+                  name="location"
+                  options={locationOptions}
+                  label="Location"
+                  placeholder="Select Location"
+                  onSearch={onSearch}
+                  filterOption={filterOption}
+                ></ClenaSelectField>
               </Col>
 
               <Col
@@ -122,12 +141,32 @@ const RegisterationPage = () => {
                   marginBottom: "10px",
                 }}
               >
-                <FormInput
-                  type="text"
-                  name="contactNo"
+                <ClenaSelectField
+                  style={{
+                    width: "100%",
+                    textAlign: "left",
+                  }}
                   size="large"
-                  label="Contact No"
-                />
+                  name="status"
+                  options={statusOptions}
+                  label="Status"
+                  placeholder="Select Status"
+                  onSearch={onSearch}
+                  filterOption={filterOption}
+                ></ClenaSelectField>
+              </Col>
+
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <CategoryField
+                  name="categoryId"
+                  label="Category"
+                ></CategoryField>
               </Col>
               <Col
                 className="gutter-row"
@@ -138,19 +177,40 @@ const RegisterationPage = () => {
               >
                 <FormInput
                   type="text"
-                  name="address"
+                  name="details"
                   size="large"
-                  label="Address"
+                  label="Details"
                 />
               </Col>
               <Col
                 className="gutter-row"
-                span={12}
+                span={6}
                 style={{
                   marginBottom: "10px",
                 }}
               >
-                <UploadImage name="profileImg" />
+                <ClenaSelectField
+                  style={{
+                    width: "100%",
+                    textAlign: "left",
+                  }}
+                  size="large"
+                  name="inStock"
+                  options={StockOptions}
+                  label="Stock"
+                  placeholder="Select Status"
+                  onSearch={onSearch}
+                  filterOption={filterOption}
+                ></ClenaSelectField>
+              </Col>
+              <Col
+                className="gutter-row"
+                span={6}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <UploadImage name="image" />
               </Col>
             </Row>
             <div
@@ -169,4 +229,4 @@ const RegisterationPage = () => {
   );
 };
 
-export default RegisterationPage;
+export default CreateServicePage;

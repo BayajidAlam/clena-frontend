@@ -185,7 +185,7 @@ const UserProfilePage = ({ params }: any) => {
               }}
             >
               <Link href={`/profile/edit/${id}`}>
-                <CleanCommonSaveButton>Update</CleanCommonSaveButton>
+                <CleanCommonSaveButton>Update Profile</CleanCommonSaveButton>
               </Link>
             </div>
           </div>

@@ -6,7 +6,6 @@ const USER_URL = "/users";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (build: any) => ({
-
     getSingleUser: build.query({
       query: (id: string) => ({
         url: `${USER_URL}/${id}`,
@@ -14,7 +13,7 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.user],
     }),
-    
+
     updateUser: build.mutation({
       query: (data: any) => ({
         url: `${USER_URL}/${data.id}`,
@@ -24,15 +23,19 @@ export const userApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.customer, tagTypes.admin],
     }),
 
-    // // delete ac department
-    // deleteAcademicDepartment: build.mutation({
-    //   query: (id) => ({
-    //     url: `${ACADEMIC_DEPARTMENT_URL}/${id}`,
-    //     method: "DELETE",
-    //   }),
-    //   invalidatesTags: [tagTypes.academicDepartment],
-    // }),
+    // delete  user
+    deleteSingleUser: build.mutation({
+      query: (id: any) => ({
+        url: `/user/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.user],
+    }),
   }),
 });
 
-export const { useGetSingleUserQuery,useUpdateUserMutation } = userApi;
+export const {
+  useGetSingleUserQuery,
+  useUpdateUserMutation,
+  useDeleteSingleUserMutation,
+} = userApi;
