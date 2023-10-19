@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const BlogCard = ({ image, date, CardTitle, CardDescription }: any) => {
@@ -6,7 +7,8 @@ const BlogCard = ({ image, date, CardTitle, CardDescription }: any) => {
       <div className="w-full px-4 md:w-1/2 lg:w-1/3">
         <div className="mx-auto mb-10 max-w-[370px]">
           <div className="mb-8 overflow-hidden rounded">
-            <img src={image} alt="" className="w-full" />
+          
+            <Image src={image} height={200} width={350} alt={image} />
           </div>
           <div>
             {date && (

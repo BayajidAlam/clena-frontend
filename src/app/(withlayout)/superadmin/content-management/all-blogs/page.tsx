@@ -51,6 +51,10 @@ const AllBlogsPage = () => {
     }
   };
 
+  if (isLoading || blogLoading) {
+    return <Loading />;
+  }
+
   const columns = [
     {
       title: "No",

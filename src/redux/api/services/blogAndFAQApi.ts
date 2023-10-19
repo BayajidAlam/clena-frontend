@@ -47,11 +47,10 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     }),
     // get all blogs
     getAllBlogs: build.query({
-      query: (arg: Record<string, any>) => {
+      query: () => {
         return {
           url: "/blogs",
           method: "GET",
-          params: arg,
         };
       },
       providesTags: [tagTypes.blog],

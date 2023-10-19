@@ -1,7 +1,30 @@
-import React from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import BlogCard from "./BlogCard";
+import { useGetAllBlogsQuery } from "@/redux/api/services/blogAndFAQApi";
 
 const LatestNews = () => {
+  const [blogs, setBlogs] = useState([]);
+  useEffect(() => {
+    const url = `http://localhost:5000/api/v1/blogs`;
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setBlogs(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, []);
+
+
+
   return (
     <section
       style={{
@@ -30,24 +53,19 @@ const LatestNews = () => {
         </div>
 
         <div className="flex flex-wrap -mx-4">
-          <BlogCard
-            date="Dec 22, 2023"
-            CardTitle="Meet AutoManage, the best AI management tools"
-            CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image="https://i.ibb.co/Cnwd4q6/image-01.jpg"
-          />
-          <BlogCard
-            date="Dec 22, 2023"
-            CardTitle="Meet AutoManage, the best AI management tools"
-            CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image="https://i.ibb.co/Y23YC07/image-02.jpg"
-          />
-          <BlogCard
-            date="Dec 22, 2023"
-            CardTitle="Meet AutoManage, the best AI management tools"
-            CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image="https://i.ibb.co/7jdcnwn/image-03.jpg"
-          />
+          {/* @ts-ignore  */}
+          {blogs?.data?.data?.slice(0,6).map((blog:any) => {
+            return (
+              <>
+                <BlogCard
+                  date={blog?.createdAt}
+                  CardTitle={blog?.title}
+                  CardDescription={blog?.text}
+                  image={blog?.image}
+                />
+              </>
+            );
+          })}
         </div>
       </div>
     </section>
