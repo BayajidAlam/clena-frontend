@@ -20,6 +20,7 @@ type FormValues = {
 };
 
 const LoginPage = () => {
+
   const [userLogin, { isLoading, data }] = useUserLoginMutation();
   const router = useRouter();
 
@@ -37,7 +38,7 @@ const LoginPage = () => {
       if (res?.token) {
         // @ts-ignore
         const decode = decodedToken(res?.token);
-        console.log(decode, "decode token from login");
+        // console.log(decode, "decode token from login");
         // @ts-ignore
         if (decode?.role === "customer") {
           router.push(`/`);
@@ -72,7 +73,7 @@ const LoginPage = () => {
         <h1
           style={{
             margin: "15px 0px",
-            color: "#29ABE2;",
+            color: "#29ABE2",
           }}
         >
           Please login your account
@@ -107,7 +108,7 @@ const LoginPage = () => {
                 style={{
                   margin: "10px 0px",
                   fontSize: "16px",
-                  color: "#29ABE2;",
+                  color: "#29ABE2",
                   fontWeight: "bold",
                 }}
               >

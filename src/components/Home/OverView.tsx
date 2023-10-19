@@ -10,7 +10,7 @@ const OverView = () => {
       style={{
         width: "75%",
         margin: "0 auto",
-        padding: "60px 0",
+        padding: "90px 0",
       }}
     >
       <h1 className="text-center mb-6">Overview</h1>

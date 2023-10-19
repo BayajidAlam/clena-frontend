@@ -49,10 +49,8 @@ const CustomerBookingManagementPage = () => {
 
   // @ts-ignore
   const bookingsData = data?.data;
-
   // @ts-ignore
   const bookingsDataLength = data?.data?.meta;
-
 
   const handleCancel = async (id: any) => {
     const res = await updateBookingStatus({
@@ -60,9 +58,9 @@ const CustomerBookingManagementPage = () => {
       body: { status: "canceled" },
     }).unwrap();
     // @ts-ignore
-    if (res?.success) {
-      refetch();
+    if (res?.data) {
       message.success("Booking Status Updated successfully!");
+      refetch();
     }
   };
 
@@ -98,9 +96,18 @@ const CustomerBookingManagementPage = () => {
       case "rejected":
         return <p className="text-red-500 font-bold text lg">Rejected</p>;
       case "canceled":
-        return <p className="text-red-500 font-bold text lg">Canceled</p>;
+        return <p className="text-red-500 font-bold text lg"></p>;
       default:
-        return <p className="text-green-500 font-bold text lg">Delivered</p>;
+        return (
+          <div className="flex justify-center items-center gap-1">
+            <Link href={`/customer/booking/feedback`}>
+              {" "}
+              <CleanCommonSaveButton onClick={() => handleCancel(record)}>
+                Feedback
+              </CleanCommonSaveButton>
+            </Link>
+          </div>
+        );
     }
   };
 
@@ -162,7 +169,7 @@ const CustomerBookingManagementPage = () => {
       render: (text: any, record: any) => {
         return <p>{text}</p>;
       },
-      width:"10%"
+      width: "10%",
     },
     {
       title: "Price",
@@ -171,7 +178,7 @@ const CustomerBookingManagementPage = () => {
       render: (text: any, record: any) => {
         return <p>{text}</p>;
       },
-      width: "10%"
+      width: "10%",
     },
     {
       title: "Schedule",
@@ -182,13 +189,15 @@ const CustomerBookingManagementPage = () => {
         const formattedDate = dayjs(text).format("MMMM DD, YYYY HH:mm:ss");
         return <p>{formattedDate}</p>;
       },
-      width: "20"
-    }
-,    
+      width: "20",
+    },
     {
       title: "Booking Status",
       dataIndex: "status",
       align: "center",
+      render: (text: any, record: any) => {
+        return <p className="text-green-500 font-bold text lg">{text}</p>;
+      },
       width: "10%",
     },
     {
@@ -214,8 +223,6 @@ const CustomerBookingManagementPage = () => {
     setSortBy(field as string);
     setSortOrder(order === "ascend" ? "asc" : "desc");
   };
-
- 
 
   if (isLoading || isBookLoading || isUserLoading) {
     return <Loading />;

@@ -7,7 +7,9 @@ import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
 import { USER_ROLE } from "@/constants/role";
 import { useUserSignUpMutation } from "@/redux/api/authApi";
+import { registerSchema } from "@/schemas/admin";
 import { getUserInfo } from "@/services/auth.service";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Col, Row, message } from "antd";
 import { useRouter } from "next/navigation";
 
@@ -18,7 +20,7 @@ const RegisterationPage = () => {
 
   const onSubmit = async (values: any) => {
     const dataWithRole = { ...values, role: USER_ROLE.CUSTOMER };
-    console.log(dataWithRole);
+    // console.log(dataWithRole);
     try {
       const res = await userSignUp(dataWithRole);
       console.log(res, "customer create on admin");
@@ -50,7 +52,7 @@ const RegisterationPage = () => {
         }}
       >
         {/* resolver={yupResolver(adminSchema)} */}
-        <Form submitHandler={onSubmit}>
+        <Form submitHandler={onSubmit} resolver={yupResolver(registerSchema)}>
           <div
             style={{
               marginBottom: "10px",

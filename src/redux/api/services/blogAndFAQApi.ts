@@ -13,6 +13,15 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.blog],
     }),
+    // add new blog
+    addNewFeedBack: build.mutation({
+      query: (data: any) => ({
+        url: "/my-feedback",
+        method: "POST",
+        data,
+      }),
+      invalidatesTags: [tagTypes.feedback],
+    }),
 
     // add new Faq
     addNewFaq: build.mutation({
@@ -140,4 +149,5 @@ export const {
   useDeleteFaqMutation,
   useAddNewReviewMutation,
   useGetAllReviewsQuery,
+  useAddNewFeedBackMutation
 } = BlogAndFaqApi;

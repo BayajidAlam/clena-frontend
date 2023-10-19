@@ -1,5 +1,6 @@
 "use client";
 
+
 import CleanCommonSaveButton from "@/components/Buttons/CleanCommonSaveButton";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
@@ -7,18 +8,21 @@ import HomeHeader from "@/components/Home/HomeHeader";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UploadImage from "@/components/ui/UploadImage";
 import { USER_ROLE } from "@/constants/role";
-
 import {
   useUserLoginMutation,
   useUserSignUpMutation,
 } from "@/redux/api/authApi";
+import { registerSchema } from "@/schemas/admin";
 import { getUserInfo, storeUserInfo } from "@/services/auth.service";
 import { decodedToken } from "@/utils/jwt";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Col, Row, message } from "antd";
 import { Footer } from "antd/es/layout/layout";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const RegisterationPage = () => {
+  
   const [userSignUp, {}] = useUserSignUpMutation();
   const [userLogin, { isLoading, data }] = useUserLoginMutation();
 
@@ -88,8 +92,7 @@ const RegisterationPage = () => {
             marginTop: "0px",
           }}
         >
-          {/* resolver={yupResolver(adminSchema)} */}
-          <Form submitHandler={onSubmit}>
+          <Form submitHandler={onSubmit} resolver={yupResolver(registerSchema)}>
             <div
               style={{
                 marginBottom: "10px",
@@ -200,10 +203,11 @@ const RegisterationPage = () => {
                   gap: "10px",
                 }}
               >
-                <CleanCommonSaveButton>Register</CleanCommonSaveButton>
+               
+                  <CleanCommonSaveButton>Register</CleanCommonSaveButton>
+               
               </div>
             </div>
-            
           </Form>
         </div>
       </div>

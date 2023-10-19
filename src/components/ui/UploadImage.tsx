@@ -82,6 +82,7 @@ const UploadImage = ({ name }: ImageUploadProps) => {
           uploadButton
         )}
       </Upload>
+      
     </>
   );
 };

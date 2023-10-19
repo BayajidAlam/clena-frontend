@@ -32,7 +32,7 @@ const LatestNews = () => {
         margin: "0 auto",
         padding: "60px 0",
       }}
-      className="pt-20 pb-10 lg:pt-[120px] lg:pb-20"
+      className=" pb-10 lg:pt-[80px] lg:pb-20"
     >
       <div className="container">
         <div className="flex flex-wrap -mx-4">
