@@ -33,6 +33,17 @@ export const serviceApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.admin, tagTypes.category],
     }),
 
+    getAllNewServices: build.query({
+      query: (arg: Record<string, any>) => {
+        return {
+          url: "/new-services",
+          method: "GET",
+          params: arg,
+        };
+      },
+      providesTags: [tagTypes.admin, tagTypes.category],
+    }),
+
     admin: build.query({
       query: (id: string | string[] | undefined) => ({
         url: `${ADMIN_URL}/${id}`,
@@ -85,5 +96,6 @@ export const {
   useAddNewServiceMutation,
   useUpdateSingleServiceMutation,
   useGetSingleServiceQuery,
-  useDeleteServiceMutation
+  useDeleteServiceMutation,
+  useGetAllNewServicesQuery
 } = serviceApi;

@@ -8,17 +8,30 @@ import Link from "next/link";
 import Loading from "@/app/loading";
 import { ArrowRightOutlined } from "@ant-design/icons";
 const UpcomingService = () => {
-  const { data, isLoading } = useGetAllServicesQuery();
+  const { data, isLoading } = useGetAllServicesQuery({});
   // @ts-ignore
   const services = data?.data?.data;
 
   const filterData = services?.filter(
-    (service: any) => service.status !== "inActive"
+    (service: any) => service.status === "inActive"
   );
 
   // console.log("🚀 ~ file: page.tsx:41 ~ ServicePage ~ data:", data)
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div
+        style={{
+          width: "75%",
+          margin: "0 auto",
+          padding: "60px 0",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
@@ -52,7 +65,7 @@ const UpcomingService = () => {
         </Link>
       </div>
       <Row gutter={[16, 16]}>
-        {filterData?.map((service: any) => {
+        {filterData?.slice(0,4).map((service: any) => {
           return (
             <Col key={service.id} sm={24} md={12} lg={6}>
               <div

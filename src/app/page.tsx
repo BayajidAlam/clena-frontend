@@ -16,7 +16,6 @@ const HomePage = () => {
       <TopBanner />
       <HomeService />
       <UpcomingService />
-      <EventsByCategory />
       <OverView />
       <ClientReview />
       <LatestNews />

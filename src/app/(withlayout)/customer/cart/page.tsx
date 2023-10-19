@@ -71,6 +71,7 @@ const CartPage = () => {
   const handleOnChange = (date: any, dateString: any) => {
     const isoDate = date?.toISOString();
     setNewDate(isoDate);
+    console.log(newDate);
   };
 
   const disabledDate = (current: any) => {
@@ -171,6 +172,7 @@ const CartPage = () => {
                       defaultValue={dayjs(newDate) || undefined}
                       disabledDate={disabledDate}
                       onChange={handleOnChange}
+                      name="booking_schedult"
                     />
                   </span>
                   {/* <span className="text-center w-1/5 font-semibold text-sm">

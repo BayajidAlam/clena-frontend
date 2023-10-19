@@ -39,10 +39,23 @@ const HomeService = () => {
   // services?.map(service=>{
   //   console.log(service,'ser');
   // })
-  console.log(services);
+
   // console.log("🚀 ~ file: page.tsx:41 ~ ServicePage ~ data:", data)
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div
+        style={{
+          width: "75%",
+          margin: "0 auto",
+          padding: "60px 0",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <p>Loading...</p>
+      </div>
+    );
   }
   return (
     <div
@@ -52,7 +65,6 @@ const HomeService = () => {
         padding: "60px 0",
       }}
     >
-     
       <div
         style={{
           display: "flex",
@@ -60,7 +72,7 @@ const HomeService = () => {
           alignItems: "center",
         }}
       >
-         <h1 className="my-4">Available Service</h1>
+        <h1 className="my-4">Available Service</h1>
         <Link
           style={{
             display: "flex",
@@ -76,7 +88,7 @@ const HomeService = () => {
         </Link>
       </div>
       <Row gutter={[16, 16]}>
-        {services?.map((service: any) => {
+        {services?.slice(0, 8).map((service: any) => {
           return (
             <Col key={service.id} sm={24} md={12} lg={6}>
               <Link href={`/service/${service.id}`}>

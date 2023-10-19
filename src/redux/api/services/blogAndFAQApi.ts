@@ -24,6 +24,27 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.faq],
     }),
 
+    // add new review
+    addNewReview: build.mutation({
+      query: (data: any) => ({
+        url: "/my-review",
+        method: "POST",
+        data,
+      }),
+      invalidatesTags: [tagTypes.review],
+    }),
+
+    // get all reviews
+    getAllReviews: build.query({
+      query: (arg: Record<string, any>) => {
+        return {
+          url: "/all-review",
+          method: "GET",
+          params: arg,
+        };
+      },
+      providesTags: [tagTypes.blog],
+    }),
     // get all blogs
     getAllBlogs: build.query({
       query: (arg: Record<string, any>) => {
@@ -47,6 +68,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
       },
       providesTags: [tagTypes.faq],
     }),
+
 
     // get single blog
     getSingleBlog: build.query({
@@ -117,4 +139,6 @@ export const {
   useGetSingleFaqQuery,
   useUpdateSingleFaqMutation,
   useDeleteFaqMutation,
+  useAddNewReviewMutation,
+  useGetAllReviewsQuery,
 } = BlogAndFaqApi;

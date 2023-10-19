@@ -56,7 +56,7 @@ export const serviceApi = baseApi.injectEndpoints({
         tagTypes.bookings,
         tagTypes.service,
         tagTypes.user,
-        tagTypes.cart
+        tagTypes.cart,
       ],
     }),
 
@@ -74,6 +74,17 @@ export const serviceApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: [tagTypes.service, tagTypes.category, tagTypes.admin],
+    }),
+
+    getBookingsByUserId: build.query({
+      query: (id: string) => ({
+        url: `/mybooking/${id}`,
+        method: "GET",
+      }),
+      providesTags: [
+        tagTypes.bookings,
+        tagTypes.cart,
+      ],
     }),
 
     updateSingleService: build.mutation({
@@ -116,12 +127,13 @@ export const {
   useAdminQuery,
   useAddAdminWithFormDataMutation,
   useUpdateAdminMutation,
-  useGetAllBookingsQuery, 
+  useGetAllBookingsQuery,
   useAddNewServiceMutation,
   useUpdateSingleServiceMutation,
   useGetSingleServiceQuery,
   useDeleteServiceMutation,
-  useUpdateBookingStatusMutation, 
+  useUpdateBookingStatusMutation,
   useAddNewBookingMutation,
   useDeleteSingleItemFormCartMutation,
+  useGetBookingsByUserIdQuery,
 } = serviceApi;
