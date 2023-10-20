@@ -1,4 +1,5 @@
-import { DatePicker, DatePickerProps, Input } from "antd";
+import React from "react";
+import { DatePicker, DatePickerProps } from "antd";
 import { Controller, useFormContext } from "react-hook-form";
 import dayjs, { Dayjs } from "dayjs";
 
@@ -8,7 +9,7 @@ type UMDatePikerProps = {
   label?: string;
   value?: Dayjs;
   size?: "large" | "small";
-  disabledDate: any
+  disabledDate?: any;
 };
 
 const FormDatePicker = ({
@@ -34,8 +35,8 @@ const FormDatePicker = ({
         control={control}
         render={({ field }) => (
           <DatePicker
-          disabledDate={disabledDate}
-            defaultValue={field.value ? dayjs(field.value) : undefined}
+            disabledDate={disabledDate}
+            value={field.value ? dayjs(field.value) : undefined} // Use value instead of defaultValue
             size={size}
             onChange={handleOnChange}
             style={{ width: "100%" }}

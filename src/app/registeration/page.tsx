@@ -32,7 +32,7 @@ const RegisterationPage = () => {
   const onSubmit = async (values: any) => {
     const dataWithRole = { ...values, role: USER_ROLE.CUSTOMER };
 
-    console.log(dataWithRole, "data");
+  
 
     try {
       const res = await userSignUp(dataWithRole);

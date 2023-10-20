@@ -21,7 +21,7 @@ const SingleServicePage = ({ params }: any) => {
 
   const router = useRouter();
 
-  const apiUrl = `http://localhost:5000/api/v1/services/${prdid}`;
+  const apiUrl = `https://clena-ts-prisma-postgress.vercel.app/api/v1/services/${prdid}`;
   useEffect(() => {
     setLoading(true);
     fetch(apiUrl)
@@ -51,7 +51,7 @@ const SingleServicePage = ({ params }: any) => {
       servicesId: id,
     };
     // Define the URL you want to make a POST request to
-    const cartApiUrl = `http://localhost:5000/api/v1/add-to-cart`; // Replace with your API endpoint
+    const cartApiUrl = `https://clena-ts-prisma-postgress.vercel.app/api/v1/add-to-cart`; // Replace with your API endpoint
 
     fetch(cartApiUrl, {
       method: "POST",

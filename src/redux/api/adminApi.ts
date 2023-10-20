@@ -1,4 +1,4 @@
-import { IAdmin, IMeta } from "@/types";
+
 import { baseApi } from "./baseApi";
 import { tagTypes } from "../tag-types";
 

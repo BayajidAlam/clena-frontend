@@ -24,7 +24,7 @@ const ServicePage = () => {
   query["sortBy"] = sortBy;
   query["sortOrder"] = sortOrder;
   query["searchTerm"] = searchTerm;
-  
+
   const debouncedSearchTerm = useDebounced({
     searchQuery: searchTerm,
     delay: 600,
@@ -43,11 +43,11 @@ const ServicePage = () => {
   // })
   const [searchValue, setSearchValue] = useState("");
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: any) => {
     setSearchValue(e.target.value);
   };
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = (e: any) => {
     e.preventDefault();
     // You can use the searchValue state here for further processing, such as sending it to an API or performing a search.
     console.log("Search Value:", searchValue);

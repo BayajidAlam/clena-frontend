@@ -7,7 +7,7 @@ import { useGetAllBlogsQuery } from "@/redux/api/services/blogAndFAQApi";
 const LatestNews = () => {
   const [blogs, setBlogs] = useState([]);
   useEffect(() => {
-    const url = `http://localhost:5000/api/v1/blogs`;
+    const url = `https://clena-ts-prisma-postgress.vercel.app/api/v1/blogs`;
     fetch(url)
       .then((response) => {
         if (!response.ok) {
