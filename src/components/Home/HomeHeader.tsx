@@ -151,7 +151,7 @@ const HomeHeader = () => {
             Logout
           </Button>
         ) : (
-          <Link href={`/registeration`}>
+          <Link href={`/login`}>
             <Button
               style={{
                 background: "#fd4f1a",
@@ -162,7 +162,7 @@ const HomeHeader = () => {
                 cursor: "pointer",
               }}
             >
-              Register
+              Login
             </Button>
           </Link>
         )}
