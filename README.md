@@ -6,7 +6,7 @@
 
 ## Documentation
 
-CLENA is Cleaning service provider and content management application
+CLENA is Cleaning service provider and content management application, I am working this application continuously. My plan to convert this to a microservice application. Where i will add a server(apigateway) and another server for real-time chating(Web socket) and video calling(WebRTC) with sellere and client.
 
 
 ## 🔗 Links
@@ -18,7 +18,7 @@ CLENA is Cleaning service provider and content management application
 
 ## Technology
 
-**Client:** Typescript, Next Js, Redux, Tailwind, React Hook Form, Axios
+Typescript, Next Js, Redux, PostgreSQL, Prisma, Ant Design, Tailwind, React hook form, Axios, JWT, Yup, Zod, moment
 
 
 ## Features
