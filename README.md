@@ -14,7 +14,7 @@ CLENA is Cleaning service provider and content management application, I am work
 
 [![portfolio](https://img.shields.io/badge/Github-server-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/BayajidAlam/cleana-backend)
 
-[![portfolio](https://img.shields.io/badge/LivesiteClient-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://clena-frontend.vercel.app/)
+[![portfolio](https://img.shields.io/badge/Livesite_Client-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://clena-frontend.vercel.app/)
 
 [![portfolio](https://img.shields.io/badge/Livesite_Server-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://clena-ts-prisma-postgress.vercel.app/api/v1)
 
