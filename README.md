@@ -18,7 +18,7 @@ CLENA is Cleaning service provider and content management application
 
 ## Technology
 
-**Client:** Typescript, Next Js, Redux, Tailwind, React Hook Form, Axios
+Typescript, Next Js, Redux, PostgreSQL, Prisma, Ant Design, Tailwind, React hook form, Axios, JWT, Yup, Zod, moment
 
 
 ## Features
