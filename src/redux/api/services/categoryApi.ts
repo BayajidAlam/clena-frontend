@@ -15,7 +15,7 @@ export const serviceApi = baseApi.injectEndpoints({
     getAllCategory: build.query({
       query: (arg: Record<string, any>) => {
         return {
-          url: "/categories",
+          url: CATEGORY_URL,
           method: "GET",
           params: arg,
         };

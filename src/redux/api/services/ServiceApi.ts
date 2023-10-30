@@ -15,7 +15,7 @@ export const serviceApi = baseApi.injectEndpoints({
 
     addNewService: build.mutation({
       query: (data: any) => ({
-        url: "/create-service",
+        url: "/services/create-service",
         method: "POST",
         data,
       }),
@@ -36,7 +36,7 @@ export const serviceApi = baseApi.injectEndpoints({
     getAllNewServices: build.query({
       query: (arg: Record<string, any>) => {
         return {
-          url: "/new-services",
+          url: "/services/new-services",
           method: "GET",
           params: arg,
         };

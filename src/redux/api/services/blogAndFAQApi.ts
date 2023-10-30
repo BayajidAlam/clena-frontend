@@ -1,22 +1,23 @@
 import { baseApi } from "../baseApi";
 import { tagTypes } from "@/redux/tag-types";
-const ADMIN_URL = "/admin";
+const BLOGS_URL = "/blogs";
+const FAQ_URL = "/faqs";
 
 export const BlogAndFaqApi = baseApi.injectEndpoints({
   endpoints: (build: any) => ({
     // add new blog
     addNewBlog: build.mutation({
       query: (data: any) => ({
-        url: "/blog/create-blog",
+        url: `${BLOGS_URL}/create-blog`,
         method: "POST",
         data,
       }),
       invalidatesTags: [tagTypes.blog],
     }),
-    // add new blog
+    // add new faq
     addNewFeedBack: build.mutation({
       query: (data: any) => ({
-        url: "/my-feedback",
+        url: "/feedbacks/my-feedback",
         method: "POST",
         data,
       }),
@@ -26,7 +27,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     // add new Faq
     addNewFaq: build.mutation({
       query: (data: any) => ({
-        url: "/blog/create-faq",
+        url: `${FAQ_URL}/create-faq`,
         method: "POST",
         data,
       }),
@@ -36,7 +37,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     // add new review
     addNewReview: build.mutation({
       query: (data: any) => ({
-        url: "/my-review",
+        url: "/reviews",
         method: "POST",
         data,
       }),
@@ -47,7 +48,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     getAllReviews: build.query({
       query: (arg: Record<string, any>) => {
         return {
-          url: "/all-review",
+          url: "/reviews",
           method: "GET",
           params: arg,
         };
@@ -58,7 +59,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     getAllBlogs: build.query({
       query: () => {
         return {
-          url: "/blogs",
+          url: BLOGS_URL,
           method: "GET",
         };
       },
@@ -69,7 +70,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     getAllFaqs: build.query({
       query: (arg: Record<string, any>) => {
         return {
-          url: "/faqs",
+          url: FAQ_URL,
           method: "GET",
           params: arg,
         };
@@ -81,7 +82,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     // get single blog
     getSingleBlog: build.query({
       query: (id: string) => ({
-        url: `/blog/${id}`,
+        url: `/${BLOGS_URL}/${id}`,
         method: "GET",
       }),
       providesTags: [tagTypes.blog],
@@ -90,7 +91,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     // get single faq
     getSingleFaq: build.query({
       query: (id: string) => ({
-        url: `/faq/${id}`,
+        url: `/${FAQ_URL}/${id}`,
         method: "GET",
       }),
       providesTags: [tagTypes.faq],
@@ -99,7 +100,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     // update blog
     updateSingleBlog: build.mutation({
       query: (data: any) => ({
-        url: `/blog/${data.id}`,
+        url: `/${BLOGS_URL}/${data.id}`,
         method: "PATCH",
         data: data.body,
       }),
@@ -109,7 +110,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     // update blog
     updateSingleFaq: build.mutation({
       query: (data: any) => ({
-        url: `/faq/${data.id}`,
+        url: `/${FAQ_URL}/${data.id}`,
         method: "PATCH",
         data: data.body,
       }),
@@ -119,7 +120,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     // delete blog
     deleteBlog: build.mutation({
       query: (id: any) => ({
-        url: `/blog/${id}`,
+        url: `/${BLOGS_URL}/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.blog],
@@ -128,7 +129,7 @@ export const BlogAndFaqApi = baseApi.injectEndpoints({
     // delete blog
     deleteFaq: build.mutation({
       query: (id: any) => ({
-        url: `/faq/${id}`,
+        url: `/${FAQ_URL}/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.faq],

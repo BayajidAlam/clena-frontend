@@ -1,4 +1,3 @@
-
 import { baseApi } from "./baseApi";
 import { tagTypes } from "../tag-types";
 
@@ -15,8 +14,6 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.admin],
     }),
-
-    
 
     admins: build.query({
       query: (arg: Record<string, any>) => {

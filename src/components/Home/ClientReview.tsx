@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 const ClientReview = () => {
   const [feedback, setFeedback] = useState([]);
   useEffect(() => {
-    const url = `https://clena-ts-prisma-postgress.vercel.app/api/v1/all-feedbacks`;
+    // const url = `https://clena-ts-prisma-postgress.vercel.app/api/v1/feedbacks`;
+    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/feedbacks`;
     fetch(url)
       .then((response) => {
         if (!response.ok) {

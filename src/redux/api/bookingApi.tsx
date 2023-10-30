@@ -1,6 +1,7 @@
 import { tagTypes } from "@/redux/tag-types";
 import { baseApi } from "./baseApi";
 const ADMIN_URL = "/admin";
+const BOOKING_URL = "/bookings";
 
 export const serviceApi = baseApi.injectEndpoints({
   endpoints: (build: any) => ({
@@ -16,7 +17,7 @@ export const serviceApi = baseApi.injectEndpoints({
     // add a booking
     addNewBooking: build.mutation({
       query: (data: any) => ({
-        url: "/book",
+        url: `/${BOOKING_URL}/book`,
         method: "POST",
         data,
       }),
@@ -36,7 +37,7 @@ export const serviceApi = baseApi.injectEndpoints({
     getAllBookings: build.query({
       query: (arg: Record<string, any>) => {
         return {
-          url: "/bookings",
+          url: BOOKING_URL,
           method: "GET",
           params: arg,
         };
@@ -47,7 +48,7 @@ export const serviceApi = baseApi.injectEndpoints({
     // update booking status
     updateBookingStatus: build.mutation({
       query: (data: any) => ({
-        url: `/bookings/${data.id}`,
+        url: `/${BOOKING_URL}/${data.id}`,
         method: "PATCH",
         data: data.body,
       }),
@@ -78,7 +79,7 @@ export const serviceApi = baseApi.injectEndpoints({
 
     getBookingsByUserId: build.query({
       query: (id: string) => ({
-        url: `/mybooking/${id}`,
+        url: `/${BOOKING_URL}/mybooking/${id}`,
         method: "GET",
       }),
       providesTags: [
