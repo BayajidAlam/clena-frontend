@@ -6,7 +6,7 @@
 
 ## Documentation
 
-CLENA is Cleaning service provider and content management application
+CLENA is Cleaning service provider and content management application, I am working this application continuously. My plan to convert this to a microservice application. Where i will add a server(apigateway) and another server for real-time chating(Web socket) and video calling(WebRTC) with sellere and client.
 
 
 ## 🔗 Links
