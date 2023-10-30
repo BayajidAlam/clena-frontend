@@ -50,8 +50,7 @@ const SingleServicePage = ({ params }: any) => {
       userId,
       servicesId: id,
     };
-    // Define the URL you want to make a POST request to
-    const cartApiUrl = `https://clena-ts-prisma-postgress.vercel.app/api/v1/add-to-cart`; // Replace with your API endpoint
+    const cartApiUrl = `https://clena-ts-prisma-postgress.vercel.app/api/v1/myCart/add-to-cart`; 
 
     fetch(cartApiUrl, {
       method: "POST",

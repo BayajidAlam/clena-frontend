@@ -17,7 +17,7 @@ export const serviceApi = baseApi.injectEndpoints({
     // add a booking
     addNewBooking: build.mutation({
       query: (data: any) => ({
-        url: `/${BOOKING_URL}/book`,
+        url: `${BOOKING_URL}/book`,
         method: "POST",
         data,
       }),
@@ -48,7 +48,7 @@ export const serviceApi = baseApi.injectEndpoints({
     // update booking status
     updateBookingStatus: build.mutation({
       query: (data: any) => ({
-        url: `/${BOOKING_URL}/${data.id}`,
+        url: `${BOOKING_URL}/${data.id}`,
         method: "PATCH",
         data: data.body,
       }),
@@ -79,7 +79,7 @@ export const serviceApi = baseApi.injectEndpoints({
 
     getBookingsByUserId: build.query({
       query: (id: string) => ({
-        url: `/${BOOKING_URL}/mybooking/${id}`,
+        url: `${BOOKING_URL}/mybooking/${id}`,
         method: "GET",
       }),
       providesTags: [
