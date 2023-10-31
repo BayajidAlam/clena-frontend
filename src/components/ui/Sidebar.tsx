@@ -13,11 +13,28 @@ const { Sider } = Layout;
 
 const SideBar = () => {
   const [collapsed, setCollapsed] = useState(false);
+
   const [role, setRole] = useState("");
   const [id, setId] = useState("");
 
   const { userId } = getUserInfo() as any;
   const { data } = useGetSingleUserQuery(userId);
+
+  const handleSidebarCollapse = () => {
+    if (window.innerWidth <= 768) {
+      setCollapsed(true);
+    } else {
+      setCollapsed(false);
+    }
+  };
+
+  useEffect(() => {
+    handleSidebarCollapse();
+    window.addEventListener("resize", handleSidebarCollapse);
+    return () => {
+      window.removeEventListener("resize", handleSidebarCollapse);
+    };
+  }, []);
 
   useEffect(() => {
     // @ts-ignore
@@ -29,8 +46,6 @@ const SideBar = () => {
     }
     // @ts-ignore
   }, [data?.data]);
-
-
 
   return (
     <Sider
