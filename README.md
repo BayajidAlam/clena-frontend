@@ -34,8 +34,8 @@ Postman Collections -https://www.postman.com/restless-space-149276/workspace/cle
 
 
 ### customer 
-- email: ryraver@mailinator.com
-- password : Pa$$w0rd!
+- email: customer@gmail.com
+- password : customer123
 
 ### admin 
 
