@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Col, Row, message } from "antd";
+import { Button, Col, Radio, RadioChangeEvent, Row, message } from "antd";
 import loginImage from "../../assets/login-image.png";
 import Image from "next/image";
 import Form from "@/components/Forms/Form";
@@ -13,6 +13,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "@/schemas/login";
 import { decodedToken } from "@/utils/jwt";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { demoUser } from "@/utils/demoUser";
 
 type FormValues = {
   email: string;
@@ -20,9 +22,33 @@ type FormValues = {
 };
 
 const LoginPage = () => {
+  const [value, setValue] = useState("");
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: "",
+  });
 
   const [userLogin, { isLoading, data }] = useUserLoginMutation();
   const router = useRouter();
+
+  useEffect(() => {
+    if (value === "super-admin") {
+      setCredentials({
+        email: "johndoe11@example.com",
+        password: "mysecretpassword",
+      });
+    } else if (value === "admin") {
+      setCredentials({
+        email: "admin1111@miagmail.com",
+        password: "111111",
+      });
+    } else if (value === "customer") {
+      setCredentials({
+        email: "customer@gmail.com",
+        password: "customer123",
+      });
+    }
+  }, [value]);
 
   if (isLoading) {
     return message.loading("Loading...");
@@ -31,9 +57,18 @@ const LoginPage = () => {
   // console.log(isLoggedIn());
   const onSubmit: SubmitHandler<FormValues> = async (data: any) => {
     try {
-      // console.log(data, "data");
-      const res = await userLogin({ ...data }).unwrap();
-
+      let formData = {};
+      if (credentials.email && credentials.password) {
+        formData = {
+          email: credentials.email,
+          password: credentials.password,
+        };
+      } else {
+        formData = { ...data };
+      }
+      
+      const res = await userLogin({ ...formData }).unwrap();
+      
       // @ts-ignore
       if (res?.token) {
         // @ts-ignore
@@ -58,6 +93,10 @@ const LoginPage = () => {
     }
   };
 
+  const onChange = (e: RadioChangeEvent) => {
+    setValue(e.target.value);
+  };
+
   return (
     <Row
       justify="center"
@@ -78,8 +117,19 @@ const LoginPage = () => {
         >
           Please login your account
         </h1>
+        <div
+          style={{
+            margin: "15px 0px",
+          }}
+        >
+          <Radio.Group onChange={onChange} value={value}>
+            <Radio value={"customer"}>Customer</Radio>
+            <Radio value={"admin"}>Admin</Radio>
+            <Radio value={"super-admin"}>Super Admin</Radio>
+          </Radio.Group>
+        </div>
         <div>
-          <Form submitHandler={onSubmit} resolver={yupResolver(loginSchema)}>
+          <Form submitHandler={onSubmit}>
             <div>
               <FormInput
                 name="email"
@@ -87,6 +137,8 @@ const LoginPage = () => {
                 size="large"
                 label="Phone Number"
                 required
+                defaultValue={credentials.email}
+                value={credentials.email}
               />
             </div>
             <div
@@ -100,6 +152,8 @@ const LoginPage = () => {
                 size="large"
                 label="Password"
                 required
+                defaultValue={credentials.password}
+                value={credentials.password}
               />
             </div>
             <Link href={`/registeration`}>

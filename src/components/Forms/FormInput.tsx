@@ -7,13 +7,14 @@ interface IInput {
   name: string;
   type?: string;
   size?: "large" | "small";
-  value?: string | string[] | undefined;
+  value?: any;
   id?: string;
   placeholder?: string;
   validation?: object;
   label?: string;
   required?: boolean;
   disable?: boolean;
+  defaultValue?: any;
 }
 
 const FormInput = ({
@@ -27,6 +28,8 @@ const FormInput = ({
   label,
   required,
   disable,
+  defaultValue,
+
 }: IInput) => {
   const {
     control,
@@ -58,6 +61,7 @@ const FormInput = ({
               placeholder={placeholder}
               {...field}
               value={value ? value : field.value}
+              defaultValue={defaultValue}
             />
           ) : (
             <Input
@@ -67,6 +71,7 @@ const FormInput = ({
               {...field}
               value={value ? value : field.value}
               disabled={disable ? disable : false}
+              defaultValue={defaultValue}
             />
           )
         }
